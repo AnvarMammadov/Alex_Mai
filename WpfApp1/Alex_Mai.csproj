@@ -1,0 +1,241 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Assets\Audio\SFX\click.wav" />
+    <None Remove="Assets\Backgrounds\alex_home.png" />
+    <None Remove="Assets\Backgrounds\alex_home_message.png" />
+    <None Remove="Assets\Backgrounds\alex_quest_room.png" />
+    <None Remove="Assets\Backgrounds\alex_smoking_room.jpeg" />
+    <None Remove="Assets\Backgrounds\bathroom.png" />
+    <None Remove="Assets\Backgrounds\day1_end_semahomeyard.png" />
+    <None Remove="Assets\Backgrounds\day1_mai_talking.png" />
+    <None Remove="Assets\Backgrounds\kitchen.png" />
+    <None Remove="Assets\Backgrounds\living_room.jpg" />
+    <None Remove="Assets\Backgrounds\mai_bedroom.jpeg" />
+    <None Remove="Assets\Backgrounds\mai_sit_on_bed_bedroom.png" />
+    <None Remove="Assets\Backgrounds\market.jpg" />
+    <None Remove="Assets\Backgrounds\mmbg.jpg" />
+    <None Remove="Assets\Backgrounds\park_.jpg" />
+    <None Remove="Assets\Backgrounds\train_alex.png" />
+    <None Remove="Assets\Fonts\VarelaRound-Regular.ttf" />
+    <None Remove="Assets\Icons\door_icon.png" />
+    <None Remove="Assets\Icons\icon_cigarettes.jpeg" />
+    <None Remove="Assets\Icons\icon_cucumber.jpg" />
+    <None Remove="Assets\Icons\icon_eggs.png" />
+    <None Remove="Assets\Icons\icon_milk.jpg" />
+    <None Remove="Assets\Icons\icon_oil.png" />
+    <None Remove="Assets\Icons\icon_omlet.png" />
+    <None Remove="Assets\Icons\icon_onion.png" />
+    <None Remove="Assets\Icons\icon_phone.jpeg" />
+    <None Remove="Assets\Icons\icon_salad.png" />
+    <None Remove="Assets\Icons\icon_salt.jpg" />
+    <None Remove="Assets\Icons\icon_tomato.png" />
+    <None Remove="Assets\Icons\icon_zippo.jpeg" />
+    <None Remove="Assets\Icons\inventory_icon.png" />
+    <None Remove="Assets\Icons\ui_alex_icon.jpg" />
+    <None Remove="Assets\Icons\ui_mai_icon.jpg" />
+    <None Remove="Assets\Sprites\alex_normal.png" />
+    <None Remove="Assets\Sprites\dish_empty.png" />
+    <None Remove="Assets\Sprites\dish_fail.png" />
+    <None Remove="Assets\Sprites\dish_with_cucumber.png" />
+    <None Remove="Assets\Sprites\dish_with_onion.png" />
+    <None Remove="Assets\Sprites\dish_with_tomato.png" />
+    <None Remove="Assets\Sprites\mai_happy.png" />
+    <None Remove="Assets\Sprites\mai_love.png" />
+    <None Remove="Assets\Sprites\mai_norm.png" />
+    <None Remove="Assets\Sprites\mai_normal.jpeg" />
+    <None Remove="Assets\Sprites\mai_sad.png" />
+    <None Remove="Assets\Sprites\pan_complete.png" />
+    <None Remove="Assets\Sprites\pan_empty.png" />
+    <None Remove="Assets\Sprites\pan_with_egg.png" />
+    <None Remove="Assets\Sprites\pan_with_milk.png" />
+    <None Remove="Assets\Sprites\pan_with_oil.png" />
+    <None Remove="Assets\Sprites\talking%28day1_alex_mai_sema%29.png" />
+    <None Remove="Data\dialogue.json" />
+    <None Remove="Data\recipes.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\Backgrounds\living_room.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Backgrounds\market.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Backgrounds\park_.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Sprites\dish_complete_salad.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Data\dialogue.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\recipes.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Assets\UI\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\Audio\BGM\morning_theme.mp3">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Audio\SFX\click.wav">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Backgrounds\alex_home.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Backgrounds\alex_home_message.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Backgrounds\alex_quest_room.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Backgrounds\alex_smoking_room.jpeg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Backgrounds\bathroom.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Backgrounds\day1_end_semahomeyard.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Backgrounds\day1_mai_talking.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Backgrounds\kitchen.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Backgrounds\mai_bedroom.jpeg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Backgrounds\mai_sit_on_bed_bedroom.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Backgrounds\mmbg.jpg" />
+    <Resource Include="Assets\Backgrounds\train_alex.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Fonts\VarelaRound-Regular.ttf" />
+    <Resource Include="Assets\Icons\door_icon.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Icons\icon_cigarettes.jpeg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Icons\icon_cucumber.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Icons\icon_eggs.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Icons\icon_milk.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Icons\icon_oil.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Icons\icon_omlet.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Icons\icon_onion.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Icons\icon_phone.jpeg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Icons\icon_salad.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Icons\icon_salt.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Icons\icon_tomato.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Icons\icon_zippo.jpeg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Icons\inventory_icon.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Icons\ui_alex_icon.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Icons\ui_mai_icon.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Sprites\alex_normal.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Sprites\dish_empty.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Sprites\dish_fail.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Sprites\dish_with_cucumber.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Sprites\dish_with_onion.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Sprites\dish_with_tomato.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Sprites\mai_happy.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Sprites\mai_love.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Sprites\mai_norm.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Sprites\mai_normal.jpeg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Sprites\mai_sad.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Sprites\pan_complete.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Sprites\pan_empty.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Sprites\pan_with_egg.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Sprites\pan_with_milk.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Sprites\pan_with_oil.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Sprites\talking(day1_alex_mai_sema).png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+
+</Project>

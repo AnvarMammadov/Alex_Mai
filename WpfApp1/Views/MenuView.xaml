@@ -1,0 +1,22 @@
+﻿<UserControl x:Class="Alex_Mai.Views.MenuView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Alex_Mai.Views"
+             mc:Ignorable="d"
+             d:DesignHeight="720" d:DesignWidth="1280">
+
+    <Grid>
+        <!-- Background Image -->
+        <Image Source="\Assets\Backgrounds\mmbg.jpg" Stretch="Fill"/>
+
+        <!-- Burada UI elementləri əlavə olunacaq -->
+        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+            <Button Content="Start Game" Style="{StaticResource GameButtonStyle}" Width="300" Margin="0,10"  Command="{Binding StartGameCommand}"/>
+            <Button Content="Load Game" Style="{StaticResource GameButtonStyle}" Width="300" Margin="0,10" Command="{Binding LoadGameCommand}"/>
+            <Button Content="Settings" Style="{StaticResource GameButtonStyle}" Width="300" Margin="0,10" Command="{Binding SettingsCommand}"/>
+            <Button Content="Quit" Style="{StaticResource GameButtonStyle}" Width="300" Margin="0,10" Command="{Binding QuitGameCommand}"/>
+        </StackPanel>
+    </Grid>
+</UserControl>

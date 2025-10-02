@@ -1,0 +1,68 @@
+[
+    {
+        "Name": "Sadə Omlet",
+        "IngredientOrder": [ "oil", "milk", "egg", "salt" ],
+        "AllIngredients": [
+            {
+                "Id": "oil",
+                "Name": "Yağ",
+                "IconPath": "/Assets/Icons/icon_oil.png"
+            },
+            {
+                "Id": "milk",
+                "Name": "Süd",
+                "IconPath": "/Assets/Icons/icon_milk.jpg"
+            },
+            {
+                "Id": "egg",
+                "Name": "Yumurta",
+                "IconPath": "/Assets/Icons/icon_eggs.png"
+            },
+            {
+                "Id": "salt",
+                "Name": "Duz",
+                "IconPath": "/Assets/Icons/icon_salt.jpg"
+            }
+        ],
+        "DishImages": {
+            "0": "/Assets/Sprites/pan_empty.png",
+            "1": "/Assets/Sprites/pan_with_oil.png",
+            "2": "/Assets/Sprites/pan_with_egg.png",
+            "3": "/Assets/Sprites/pan_with_milk.png",
+            "4": "/Assets/Sprites/pan_complete.png"
+        }
+    },
+    {
+        "Name": "Tərəvəz Salatı",
+        "IngredientOrder": [ "tomato", "cucumber", "onion","oil" ],
+        "AllIngredients": [
+            {
+                "Id": "tomato",
+                "Name": "Pomidor",
+                "IconPath": "/Assets/Icons/icon_tomato.png"
+            },
+            {
+                "Id": "cucumber",
+                "Name": "Xiyar",
+                "IconPath": "/Assets/Icons/icon_cucumber.jpg"
+            },
+            {
+                "Id": "onion",
+                "Name": "Soğan",
+                "IconPath": "/Assets/Icons/icon_onion.png"
+            },
+            {
+                "Id": "oil",
+                "Name": "Yağ",
+                "IconPath": "/Assets/Icons/icon_oil.png"
+            }
+        ],
+        "DishImages": {
+            "0": "/Assets/Sprites/dish_empty.png",
+            "1": "/Assets/Sprites/dish_with_tomato.png",
+            "2": "/Assets/Sprites/dish_with_cucumber.png",
+            "3": "/Assets/Sprites/dish_with_onion.png",
+            "4": "/Assets/Sprites/dish_complete_salad.png"
+        }
+    }
+]

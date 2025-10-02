@@ -1,0 +1,69 @@
+﻿<UserControl x:Class="Alex_Mai.Views.MapView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Alex_Mai.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="600">
+    <Border Background="{StaticResource GameBackgroundBrush}" 
+            BorderBrush="{StaticResource GameBorderBrush}" 
+            BorderThickness="2" CornerRadius="5" Padding="15" Opacity="0.8">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0" Margin="0,0,0,15">
+                <TextBlock Text="NAVIGATION" FontFamily="{StaticResource GameFont}" FontSize="28" FontWeight="Bold" VerticalAlignment="Center"/>
+                <Button Content="CLOSE" Style="{StaticResource GameButtonStyle}" HorizontalAlignment="Right" Padding="15,5"
+                        Command="{Binding CloseMapCommand}"/>
+            </Grid>
+
+            <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,10">
+                <Button Content="HOME" Command="{Binding ShowHomeCommand}" Margin="0,0,10,0">
+                    <Button.Style>
+                        <Style TargetType="Button" BasedOn="{StaticResource GameButtonStyle}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsShowingHome}" Value="False">
+                                    <Setter Property="Opacity" Value="0.5"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+                <Button Content="OUT" Command="{Binding ShowOutCommand}">
+                    <Button.Style>
+                        <Style TargetType="Button" BasedOn="{StaticResource GameButtonStyle}">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsShowingHome}" Value="True">
+                                    <Setter Property="Opacity" Value="0.5"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Button.Style>
+                </Button>
+            </StackPanel>
+
+            <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto">
+                <ItemsControl ItemsSource="{Binding CurrentLocations}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Button Content="{Binding Name}" Style="{StaticResource GameButtonStyle}" Margin="5" Width="170"
+                                    IsEnabled="{Binding IsEnabled}"
+                                    Command="{Binding DataContext.NavigateToCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                    CommandParameter="{Binding}"/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+        </Grid>
+    </Border>
+</UserControl>
