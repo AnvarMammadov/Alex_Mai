@@ -1,0 +1,17 @@
+[
+    {
+        "Name": "Sadə Sifariş",
+        "ProductOrder": [ "coffee", "sandwich" ],
+        "Reward": 15
+    },
+    {
+        "Name": "Böyük Sifariş",
+        "ProductOrder": [ "juice", "sandwich", "cake" ],
+        "Reward": 25
+    },
+    {
+        "Name": "Şirniyyat",
+        "ProductOrder": [ "coffee", "cake" ],
+        "Reward": 12
+    }
+]

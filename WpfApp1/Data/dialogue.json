@@ -852,32 +852,72 @@
     },
 
     "day2_part_time_hub": {
-        "character": "Alex",
-        "text": "Part-time iş yerinin qarşısındasan. Nə edək?",
-        "background": "part_time.png",
-        "sprite": null,
+        "character": "Menecer",
+        "text": "Part-time iş yerinin qarşısındasan. İçəridə menecer sənə yaxınlaşır.",
+        "background": "part_time_job_earn_money.jpg",
+        "sprite": "manager_neutral.png",
         "choices": [
             {
-                "text": "Cədvələ bax",
+                "text": "İşləmək istədiyini de.",
                 "nextNodeId": "event_pt_schedule"
             },
             {
-                "text": "Qısa növbəyə başla",
-                "nextNodeId": "event_pt_short_shift"
+                "text": "Geri qayıt.",
+                "nextNodeId": "day2_morning_hub"
             }
         ]
     },
     "event_pt_schedule": {
         "character": "Menecer",
-        "text": "“Bu gün 3 saatlıq boş növbə var. İstəsən götür.”",
+        "text": "“Bu gün 60 deqiqilik boş növbə var. Götürmək istəyirsən?”",
+        "sprite": "manager_neutral.png",
         "choices": [
             {
-                "text": "Yaxşı, başlayım",
-                "nextNodeId": "event_pt_short_shift"
+                "text": "Bəli, başlayım",
+                "nextNodeId": "start_part_time_minigame"
             },
             {
-                "text": "Bu gün istirahət",
+                "text": "Xeyr, bu gün istirahət edəcəm.",
                 "nextNodeId": "day2_part_time_hub"
+            }
+        ]
+    },
+    "start_part_time_minigame": {
+        "text": "Artiq baslayiriq...",
+        "actions": [
+            {
+                "stat": "StartWorkMinigame",
+                "operator": "Set",
+                "value": 1
+            }
+        ],
+        "choices": []
+    },
+    "reaction_work_end_success": {
+        "character": "Menecer",
+        "text": "“Əla iş idi, Alex! Bu da sənin bugünkü qazancın.”",
+        "sprite": "manager_happy.png",
+        "actions": [
+            { "stat": "TimeAdvance" }
+        ],
+        "choices": [
+            {
+                "text": "...",
+                "nextNodeId": "day2_questroom_hub"
+            }
+        ]
+    },
+    "reaction_work_end_fail": {
+        "character": "Menecer",
+        "text": "“Bugün bir az yavaş idin. Narahat olma, sabah daha yaxşı olarsan.”",
+        "sprite": "manager_neutral.png",
+        "actions": [
+            { "stat": "TimeAdvance" }
+        ],
+        "choices": [
+            {
+                "text": "...",
+                "nextNodeId": "generic_day_quest_room_hub"
             }
         ]
     },

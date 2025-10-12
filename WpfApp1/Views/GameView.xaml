@@ -52,7 +52,7 @@
             </Border>
 
         </StackPanel>
-        
+
         <StackPanel VerticalAlignment="Top" HorizontalAlignment="Right" Margin="20" Opacity="0.8">
             <Border BorderBrush="Black" BorderThickness="2" Background="#F5F5F5" CornerRadius="5"
             Padding="8,4" Margin="0,0,0,5">
@@ -171,6 +171,13 @@
                                RelativeSource={RelativeSource AncestorType=local:GameView}, 
                                Converter={StaticResource BoolToVisibilityConverter}}"
           d:Visibility="Collapsed"/>
+        <views:WorkMinigameView   DataContext="{Binding WorkGame}"
+                HorizontalAlignment="Center" 
+                VerticalAlignment="Center"
+                Visibility="{Binding DataContext.IsWorkMinigameOpen, 
+                       RelativeSource={RelativeSource AncestorType=local:GameView}, 
+                       Converter={StaticResource BoolToVisibilityConverter}}"
+         d:Visibility="Collapsed"/>
 
     </Grid>
 </UserControl>

@@ -15,15 +15,20 @@
     <None Remove="Assets\Backgrounds\alex_quest_room.png" />
     <None Remove="Assets\Backgrounds\alex_smoking_room.jpeg" />
     <None Remove="Assets\Backgrounds\bathroom.png" />
+    <None Remove="Assets\Backgrounds\bed.jpg" />
     <None Remove="Assets\Backgrounds\day1_end_semahomeyard.png" />
     <None Remove="Assets\Backgrounds\day1_mai_talking.png" />
     <None Remove="Assets\Backgrounds\kitchen.png" />
     <None Remove="Assets\Backgrounds\living_room.jpg" />
     <None Remove="Assets\Backgrounds\mai_bedroom.jpeg" />
     <None Remove="Assets\Backgrounds\mai_sit_on_bed_bedroom.png" />
+    <None Remove="Assets\Backgrounds\mai_sleep_bed.jpg" />
     <None Remove="Assets\Backgrounds\market.jpg" />
+    <None Remove="Assets\Backgrounds\market_store.jpg" />
     <None Remove="Assets\Backgrounds\mmbg.jpg" />
     <None Remove="Assets\Backgrounds\park_.jpg" />
+    <None Remove="Assets\Backgrounds\part_time_job.jpg" />
+    <None Remove="Assets\Backgrounds\part_time_job_earn_money.jpg" />
     <None Remove="Assets\Backgrounds\train_alex.png" />
     <None Remove="Assets\Fonts\VarelaRound-Regular.ttf" />
     <None Remove="Assets\Icons\door_icon.png" />
@@ -53,6 +58,7 @@
     <None Remove="Assets\Sprites\mai_norm.png" />
     <None Remove="Assets\Sprites\mai_normal.jpeg" />
     <None Remove="Assets\Sprites\mai_sad.png" />
+    <None Remove="Assets\Sprites\mai_sleep_side_bed.jpg" />
     <None Remove="Assets\Sprites\pan_complete.png" />
     <None Remove="Assets\Sprites\pan_empty.png" />
     <None Remove="Assets\Sprites\pan_with_egg.png" />
@@ -60,17 +66,33 @@
     <None Remove="Assets\Sprites\pan_with_oil.png" />
     <None Remove="Assets\Sprites\talking%28day1_alex_mai_sema%29.png" />
     <None Remove="Data\dialogue.json" />
+    <None Remove="Data\orders.json" />
     <None Remove="Data\recipes.json" />
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Assets\Backgrounds\bed.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Assets\Backgrounds\living_room.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Backgrounds\mai_sleep_bed.jpg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Assets\Backgrounds\market.jpg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Assets\Backgrounds\market_store.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Assets\Backgrounds\park_.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Backgrounds\part_time_job.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Backgrounds\part_time_job_earn_money.jpg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Assets\Sprites\dish_complete_salad.png">
@@ -82,12 +104,16 @@
     <Content Include="Data\dialogue.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Data\orders.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Data\recipes.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Assets\Animations\" />
     <Folder Include="Assets\UI\" />
   </ItemGroup>
 
@@ -216,6 +242,9 @@
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Assets\Sprites\mai_sad.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Sprites\mai_sleep_side_bed.jpg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Assets\Sprites\pan_complete.png">

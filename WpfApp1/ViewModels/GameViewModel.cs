@@ -16,7 +16,7 @@ namespace Alex_Mai.ViewModels
         public PhoneViewModel Phone { get; }
         public MapViewModel Map { get; }
         public CookingGameViewModel CookingGame { get; }
-
+        public WorkMinigameViewModel WorkGame { get; }
 
         private Dictionary<string, string> _locationIndex;///
 
@@ -45,6 +45,7 @@ namespace Alex_Mai.ViewModels
         [ObservableProperty] private bool _isPhoneOpen = false;
         [ObservableProperty] private bool _isMapOpen = false;
         [ObservableProperty] private bool _isCookingMinigameOpen = false;
+        [ObservableProperty] private bool _isWorkMinigameOpen = false;
 
         public ObservableCollection<Choice> CurrentChoices { get; set; } = new ObservableCollection<Choice>();
 
@@ -127,6 +128,7 @@ namespace Alex_Mai.ViewModels
             Phone = new PhoneViewModel(this);
             Map = new MapViewModel(this);
             CookingGame = new CookingGameViewModel(this);
+            WorkGame = new WorkMinigameViewModel(this);
 
             _locationIndex = _dialogueService.GetLocationIndex();
 
@@ -242,6 +244,7 @@ namespace Alex_Mai.ViewModels
             if (!string.IsNullOrEmpty(choice.NextNodeId))
             {
                 if (choice.NextNodeId == "start_cooking_minigame") StartCookingMinigame();
+                else if (choice.NextNodeId == "start_part_time_minigame") { StartWorkMinigame(); }
                 else if (choice.NextNodeId == "go_to_sleep") { SleepAndRecover(); ShowDialogue("day2_morning_hub"); }
                 else ShowDialogue(choice.NextNodeId);
             }
@@ -484,6 +487,28 @@ namespace Alex_Mai.ViewModels
             }
         }
 
+
+        private void StartWorkMinigame()
+        {
+           // CloseAllOverlays();
+            WorkGame.StartShift();
+            IsWorkMinigameOpen = true;
+        }
+
+        public void EndWorkMinigame(int moneyEarned)
+        {
+            IsWorkMinigameOpen = false;
+            CurrentGameState.PlayerMoney += moneyEarned; // Qazanılan pulu əlavə et
+
+            if (moneyEarned > 0)
+            {
+                ShowDialogue("reaction_work_end_success");
+            }
+            else
+            {
+                ShowDialogue("reaction_work_end_fail");
+            }
+        }
 
         public string MaiMood
         {
