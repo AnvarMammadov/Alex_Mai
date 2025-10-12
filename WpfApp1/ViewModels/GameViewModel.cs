@@ -17,6 +17,7 @@ namespace Alex_Mai.ViewModels
         public MapViewModel Map { get; }
         public CookingGameViewModel CookingGame { get; }
         public WorkMinigameViewModel WorkGame { get; }
+        public MarketViewModel Market { get; }
 
         private Dictionary<string, string> _locationIndex;///
 
@@ -28,6 +29,9 @@ namespace Alex_Mai.ViewModels
         [NotifyPropertyChangedFor(nameof(MaiMood))]
        // [NotifyPropertyChangedFor(nameof(TimeOfDayIcon))] // Bu hələlik qala bilər
         [ObservableProperty] private GameState _currentGameState;
+
+        [ObservableProperty] private string _notificationMessage;
+
 
 
         [NotifyPropertyChangedFor(nameof(MaiMood))]
@@ -46,6 +50,8 @@ namespace Alex_Mai.ViewModels
         [ObservableProperty] private bool _isMapOpen = false;
         [ObservableProperty] private bool _isCookingMinigameOpen = false;
         [ObservableProperty] private bool _isWorkMinigameOpen = false;
+        [ObservableProperty] private bool _isMarketOpen = false;
+        [ObservableProperty] private bool _isNotificationVisible = false;
 
         public ObservableCollection<Choice> CurrentChoices { get; set; } = new ObservableCollection<Choice>();
 
@@ -129,12 +135,24 @@ namespace Alex_Mai.ViewModels
             Map = new MapViewModel(this);
             CookingGame = new CookingGameViewModel(this);
             WorkGame = new WorkMinigameViewModel(this);
+            Market = new MarketViewModel(this);
 
             _locationIndex = _dialogueService.GetLocationIndex();
 
 
             ShowDialogue("start_game");
         }
+
+        private async Task ShowNotification(string message, int durationMs = 2000)
+        {
+            NotificationMessage = message;
+            IsNotificationVisible = true;
+            await Task.Delay(durationMs);
+            IsNotificationVisible = false;
+        }
+
+
+
 
         private bool _isSkippingAnimation = false;
         private async Task AnimateDialogueText(string fullText)
@@ -444,6 +462,13 @@ namespace Alex_Mai.ViewModels
         public void GoToPlace(string placeId)
         {
             IsMapOpen = false;
+            // YENİ: Market üçün xüsusi yoxlama
+            if (placeId.ToLower() == "market")
+            {
+                ToggleMarket(true);
+                return; // Dialoq başlamasın
+            }
+
             if (_locationIndex != null && _locationIndex.TryGetValue(placeId, out var nodeId) && !string.IsNullOrEmpty(nodeId))
             {
                 // hər otaq keçidi 1 slot vaxt aparsın və 3 enerji xərcləsin (istəyə görə dəyiş)
@@ -451,6 +476,12 @@ namespace Alex_Mai.ViewModels
                 ApplyEnergy(-3);
                 ShowDialogue(nodeId);
             }
+        }
+
+        // Yeni metodları əlavə edin
+        public void ToggleMarket(bool isOpen)
+        {
+            IsMarketOpen = isOpen;
         }
 
         private void LoadLocationIndex()
@@ -509,6 +540,43 @@ namespace Alex_Mai.ViewModels
                 ShowDialogue("reaction_work_end_fail");
             }
         }
+
+        public async void PurchaseItem(MarketItem item)
+        {
+            const int MAX_ITEM_STACK = 3; // Maksimum say limiti
+            int currentItemCount = Inventory.GetItemCount(item.ItemId);
+
+            // Limiti yoxla
+            if (currentItemCount >= MAX_ITEM_STACK)
+            {
+                await ShowNotification("Bu əşyadan kifayət qədər var!");
+                return;
+            }
+
+            // Pulu yoxla
+            if (CurrentGameState.PlayerMoney >= item.Price)
+            {
+                // Pulu çıx
+                CurrentGameState.PlayerMoney -= item.Price;
+
+                // İnventara əlavə et
+                Inventory.AddItem(new InventoryItem
+                {
+                    ItemId = item.ItemId,
+                    Name = item.Name,
+                    IconPath = item.IconPath
+                });
+
+                // Uğurlu alış-veriş bildirişi
+                await ShowNotification($"+1 {item.Name}");
+            }
+            else
+            {
+                // Kifayət qədər pul yoxdur bildirişi
+                await ShowNotification("Kifayət qədər pulunuz yoxdur!");
+            }
+        }
+
 
         public string MaiMood
         {

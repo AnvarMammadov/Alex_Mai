@@ -156,6 +156,13 @@
                 </ItemsControl>
             </Grid>
         </Border>
+        <Border VerticalAlignment="Top" HorizontalAlignment="Right" Margin="20,130,20,0"
+                Background="#CC000000" BorderBrush="White" BorderThickness="1"
+                CornerRadius="5" Padding="15,10"
+                Visibility="{Binding IsNotificationVisible, Converter={StaticResource BoolToVisibilityConverter}}">
+            <TextBlock Text="{Binding NotificationMessage}" Foreground="White"
+                       FontFamily="{StaticResource GameFont}" FontSize="18"/>
+        </Border>
         <views:PhoneView DataContext="{Binding Phone}"
                  HorizontalAlignment="Center" 
                  VerticalAlignment="Center"
@@ -178,6 +185,12 @@
                        RelativeSource={RelativeSource AncestorType=local:GameView}, 
                        Converter={StaticResource BoolToVisibilityConverter}}"
          d:Visibility="Collapsed"/>
+        <views:MarketView DataContext="{Binding Market}"
+                          HorizontalAlignment="Center" VerticalAlignment="Center"
+                          Visibility="{Binding DataContext.IsMarketOpen, 
+                                       RelativeSource={RelativeSource AncestorType=local:GameView}, 
+                                       Converter={StaticResource BoolToVisibilityConverter}}"
+                          d:Visibility="Collapsed"/>
 
     </Grid>
 </UserControl>

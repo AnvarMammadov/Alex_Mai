@@ -43,6 +43,30 @@ namespace Alex_Mai.ViewModels
             }
         }
 
+        public void AddItem(InventoryItem newItem)
+        {
+            var existingItem = Items.FirstOrDefault(i => i.ItemId == newItem.ItemId);
+
+            if (existingItem != null)
+            {
+                // Əgər əşya artıq varsa, sadəcə sayını artır
+                existingItem.Quantity++;
+            }
+            else
+            {
+                // Əgər yoxdursa, siyahıya yeni əşya kimi əlavə et
+                newItem.Quantity = 1;
+                Items.Add(newItem);
+            }
+        }
+
+        // BU YENİ METODU KLASSA ƏLAVƏ EDİN:
+        public int GetItemCount(string itemId)
+        {
+            var existingItem = Items.FirstOrDefault(i => i.ItemId == itemId);
+            return existingItem?.Quantity ?? 0;
+        }
+
         // İnventarı bağlamaq üçün komanda
         [RelayCommand]
         private void Close()

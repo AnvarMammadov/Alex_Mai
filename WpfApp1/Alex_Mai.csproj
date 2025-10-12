@@ -66,6 +66,7 @@
     <None Remove="Assets\Sprites\pan_with_oil.png" />
     <None Remove="Assets\Sprites\talking%28day1_alex_mai_sema%29.png" />
     <None Remove="Data\dialogue.json" />
+    <None Remove="Data\market_items.json" />
     <None Remove="Data\orders.json" />
     <None Remove="Data\recipes.json" />
   </ItemGroup>
@@ -102,6 +103,9 @@
 
   <ItemGroup>
     <Content Include="Data\dialogue.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\market_items.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Data\orders.json">

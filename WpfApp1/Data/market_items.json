@@ -1,0 +1,26 @@
+[
+    {
+        "ItemId": "cigarette",
+        "Name": "Siqaret",
+        "Price": 8,
+        "IconPath": "/Assets/Icons/icon_cigarettes.jpeg",
+        "Category": "Other",
+        "Description": "Stressi azaldır, amma sağlamlığa ziyandır."
+    },
+    {
+        "ItemId": "soda",
+        "Name": "Qazlı Su",
+        "Price": 2,
+        "IconPath": "/Assets/Icons/icon_soda.png", 
+        "Category": "Food",
+        "Description": "Bir az enerji verir."
+    },
+    {
+        "ItemId": "chocolate",
+        "Name": "Şokolad",
+        "Price": 3,
+        "IconPath": "/Assets/Icons/icon_chocolate.png", 
+        "Category": "Food",
+        "Description": "Mai üçün hədiyyə ola bilər."
+    }
+]
