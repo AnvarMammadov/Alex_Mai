@@ -263,9 +263,24 @@ namespace Alex_Mai.ViewModels
             {
                 if (choice.NextNodeId == "start_cooking_minigame") StartCookingMinigame();
                 else if (choice.NextNodeId == "start_part_time_minigame") { StartWorkMinigame(); }
-                else if (choice.NextNodeId == "go_to_sleep") { SleepAndRecover(); ShowDialogue("day2_morning_hub"); }
+                else if (choice.NextNodeId == "go_to_sleep") { SleepAndRecover(); ShowDialogue("day2_morning_hub"); }     
                 else ShowDialogue(choice.NextNodeId);
             }
+
+            // Əgər seçimdə xüsusi bir "action" varsa, onu icra et.
+            if (!string.IsNullOrEmpty(choice.Action))
+            {
+                switch (choice.Action)
+                {
+                    case "market_interface":
+                        ToggleMarket();
+                        break;
+
+                        // Gələcəkdə bura "OpenMap", "OpenPhone" kimi başqa əmrlər də əlavə edə bilərik.
+                }
+            }
+
+
         }
 
 
@@ -462,12 +477,7 @@ namespace Alex_Mai.ViewModels
         public void GoToPlace(string placeId)
         {
             IsMapOpen = false;
-            // YENİ: Market üçün xüsusi yoxlama
-            if (placeId.ToLower() == "market")
-            {
-                ToggleMarket(true);
-                return; // Dialoq başlamasın
-            }
+            IsMarketOpen = false;
 
             if (_locationIndex != null && _locationIndex.TryGetValue(placeId, out var nodeId) && !string.IsNullOrEmpty(nodeId))
             {
@@ -479,9 +489,10 @@ namespace Alex_Mai.ViewModels
         }
 
         // Yeni metodları əlavə edin
-        public void ToggleMarket(bool isOpen)
+        public void ToggleMarket()
         {
-            IsMarketOpen = isOpen;
+            IsInventoryOpen = false; // İnventarı bağla
+            IsMarketOpen = !IsMarketOpen;
         }
 
         private void LoadLocationIndex()

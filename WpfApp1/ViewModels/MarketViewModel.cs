@@ -51,7 +51,7 @@ namespace Alex_Mai.ViewModels
         [RelayCommand]
         private void Close()
         {
-            _parentViewModel.ToggleMarket(false);
+            _parentViewModel.IsMarketOpen = false;
         }
     }
 }

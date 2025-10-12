@@ -962,28 +962,11 @@
         "choices": [
             {
                 "text": "Rəflərə göz gəzdir",
-                "nextNodeId": "event_market_browse"
+                "action": "market_interface"
             },
             {
                 "text": "Əsas ərzaqları al",
                 "nextNodeId": "event_market_buy"
-            }
-        ]
-    },
-    "event_market_browse": {
-        "character": "Alex",
-        "text": "Qiymətləri müqayisə edirsən. Bəzi ideyalar götürdün.",
-        "actions": [
-            {
-                "stat": "TimeAdvance",
-                "operator": "Add",
-                "value": 1
-            }
-        ],
-        "choices": [
-            {
-                "text": "...",
-                "nextNodeId": "day2_market_hub"
             }
         ]
     },
