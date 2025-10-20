@@ -32,16 +32,24 @@
     <None Remove="Assets\Backgrounds\train_alex.png" />
     <None Remove="Assets\Fonts\VarelaRound-Regular.ttf" />
     <None Remove="Assets\Icons\door_icon.png" />
+    <None Remove="Assets\Icons\icon_chocolate.jpg" />
     <None Remove="Assets\Icons\icon_cigarettes.jpeg" />
     <None Remove="Assets\Icons\icon_cucumber.jpg" />
+    <None Remove="Assets\Icons\icon_desktop_browser.png" />
     <None Remove="Assets\Icons\icon_eggs.png" />
     <None Remove="Assets\Icons\icon_milk.jpg" />
     <None Remove="Assets\Icons\icon_oil.png" />
     <None Remove="Assets\Icons\icon_omlet.png" />
     <None Remove="Assets\Icons\icon_onion.png" />
     <None Remove="Assets\Icons\icon_phone.jpeg" />
+    <None Remove="Assets\Icons\icon_phone_camera.png" />
+    <None Remove="Assets\Icons\icon_phone_cg.png" />
+    <None Remove="Assets\Icons\icon_phone_chat.png" />
+    <None Remove="Assets\Icons\icon_phone_settings.png" />
+    <None Remove="Assets\Icons\icon_phone_stats.png" />
     <None Remove="Assets\Icons\icon_salad.png" />
     <None Remove="Assets\Icons\icon_salt.jpg" />
+    <None Remove="Assets\Icons\icon_soda.jpg" />
     <None Remove="Assets\Icons\icon_tomato.png" />
     <None Remove="Assets\Icons\icon_zippo.jpeg" />
     <None Remove="Assets\Icons\inventory_icon.png" />
@@ -94,6 +102,30 @@
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Assets\Backgrounds\part_time_job_earn_money.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Icons\icon_chocolate.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Icons\icon_desktop_browser.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Icons\icon_phone_camera.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Icons\icon_phone_cg.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Icons\icon_phone_chat.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Icons\icon_phone_settings.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Icons\icon_phone_stats.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Icons\icon_soda.jpg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Assets\Sprites\dish_complete_salad.png">

@@ -5,37 +5,64 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Alex_Mai.Views"
              mc:Ignorable="d" 
-             d:DesignHeight="600" d:DesignWidth="400">
-    <Grid>
-        <Image Source="/Assets/Icons/icon_phone.jpeg" Stretch="Fill"/>
+             d:DesignHeight="600" d:DesignWidth="300">
 
-        <ContentControl Content="{Binding CurrentScreenViewModel}" Margin="54,87,50,100"/>
+    <UserControl.Resources>
+        <Style x:Key="PhoneHomeButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="Gray"/>
+            <Setter Property="BorderBrush" Value="#AAAAAA"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="100">
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#EEEEEE"/>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background" Value="#CCCCCC"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
 
-        <Button Command="{Binding ClosePhoneCommand}"
-            HorizontalAlignment="Center" VerticalAlignment="Bottom"
-            Width="60" Height="26" Margin="0,0,0,40">
-            <Button.Style>
-                <Style TargetType="Button">
-                    <Setter Property="Background" Value="Transparent"/>
-                    <Setter Property="BorderThickness" Value="0"/>
-                    <Setter Property="Cursor" Value="Hand"/>
-                    <Setter Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate TargetType="Button">
-                                <Grid Background="{TemplateBinding Background}">
-                                    <TextBlock Text="" 
-                                           Foreground="Black" 
-                                           FontSize="26" 
-                                           FontWeight="Bold"
-                                           HorizontalAlignment="Center"
-                                           VerticalAlignment="Center"/>
-                                </Grid>
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                </Style>
-            </Button.Style>
-        </Button>
+    <Border Background="#1C1C1C" 
+            CornerRadius="30"    
+            BorderBrush="#333333" 
+            BorderThickness="2"
+            Height="600" Width="300">
 
-    </Grid>
+        <Grid Margin="10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="35"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="65"/>
+            </Grid.RowDefinitions>
+
+            <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Ellipse Fill="#444444" Width="8" Height="8" Margin="0,0,10,0"/>
+                <Rectangle Fill="#444444" Width="40" Height="6" RadiusX="3" RadiusY="3"/>
+            </StackPanel>
+
+            <Border Grid.Row="1" Background="Black" CornerRadius="5">
+                <ContentControl Content="{Binding CurrentScreenViewModel}" Margin="5"/>
+            </Border>
+
+            <Grid Grid.Row="2">
+                <Button Command="{Binding ClosePhoneCommand}"
+                        HorizontalAlignment="Center" VerticalAlignment="Center"
+                        Width="50" Height="50" Style="{StaticResource PhoneHomeButtonStyle}"/>
+            </Grid>
+        </Grid>
+    </Border>
+
 </UserControl>

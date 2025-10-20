@@ -5,7 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Alex_Mai.Views"
              xmlns:views="clr-namespace:Alex_Mai.Views"
-             xmlns:converters="clr-namespace:Alex_Mai.Converters" mc:Ignorable="d" 
+             xmlns:converters="clr-namespace:Alex_Mai.Converters"
+             mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="500">
 
     <UserControl.Resources>
@@ -80,7 +81,8 @@
 
     <Border Background="{StaticResource GameBackgroundBrush}" 
             BorderBrush="{StaticResource GameBorderBrush}" 
-            BorderThickness="2" CornerRadius="5" Padding="15">
+            BorderThickness="2" CornerRadius="5" Padding="15" 
+            Width="500" Height="300">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -96,10 +98,17 @@
                         Command="{Binding CloseCommand}"/>
             </Grid>
 
-            <ItemsControl Grid.Row="1" ItemsSource="{Binding Items}">
+            <ItemsControl Grid.Row="1" ItemsSource="{Binding Items}" ScrollViewer.VerticalScrollBarVisibility="Auto">
+                <ItemsControl.Template>
+                    <ControlTemplate>
+                        <ScrollViewer CanContentScroll="True">
+                            <ItemsPresenter/>
+                        </ScrollViewer>
+                    </ControlTemplate>
+                </ItemsControl.Template>
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <WrapPanel HorizontalAlignment="Center"/>
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>

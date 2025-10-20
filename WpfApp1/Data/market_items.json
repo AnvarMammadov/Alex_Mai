@@ -2,7 +2,7 @@
     {
         "ItemId": "cigarette",
         "Name": "Siqaret",
-        "Price": 8,
+        "Price": 6,
         "IconPath": "/Assets/Icons/icon_cigarettes.jpeg",
         "Category": "Other",
         "Description": "Stressi azaldır, amma sağlamlığa ziyandır."
@@ -10,8 +10,8 @@
     {
         "ItemId": "soda",
         "Name": "Qazlı Su",
-        "Price": 2,
-        "IconPath": "/Assets/Icons/icon_soda.png", 
+        "Price": 1,
+        "IconPath": "/Assets/Icons/icon_soda.jpg",
         "Category": "Food",
         "Description": "Bir az enerji verir."
     },
@@ -19,8 +19,32 @@
         "ItemId": "chocolate",
         "Name": "Şokolad",
         "Price": 3,
-        "IconPath": "/Assets/Icons/icon_chocolate.png", 
+        "IconPath": "/Assets/Icons/icon_chocolate.jpg",
         "Category": "Food",
         "Description": "Mai üçün hədiyyə ola bilər."
+    },
+    {
+        "ItemId": "omlet",
+        "Name": "Omlet",
+        "Price": 5,
+        "IconPath": "/Assets/Icons/icon_omlet.png",
+        "Category": "Food",
+        "Description": "Qarin doyurmaq ucun birebir..."
+    },
+    {
+        "ItemId": "milk",
+        "Name": "Sud",
+        "Price": 2,
+        "IconPath": "/Assets/Icons/icon_milk.jpg",
+        "Category": "Food",
+        "Description": "Her soyuducuda olmalidir."
+    },
+    {
+        "ItemId": "salad",
+        "Name": "Terevez Salati",
+        "Price": 4,
+        "IconPath": "/Assets/Sprites/dish_complete_salad.png",
+        "Category": "Food",
+        "Description": "Xeyirli ve teravetli.."
     }
 ]
