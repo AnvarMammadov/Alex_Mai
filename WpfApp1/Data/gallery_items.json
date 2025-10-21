@@ -1,0 +1,23 @@
+[
+    {
+        "Id": "cg_mai_sleep",
+        "Title": "Show Sleeping",
+        "ThumbnailPath": "/Assets/Backgrounds/mai_sleep_bed.jpg",
+        "FullImagePath": "/Assets/Sprites/mai_sleep_side_bed.jpg",
+        "IsUnlocked": false
+    },
+    {
+        "Id": "cg_family_meet",
+        "Title": "First Meeting",
+        "ThumbnailPath": "/Assets/Backgrounds/day1_end_semahomeyard.png",
+        "FullImagePath": "/Assets/Sprites/talking(day1_alex_mai_sema).png",
+        "IsUnlocked": true
+    },
+    {
+        "Id": "cg_park_talk",
+        "Title": "Conversation in the Park",
+        "ThumbnailPath": "/Assets/CGs/Thumbnails/park_talk_thumb.png",
+        "FullImagePath": "/Assets/CGs/Full/park_talk_full.png",
+        "IsUnlocked": false
+    }
+]

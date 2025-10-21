@@ -1,0 +1,78 @@
+
+{
+    "conversations": { 
+        "mai_initial": {
+            "history": [ 
+                {
+                    "sender": "Mai",
+                    "text": "Hey Alex, how are you doing?"
+                }
+            ],
+            "responses": { 
+                "Hi Mai! I'm good, just relaxing.": "mai_resp_initial_1",
+                "Not much, just woke up.": "mai_resp_initial_2",
+                "Mesajlarimizi Terane muellime gorur...": "mai_resp_terane",
+                "default": "mai_resp_generic_hmm" 
+            }
+        },
+        "mai_day2_afternoon": {
+            "history": [
+                {
+                    "sender": "Mai",
+                    "text": "Finished studying for today! Finally free. ✨ Any plans for the afternoon?"
+                }
+            ],
+            "responses": {
+                "Maybe we could do something?": "mai_resp_day2_suggest",
+                "Just planning to relax at home.": "mai_resp_day2_relax",
+                "default": "mai_resp_generic_ok"
+            }
+        }
+       
+    },
+
+    "responseMessages": {
+        "mai_resp_initial_1": [
+            {
+                "sender": "Mai",
+                "text": "That's good to hear. 😊 What are you up to?"
+            }
+        ],
+        "mai_resp_initial_2": [
+            {
+                "sender": "Mai",
+                "text": "Good morning then! Sleep well?"
+            }
+        ],
+        "mai_resp_terane": [
+            {
+                "sender": "Mai",
+                "text": "Salam Terane muellime <3"
+            }
+        ],
+        "mai_resp_day2_suggest": [
+            {
+                "sender": "Mai",
+                "text": "Like what? I'm open to ideas!"
+            }
+        ],
+        "mai_resp_day2_relax": [
+            {
+                "sender": "Mai",
+                "text": "Okay, enjoy your rest!"
+            }
+        ],
+        "mai_resp_generic_hmm": [
+            {
+                "sender": "Mai",
+                "text": "Hmm?"
+            }
+        ],
+        "mai_resp_generic_ok": [
+            {
+                "sender": "Mai",
+                "text": "Okay."
+            }
+        ]
+    }
+}

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,6 +26,10 @@ namespace Alex_Mai.Models
 
         public int MaxEnergy { get; } = 100; // Maksimum enerji
 
+        // *** YENİ: Əməliyyat Tarixçəsi ***
+        public ObservableCollection<Transaction> Transactions { get; } = new ObservableCollection<Transaction>();
+
+
         // Həftənin gününü hesablayan yeni xüsusiyyət
         public string DayOfWeek
         {
@@ -39,5 +44,54 @@ namespace Alex_Mai.Models
 
         // Ayın gününü mətn formatında göstərən yeni xüsusiyyət (Oyunun Sentyabrda başladığını fərz edirik)
         public string FullDateString => $"September {CurrentDay}";
+
+
+
+        // *** YENİ: Əməliyyat Əlavə Etmə Metodu ***
+        public void AddTransaction(string description, int amount, TransactionType type, DateTime timestamp)
+        {
+            // Əməliyyat əlavə olunmazdan *əvvəlki* balans vacib deyil,
+            // çünki bu metod çağırıldıqda PlayerMoney artıq yenilənmiş olacaq.
+            int absoluteAmount = Math.Abs(amount);
+
+            var transaction = new Transaction
+            {
+                Description = description,
+                Amount = absoluteAmount,
+                Type = type,
+                Timestamp = timestamp,
+                BalanceAfter = this.PlayerMoney // Cari (yenilənmiş) balans
+            };
+
+            // Ən başa əlavə et
+            Transactions.Insert(0, transaction);
+
+            // Limit
+            const int maxHistory = 50;
+            while (Transactions.Count > maxHistory)
+            {
+                Transactions.RemoveAt(Transactions.Count - 1);
+            }
+        }
+
+
+        // *** YENİ: Save/Load üçün metodlar (Opsional, amma tövsiyə olunur) ***
+        public void ClearTransactions() // Yeni oyuna başlayanda və ya yükləyəndə lazım ola bilər
+        {
+            Transactions.Clear();
+        }
+
+        public void LoadTransactions(List<Transaction> loadedTransactions) // Yüklənmiş əməliyyatları əlavə etmək üçün
+        {
+            ClearTransactions();
+            if (loadedTransactions != null)
+            {
+                // Adətən save faylında tərs sırada saxlanılır, ona görə də yükləyərkən düzgün sıraya salmaq lazım ola bilər
+                foreach (var t in loadedTransactions.OrderByDescending(t => t.Timestamp)) // Və ya sadəcə foreach
+                {
+                    Transactions.Add(t); // Və ya Insert(0, t)
+                }
+            }
+        }
     }
 }

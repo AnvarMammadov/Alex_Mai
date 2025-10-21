@@ -1,0 +1,173 @@
+﻿<UserControl x:Class="Alex_Mai.Views.ChatView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:Alex_Mai.Views"
+             xmlns:viewModels="clr-namespace:Alex_Mai.ViewModels"
+             xmlns:converters="clr-namespace:Alex_Mai.Converters"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance Type=viewModels:ChatViewModel}"
+             d:DesignHeight="500" d:DesignWidth="280" Background="Black"
+             Unloaded="UserControl_Unloaded">
+
+    <UserControl.Resources>
+        <converters:BoolToMessageStyleMultiConverter x:Key="BoolToMessageStyleMultiConverter"/>
+        <converters:BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+
+        <Style x:Key="SentMessageStyle" TargetType="Border">
+            <Setter Property="Background" Value="#303030"/>
+            <Setter Property="CornerRadius" Value="10,10,0,10"/>
+            <Setter Property="Padding" Value="8"/>
+            <Setter Property="Margin" Value="40,5,5,5"/>
+            <Setter Property="HorizontalAlignment" Value="Right"/>
+            <Setter Property="MaxWidth" Value="200"/>
+        </Style>
+
+        <Style x:Key="ReceivedMessageStyle" TargetType="Border">
+            <Setter Property="Background" Value="#1C1C1C"/>
+            <Setter Property="CornerRadius" Value="10,10,10,0"/>
+            <Setter Property="Padding" Value="8"/>
+            <Setter Property="Margin" Value="5,5,40,5"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="MaxWidth" Value="200"/>
+        </Style>
+        <Style x:Key="ModernThumbStyle" TargetType="{x:Type Thumb}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Thumb}">
+                        <Border Background="#60FFFFFF" CornerRadius="3" />
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="ModernScrollBarStyle" TargetType="{x:Type ScrollBar}">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Width" Value="6"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ScrollBar}">
+                        <Track x:Name="PART_Track" IsDirectionReversed="true">
+                            <Track.Thumb>
+                                <Thumb Style="{StaticResource ModernThumbStyle}" Width="4" />
+                            </Track.Thumb>
+                        </Track>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="ModernScrollViewerStyle" TargetType="{x:Type ScrollViewer}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ScrollViewer}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <ScrollContentPresenter Grid.Column="0" CanContentScroll="True" />
+
+                            <ScrollBar x:Name="PART_VerticalScrollBar"
+                                     Grid.Column="1"
+                                     Style="{StaticResource ModernScrollBarStyle}"
+                                     Value="{TemplateBinding VerticalOffset}"
+                                     Maximum="{TemplateBinding ScrollableHeight}"
+                                     ViewportSize="{TemplateBinding ViewportHeight}"
+                                     Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}"
+                                     Opacity="0"/>
+                        </Grid>
+
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="PART_VerticalScrollBar" Property="Opacity" Value="0.7"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="0" Background="#111111" Padding="10">
+            <Grid VerticalAlignment="Center">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="0" Command="{Binding NavigateToHomeCommand}" VerticalAlignment="Center" Background="Transparent" BorderThickness="0" Foreground="White" Margin="0,0,10,0" Content="&lt; Back"/>
+                <Ellipse Grid.Column="1" Width="30" Height="30" Margin="0,0,8,0">
+                    <Ellipse.Fill>
+                        <ImageBrush ImageSource="{Binding MaiMoodIcon}"/>
+                    </Ellipse.Fill>
+                </Ellipse>
+                <StackPanel Grid.Column="2" VerticalAlignment="Center">
+                    <TextBlock Text="Mai" Foreground="White" FontWeight="Bold"/>
+                    <TextBlock Text="{Binding CurrentMaiStatus}" Foreground="LightGray" FontSize="10"/>
+                </StackPanel>
+                <Button Grid.Column="3" Command="{Binding ViewMaiStatusCommand}" Content="..." FontSize="16" FontWeight="Bold" Background="Transparent" BorderThickness="0" Foreground="White" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5,0,0,0" />
+            </Grid>
+        </Border>
+
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" x:Name="MessageScrollViewer"
+                      Style="{StaticResource ModernScrollViewerStyle}">
+
+            <ItemsControl ItemsSource="{Binding Messages}">
+
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border x:Name="MessageBorder">
+                            <Border.Style>
+                                <MultiBinding Converter="{StaticResource BoolToMessageStyleMultiConverter}">
+                                    <Binding Path="IsSentByUser"/>
+                                    <Binding RelativeSource="{RelativeSource AncestorType={x:Type local:ChatView}}"/>
+                                </MultiBinding>
+                            </Border.Style>
+                            <TextBlock Text="{Binding Text}" Foreground="White" TextWrapping="Wrap"/>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+
+        <Border Grid.Row="2" Margin="10,0,0,5" HorizontalAlignment="Left"
+                Visibility="{Binding IsMaiTyping, Converter={StaticResource BoolToVisibilityConverter}}">
+            <TextBlock Text="Typing..." Foreground="Gray" FontStyle="Italic" FontSize="10"/>
+        </Border>
+
+
+        <Border Grid.Row="3" Background="#111111" Padding="8">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBox Grid.Column="0" Text="{Binding NewMessageText, UpdateSourceTrigger=PropertyChanged}"
+                         Background="#303030" Foreground="White" BorderThickness="0"
+                         Padding="5" VerticalContentAlignment="Center" MaxLength="100"
+                         TextWrapping="Wrap" AcceptsReturn="True" SpellCheck.IsEnabled="False"/>
+                <Button Grid.Column="1"
+                        Command="{Binding SendMessageCommand}"
+                        Style="{StaticResource GameButtonStyle}"
+                        Width="35" Height="35" Padding="0" Margin="5,0,0,0"
+                        VerticalAlignment="Center">
+                    <TextBlock Text=">" FontSize="18" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <!--<Image Source="/Assets/Icons/icon_send.png" Width="18" Height="18"/>-->
+                </Button>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

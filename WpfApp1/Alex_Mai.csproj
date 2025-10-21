@@ -47,6 +47,7 @@
     <None Remove="Assets\Icons\icon_phone_chat.png" />
     <None Remove="Assets\Icons\icon_phone_settings.png" />
     <None Remove="Assets\Icons\icon_phone_stats.png" />
+    <None Remove="Assets\Icons\icon_phone_wallet.png" />
     <None Remove="Assets\Icons\icon_salad.png" />
     <None Remove="Assets\Icons\icon_salt.jpg" />
     <None Remove="Assets\Icons\icon_soda.jpg" />
@@ -73,10 +74,21 @@
     <None Remove="Assets\Sprites\pan_with_milk.png" />
     <None Remove="Assets\Sprites\pan_with_oil.png" />
     <None Remove="Assets\Sprites\talking%28day1_alex_mai_sema%29.png" />
+    <None Remove="Data\chats.json" />
     <None Remove="Data\dialogue.json" />
+    <None Remove="Data\gallery_items.json" />
     <None Remove="Data\market_items.json" />
     <None Remove="Data\orders.json" />
     <None Remove="Data\recipes.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Data\chats.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\gallery_items.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
@@ -123,6 +135,9 @@
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Assets\Icons\icon_phone_stats.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Icons\icon_phone_wallet.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Assets\Icons\icon_soda.jpg">

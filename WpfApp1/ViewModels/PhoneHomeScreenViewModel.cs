@@ -26,15 +26,13 @@ namespace Alex_Mai.ViewModels
         [RelayCommand]
         private void NavigateToChat()
         {
-            // Gələcəkdə bura Chat/Mesajlaşma ekranına keçid məntiqi gələcək.
-            MessageBox.Show("Chat tətbiqi hələ hazır deyil.");
+            _parentViewModel.NavigateToChat();  
         }
 
         [RelayCommand]
         private void NavigateToCG()
         {
-            // Gələcəkdə bura CG (Qalereya) ekranına keçid məntiqi gələcək.
-            MessageBox.Show("Gallery tətbiqi hələ hazır deyil.");
+            _parentViewModel.NavigateToGallery();
         }
 
         [RelayCommand]
@@ -42,6 +40,12 @@ namespace Alex_Mai.ViewModels
         {
             // Gələcəkdə bura Kamera funksiyasına keçid məntiqi gələcək (bəlkə bir mini-oyun?).
             MessageBox.Show("Camera tətbiqi hələ hazır deyil.");
+        }
+
+        [RelayCommand]
+        private void NavigateToWallet()
+        {
+            _parentViewModel.NavigateToWallet(); // Call the method in PhoneViewModel
         }
     }
 }

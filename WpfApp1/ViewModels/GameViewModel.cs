@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using Alex_Mai.Models;
 using Alex_Mai.Services;
+using Alex_Mai.ViewModels;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Alex_Mai.ViewModels;
 
 namespace Alex_Mai.ViewModels
 {
@@ -370,9 +371,38 @@ namespace Alex_Mai.ViewModels
 
                     // ⬇️ YENİ: pul
                     case "Money":
-                        if (action.Operator == "Add") CurrentGameState.PlayerMoney += action.Value;
-                        else if (action.Operator == "Subtract") CurrentGameState.PlayerMoney -= action.Value;
-                        else if (action.Operator == "Set") CurrentGameState.PlayerMoney = action.Value;
+                        int previousMoney = CurrentGameState.PlayerMoney;
+                        int amount = action.Value;
+                        TransactionType type = TransactionType.Expense; // Default
+                        string description = "Unknown Transaction"; // Default
+                        if (action.Operator == "Add") {
+                            CurrentGameState.PlayerMoney += amount;
+                            type = TransactionType.Income;
+                            description = "Received Money";
+                        }
+                        else if (action.Operator == "Subtract")
+                        {
+                            CurrentGameState.PlayerMoney -= amount;
+                            type = TransactionType.Expense;
+                            description = "Spent Money"; // Daha yaxşı description dialoqdan gələ bilər
+                        }
+                        else if (action.Operator == "Set")
+                        {
+                            // Set üçün tarixçə əlavə etmək mürəkkəb ola bilər, fərqi hesablamaq lazımdır
+                            // Hələlik bunu buraxaq və ya fərqi hesablayıb əlavə edək
+                            CurrentGameState.PlayerMoney = amount;
+                            // Opsional: Fərqi hesablayıb əlavə et
+                            int difference = amount - previousMoney;
+                            if (difference != 0)
+                            {
+                                CurrentGameState.AddTransaction("Balance Set (Dialogue)", Math.Abs(difference), difference > 0 ? TransactionType.Income : TransactionType.Expense, DateTime.Now);
+                            }
+                        }
+                        // Əgər pul dəyişibsə əməliyyatı qeyd et (Set xaricində)
+                        if (action.Operator == "Add" || action.Operator == "Subtract")
+                        {
+                            CurrentGameState.AddTransaction(description, amount, type, DateTime.Now);
+                        }
                         break;
 
                     // ⬇️ İstəsən “Sleep” kimi flag da dəstəkləyə bilərik
@@ -544,12 +574,27 @@ namespace Alex_Mai.ViewModels
 
             if (moneyEarned > 0)
             {
+                // *** YENİ: Əməliyyatı qeyd et ***
+                // Pul əlavə olunmazdan *sonra* balans düzgün görünsün deyə
+                // bu metodu PlayerMoney yeniləndikdən sonra çağırmaq daha yaxşıdır
+                // Və ya AddTransaction metodunu balansı ayrıca alacaq şəkildə dəyişmək
+                // Hələlik:
+                int balanceBefore = CurrentGameState.PlayerMoney;
+                CurrentGameState.PlayerMoney += moneyEarned; // Pul əlavə et
+                CurrentGameState.AddTransaction("Part-time Job Earnings", moneyEarned, TransactionType.Income, DateTime.Now);   // *** DƏYİŞİKLİK: Birbaşa GameState-ə əlavə et ***
                 ShowDialogue("reaction_work_end_success");
             }
             else
             {
+                CurrentGameState.PlayerMoney += moneyEarned; // For potential negative earnings/fees? Update if needed.
+                                                             // Optionally log failed work attempt if needed
                 ShowDialogue("reaction_work_end_fail");
             }
+
+            // Make sure PlayerMoney change notification reaches WalletViewModel
+            // The PropertyChanged subscription should handle this.
+
+            // TODO: Pulun dəyişdiyi digər yerlərdə də (məsələn, dialoq actionları) AddTransactionToWallet çağırılmalıdır.
         }
 
         public async void PurchaseItem(MarketItem item)
@@ -569,6 +614,9 @@ namespace Alex_Mai.ViewModels
             {
                 // Pulu çıx
                 CurrentGameState.PlayerMoney -= item.Price;
+
+                // *** DƏYİŞİKLİK: Birbaşa GameState-ə əlavə et ***
+                CurrentGameState.AddTransaction($"Purchased: {item.Name}", item.Price, TransactionType.Expense, DateTime.Now);
 
                 // İnventara əlavə et
                 Inventory.AddItem(new InventoryItem
