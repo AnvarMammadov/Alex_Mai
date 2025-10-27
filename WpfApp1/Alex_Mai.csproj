@@ -24,6 +24,7 @@
     <None Remove="Assets\Backgrounds\mai_sit_on_bed_bedroom.png" />
     <None Remove="Assets\Backgrounds\mai_sleep_bed.jpg" />
     <None Remove="Assets\Backgrounds\market.jpg" />
+    <None Remove="Assets\Backgrounds\market_store.jpeg" />
     <None Remove="Assets\Backgrounds\market_store.jpg" />
     <None Remove="Assets\Backgrounds\mmbg.jpg" />
     <None Remove="Assets\Backgrounds\park_.jpg" />
@@ -102,6 +103,9 @@
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Assets\Backgrounds\market.jpg">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Backgrounds\market_store.jpeg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Assets\Backgrounds\market_store.jpg">

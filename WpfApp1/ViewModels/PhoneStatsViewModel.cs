@@ -26,5 +26,12 @@ namespace Alex_Mai.ViewModels
 
         [RelayCommand]
         private void NavigateToHome() { _parentViewModel.NavigateToHome(); }
+
+        public void Cleanup()
+        {
+            // Hazırda heç bir abunəlik yoxdur.
+            Console.WriteLine("PhoneStatsViewModel cleaned up."); // Debug üçün mesaj (opsional)
+        }
     }
 }
+

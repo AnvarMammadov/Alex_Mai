@@ -132,7 +132,7 @@ namespace Alex_Mai.ViewModels
             LoadLocationIndex();
 
             Inventory = new InventoryViewModel(this);
-            Phone = new PhoneViewModel(this);
+            Phone = new PhoneViewModel(this, CurrentGameState);
             Map = new MapViewModel(this);
             CookingGame = new CookingGameViewModel(this);
             WorkGame = new WorkMinigameViewModel(this);

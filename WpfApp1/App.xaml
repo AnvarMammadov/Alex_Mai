@@ -131,7 +131,7 @@
                     <DataTemplate DataType="{x:Type viewModels:WalletViewModel}">
                         <views:WalletView/>
                     </DataTemplate>
-
+    
                 </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>

@@ -67,7 +67,7 @@ namespace Alex_Mai.ViewModels
         }
 
         [RelayCommand]
-        private void ShowFullImage(GalleryItem item)
+        private void ShowFullImage(GalleryItem item)     
         {
             if (item != null && item.IsUnlocked)
             {
@@ -89,6 +89,13 @@ namespace Alex_Mai.ViewModels
             // Reset state if needed when leaving
             CloseFullImage();
             _parentViewModel.NavigateToHome();
+        }
+
+        public void Cleanup()
+        {
+            // Hazırda heç bir abunəlik yoxdur, amma metodun olması yaxşıdır.
+            // Gələcəkdə bura event unsubscription kodları əlavə oluna bilər.
+            Console.WriteLine("GalleryViewModel cleaned up."); // Debug üçün mesaj (opsional)
         }
     }
 }

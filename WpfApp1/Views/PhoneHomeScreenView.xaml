@@ -1,14 +1,13 @@
 ﻿<UserControl x:Class="Alex_Mai.Views.PhoneHomeScreenView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:Alex_Mai.Views"
-             mc:Ignorable="d" 
+             mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="300">
 
     <UserControl.Resources>
-
         <Style x:Key="AppIconStyle" TargetType="Button">
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="BorderThickness" Value="0"/>
@@ -18,8 +17,8 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <ContentPresenter x:Name="Content" 
-                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                        <ContentPresenter x:Name="Content"
+                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                           VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                                           RenderTransformOrigin="0.5, 0.5">
 
@@ -28,10 +27,10 @@
                             </ContentPresenter.RenderTransform>
 
                             <ContentPresenter.Effect>
-                                <DropShadowEffect x:Name="IconGlow" 
-                                                  Color="White" 
-                                                  ShadowDepth="0" 
-                                                  BlurRadius="10" 
+                                <DropShadowEffect x:Name="IconGlow"
+                                                  Color="White"
+                                                  ShadowDepth="0"
+                                                  BlurRadius="10"
                                                   Opacity="0" />
                             </ContentPresenter.Effect>
                         </ContentPresenter>
@@ -43,7 +42,6 @@
                                     <Storyboard>
                                         <DoubleAnimation Storyboard.TargetName="IconScale" Storyboard.TargetProperty="ScaleX" To="1.05" Duration="0:0:0.2" />
                                         <DoubleAnimation Storyboard.TargetName="IconScale" Storyboard.TargetProperty="ScaleY" To="1.05" Duration="0:0:0.2" />
-
                                         <DoubleAnimation Storyboard.TargetName="IconGlow" Storyboard.TargetProperty="Opacity" To="0.8" Duration="0:0:0.2" />
                                     </Storyboard>
                                 </BeginStoryboard>
@@ -81,9 +79,9 @@
             </Setter>
         </Style>
 
-        <DrawingBrush x:Key="HomeScreenWallpaper_GeometricLines" 
-                      TileMode="Tile" 
-                      Viewport="0,0,15,15" 
+        <DrawingBrush x:Key="HomeScreenWallpaper_GeometricLines"
+                      TileMode="Tile"
+                      Viewport="0,0,15,15"
                       ViewportUnits="Absolute">
             <DrawingBrush.Drawing>
                 <DrawingGroup>
@@ -116,141 +114,143 @@
             <Grid VerticalAlignment="Center">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Grid.Column="0" Text="11:08" Foreground="White" FontSize="12" VerticalAlignment="Center" Margin="0,0,5,0"/>
-                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,5,0">
+
+                <TextBlock Grid.Column="0" Text="{Binding FormattedTime, Mode=OneWay}" Foreground="White" FontSize="12" VerticalAlignment="Center" Margin="0,0,5,0"/>
+
+                <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,5,0">
                     <Rectangle Fill="White" Width="3" Height="4" Margin="1,0" VerticalAlignment="Bottom"/>
                     <Rectangle Fill="White" Width="3" Height="6" Margin="1,0" VerticalAlignment="Bottom"/>
                     <Rectangle Fill="White" Width="3" Height="8" Margin="1,0" VerticalAlignment="Bottom"/>
                     <Rectangle Fill="#AAAAAA" Width="3" Height="10" Margin="1,0" VerticalAlignment="Bottom"/>
                 </StackPanel>
-                <TextBlock Grid.Column="3" Text="Sep 14" Foreground="White" FontSize="12" Margin="0,0,5,0" VerticalAlignment="Center"/>
-                <Border Grid.Column="4" BorderBrush="White" BorderThickness="1" Width="20" Height="10" VerticalAlignment="Center" CornerRadius="1">
+
+                <Border Grid.Column="3" BorderBrush="White" BorderThickness="1" Width="20" Height="10" VerticalAlignment="Center" CornerRadius="1">
                     <Rectangle Fill="White" Width="12" Height="6" HorizontalAlignment="Left" Margin="1"/>
                 </Border>
+
             </Grid>
         </Border>
 
         <WrapPanel Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10">
-
             <Button Style="{StaticResource AppIconStyle}" Command="{Binding NavigateToStatsCommand}">
                 <StackPanel HorizontalAlignment="Center">
-                    <Border Width="60" Height="60" 
-                            Background="White" 
-                            CornerRadius="12">
-                        <Image Source="/Assets/Icons/icon_phone_stats.png" 
-                               Width="45" Height="45"
-                               VerticalAlignment="Center"
-                               HorizontalAlignment="Center"
-                               Stretch="Uniform"/>
+                    <Border Width="60" Height="60"
+                             Background="White"
+                             CornerRadius="12">
+                        <Image Source="/Assets/Icons/icon_phone_stats.png"
+                                Width="45" Height="45"
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Center"
+                                Stretch="Uniform"/>
                     </Border>
-                    <TextBlock Text="Stats" 
-                               Foreground="White" 
-                               TextAlignment="Center" 
-                               Margin="0,8,0,0" 
-                               FontFamily="{StaticResource GameFont}"/>
+                    <TextBlock Text="Stats"
+                                Foreground="White"
+                                TextAlignment="Center"
+                                Margin="0,8,0,0"
+                                FontFamily="{StaticResource GameFont}"/>
                 </StackPanel>
             </Button>
 
             <Button Style="{StaticResource AppIconStyle}" Command="{Binding NavigateToSettingsCommand}">
                 <StackPanel HorizontalAlignment="Center">
-                    <Border Width="60" Height="60" 
-                            Background="White" 
-                            CornerRadius="12">
-                        <Image Source="/Assets/Icons/icon_phone_settings.png" 
-                               Width="45" Height="45"
-                               VerticalAlignment="Center"
-                               HorizontalAlignment="Center"
-                               Stretch="Uniform"/>
+                    <Border Width="60" Height="60"
+                             Background="White"
+                             CornerRadius="12">
+                        <Image Source="/Assets/Icons/icon_phone_settings.png"
+                                Width="45" Height="45"
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Center"
+                                Stretch="Uniform"/>
                     </Border>
-                    <TextBlock Text="Settings" 
-                               Foreground="White" 
-                               TextAlignment="Center" 
-                               Margin="0,8,0,0" 
-                               FontFamily="{StaticResource GameFont}"/>
+                    <TextBlock Text="Settings"
+                                Foreground="White"
+                                TextAlignment="Center"
+                                Margin="0,8,0,0"
+                                FontFamily="{StaticResource GameFont}"/>
                 </StackPanel>
             </Button>
 
             <Button Style="{StaticResource AppIconStyle}" Command="{Binding NavigateToChatCommand}">
                 <StackPanel HorizontalAlignment="Center">
-                    <Border Width="60" Height="60" 
-                            Background="White" 
-                            CornerRadius="12">
-                        <Image Source="/Assets/Icons/icon_phone_chat.png" 
-                               Width="45" Height="45"
-                               VerticalAlignment="Center"
-                               HorizontalAlignment="Center"
-                               Stretch="Uniform"/>
+                    <Border Width="60" Height="60"
+                             Background="White"
+                             CornerRadius="12">
+                        <Image Source="/Assets/Icons/icon_phone_chat.png"
+                                Width="45" Height="45"
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Center"
+                                Stretch="Uniform"/>
                     </Border>
-                    <TextBlock Text="Chat" 
-                               Foreground="White" 
-                               TextAlignment="Center" 
-                               Margin="0,8,0,0" 
-                               FontFamily="{StaticResource GameFont}"/>
+                    <TextBlock Text="Chat"
+                                Foreground="White"
+                                TextAlignment="Center"
+                                Margin="0,8,0,0"
+                                FontFamily="{StaticResource GameFont}"/>
                 </StackPanel>
             </Button>
 
             <Button Style="{StaticResource AppIconStyle}" Command="{Binding NavigateToCGCommand}">
                 <StackPanel HorizontalAlignment="Center">
-                    <Border Width="60" Height="60" 
-                            Background="White" 
-                            CornerRadius="12">
-                        <Image Source="/Assets/Icons/icon_phone_cg.png" 
-                               Width="45" Height="45"
-                               VerticalAlignment="Center"
-                               HorizontalAlignment="Center"
-                               Stretch="Uniform"/>
+                    <Border Width="60" Height="60"
+                             Background="White"
+                             CornerRadius="12">
+                        <Image Source="/Assets/Icons/icon_phone_cg.png"
+                                Width="45" Height="45"
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Center"
+                                Stretch="Uniform"/>
                     </Border>
-                    <TextBlock Text="Gallery" 
-                               Foreground="White" 
-                               TextAlignment="Center" 
-                               Margin="0,8,0,0" 
-                               FontFamily="{StaticResource GameFont}"/>
+                    <TextBlock Text="Gallery"
+                                Foreground="White"
+                                TextAlignment="Center"
+                                Margin="0,8,0,0"
+                                FontFamily="{StaticResource GameFont}"/>
                 </StackPanel>
             </Button>
 
             <Button Style="{StaticResource AppIconStyle}" Command="{Binding NavigateToCameraCommand}">
                 <StackPanel HorizontalAlignment="Center">
-                    <Border Width="60" Height="60" 
-                            Background="White" 
-                            CornerRadius="12">
-                        <Image Source="/Assets/Icons/icon_phone_camera.png" 
-                               Width="45" Height="45"
-                               VerticalAlignment="Center"
-                               HorizontalAlignment="Center"
-                               Stretch="Uniform"/>
+                    <Border Width="60" Height="60"
+                             Background="White"
+                             CornerRadius="12">
+                        <Image Source="/Assets/Icons/icon_phone_camera.png"
+                                Width="45" Height="45"
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Center"
+                                Stretch="Uniform"/>
                     </Border>
-                    <TextBlock Text="Camera" 
-                               Foreground="White" 
-                               TextAlignment="Center" 
-                               Margin="0,8,0,0" 
-                               FontFamily="{StaticResource GameFont}"/>
+                    <TextBlock Text="Camera"
+                                Foreground="White"
+                                TextAlignment="Center"
+                                Margin="0,8,0,0"
+                                FontFamily="{StaticResource GameFont}"/>
                 </StackPanel>
             </Button>
 
             <Button Style="{StaticResource AppIconStyle}" Command="{Binding NavigateToWalletCommand}">
                 <StackPanel HorizontalAlignment="Center">
-                    <Border Width="60" Height="60" 
-                Background="White" 
-                CornerRadius="12">
-                        <Image Source="/Assets/Icons/icon_phone_wallet.png" 
-                   Width="45" Height="45"
-                   VerticalAlignment="Center"
-                   HorizontalAlignment="Center"
-                   Stretch="Uniform"/>
+                    <Border Width="60" Height="60"
+                             Background="White"
+                             CornerRadius="12">
+                        <Image Source="/Assets/Icons/icon_phone_wallet.png"
+                                Width="45" Height="45"
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Center"
+                                Stretch="Uniform"/>
                     </Border>
-                    <TextBlock Text="Wallet" 
-                   Foreground="White" 
-                   TextAlignment="Center" 
-                   Margin="0,8,0,0" 
-                   FontFamily="{StaticResource GameFont}"/>
+                    <TextBlock Text="Wallet"
+                                Foreground="White"
+                                TextAlignment="Center"
+                                Margin="0,8,0,0"
+                                FontFamily="{StaticResource GameFont}"/>
                 </StackPanel>
             </Button>
-
+            
+            
         </WrapPanel>
     </Grid>
 </UserControl>

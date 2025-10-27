@@ -957,7 +957,7 @@
     "day2_market_hub": {
         "character": "Alex",
         "text": "Marketə girdin. Rəflər doludur.",
-        "background": "market.jpg",
+        "background": "market_store.jpeg",
         "sprite": null,
         "choices": [
             {

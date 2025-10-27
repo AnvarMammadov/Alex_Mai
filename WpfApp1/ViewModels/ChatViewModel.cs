@@ -159,6 +159,16 @@ namespace Alex_Mai.ViewModels
             _parentViewModel.NavigateToHome();
         }
 
+        public void Cleanup()
+        {
+            // MaiStats dəyişikliklərini izləməyi dayandır
+            if (_maiStats != null) // Ehtiyat üçün null yoxlaması
+            {
+                _maiStats.PropertyChanged -= MaiStats_PropertyChanged;
+                Console.WriteLine("ChatViewModel cleaned up."); // Debug üçün mesaj (opsional)
+            }
+        }
+
         // Optional: Ensure unsubscription if the ViewModel is somehow destroyed unexpectedly
         // You might need a more robust mechanism depending on ViewModel lifecycle management
         // For now, unsubscription in NavigateToHome should cover the main scenario.
