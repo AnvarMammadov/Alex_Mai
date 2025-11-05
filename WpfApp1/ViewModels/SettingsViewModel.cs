@@ -13,7 +13,7 @@ namespace Alex_Mai.ViewModels
     public partial class SettingsViewModel : ObservableObject
     {
         private readonly MainViewModel _mainViewModel;
-        private readonly SettingsService _settingsService;
+        private readonly SettingsService _settingsService; // <-- Dəyişiklik yoxdur
 
         [ObservableProperty]
         private GameSettings _currentSettings;
@@ -21,14 +21,20 @@ namespace Alex_Mai.ViewModels
         public SettingsViewModel(MainViewModel mainViewModel)
         {
             _mainViewModel = mainViewModel;
-            _settingsService = new SettingsService();
-            CurrentSettings = _settingsService.LoadSettings();
+
+            // DƏYİŞİKLİK: 'new SettingsService()' əvəzinə 'Instance' istifadə edirik
+            _settingsService = SettingsService.Instance;
+
+            // DƏYİŞİKLİK: 'LoadSettings()' əvəzinə 'GetSettings()' çağırırıq
+            CurrentSettings = _settingsService.GetSettings();
         }
 
         [RelayCommand]
         private void SaveAndBack()
         {
-            _settingsService.SaveSettings(CurrentSettings);
+            // DƏYİŞİKLİK: 'SaveSettings' artıq parametri özü bilir
+            _settingsService.SaveSettings();
+
             // Ana menyuya qayıt
             _mainViewModel.NavigateToMenu();
         }

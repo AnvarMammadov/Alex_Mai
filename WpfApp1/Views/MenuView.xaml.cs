@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Alex_Mai.Services;
 
 namespace Alex_Mai.Views
 {
@@ -23,6 +24,13 @@ namespace Alex_Mai.Views
         public MenuView()
         {
             InitializeComponent();
+        }
+
+        // YENİ METODU BURA ƏLAVƏ EDİN
+        private void Button_MouseEnter(object sender, MouseEventArgs e)
+        {
+            // Əlavə etdiyiniz faylın adını bura yazın
+            AudioService.Instance.PlaySFX("click.wav");
         }
     }
 }

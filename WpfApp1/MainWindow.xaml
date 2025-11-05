@@ -4,9 +4,31 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Alex_Mai"
+        xmlns:shell="clr-namespace:System.Windows.Shell;assembly=PresentationFramework" 
         mc:Ignorable="d"
-        Title="MainWindow" Height="720" Width="1280" WindowStartupLocation="CenterScreen">
+        Height="720" Width="1280" WindowStartupLocation="CenterScreen"
+        Icon="/Assets/Icons/ui_mai_icon.jpg">
+
+    <shell:WindowChrome.WindowChrome>
+        <shell:WindowChrome CaptionHeight="30" ResizeBorderThickness="5" />
+    </shell:WindowChrome.WindowChrome>
+
     <Grid>
-        <ContentControl Content="{Binding CurrentViewModel}" />
+        <ContentControl Content="{Binding CurrentViewModel}" Margin="0,30,0,0" />
+
+        <Grid VerticalAlignment="Top" Height="30" Background="#FF1E1E1E">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top">
+
+                <Button Content="&#xE921;" Style="{StaticResource WindowButtonStyle}"
+                        Click="MinimizeButton_Click"/>
+
+                <Button x:Name="MaximizeButton" Content="&#xE922;" Style="{StaticResource WindowButtonStyle}"
+                        Click="MaximizeButton_Click"/>
+
+                <Button Content="&#xE8BB;" Style="{StaticResource WindowCloseButtonStyle}"
+                        Click="CloseButton_Click"/>
+
+            </StackPanel>
+        </Grid>
     </Grid>
 </Window>

@@ -7,10 +7,35 @@
              mc:Ignorable="d" 
              d:DesignHeight="720" d:DesignWidth="1280">
 
-    <Grid>
+    <UserControl.Resources>
+        <CubicEase x:Key="CubicEaseOut" EasingMode="EaseOut"/>
+    </UserControl.Resources>
+    <UserControl.Triggers>
+        <EventTrigger RoutedEvent="Loaded">
+            <BeginStoryboard>
+                <Storyboard>
+                    <DoubleAnimation Storyboard.TargetName="RootGrid" 
+                                     Storyboard.TargetProperty="Opacity" 
+                                     From="0" To="1" 
+                                     Duration="0:0:2"/>
+                </Storyboard>
+            </BeginStoryboard>
+        </EventTrigger>
+    </UserControl.Triggers>
+
+    <Grid x:Name="RootGrid" Opacity="0">
+
         <Image Source="\Assets\Backgrounds\mmbg.jpg" Stretch="UniformToFill"/>
 
-        <Border Background="#80000000"/>
+        <Border>
+            <Border.Background>
+                <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
+                    <GradientStop Color="#66000000" Offset="0"/>
+                    <GradientStop Color="#55000000" Offset="0.3"/>
+                    <GradientStop Color="#00000000" Offset="0.7"/>
+                </LinearGradientBrush>
+            </Border.Background>
+        </Border>
 
         <Grid>
             <Grid.ColumnDefinitions>
@@ -25,29 +50,167 @@
                     Padding="40,0,0,0">
 
                 <StackPanel VerticalAlignment="Center" HorizontalAlignment="Left">
-                    <Button Content="Start Game" 
+
+                    <Button Content="New Game" 
                             Style="{StaticResource MainMenuButtonStyle}" 
-                            Command="{Binding StartGameCommand}"/>
-                    <Button Content="Load Game" 
+                            Command="{Binding StartGameCommand}"
+                            RenderTransformOrigin="0.5,0.5"
+                            MouseEnter="Button_MouseEnter">
+                        <Button.RenderTransform>
+                            <TranslateTransform Y="0"/>
+                        </Button.RenderTransform>
+                        <Button.Triggers>
+                            <EventTrigger RoutedEvent="Loaded">
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetProperty="(Button.RenderTransform).(TranslateTransform.Y)"
+                                                         From="0" To="-8" Duration="0:0:2"
+                                                         AutoReverse="True" RepeatBehavior="Forever"
+                                                         BeginTime="0:0:0"
+                                                         EasingFunction="{StaticResource CubicEaseOut}"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                        </Button.Triggers>
+                    </Button>
+
+                    <Button Content="{Binding LoadGameButtonText}" 
+                            IsEnabled="{Binding IsLoadGameEnabled}"
                             Style="{StaticResource MainMenuButtonStyle}" 
-                            Command="{Binding LoadGameCommand}"/>
+                            Command="{Binding LoadGameCommand}"
+                            RenderTransformOrigin="0.5,0.5"
+                            MouseEnter="Button_MouseEnter">
+                        <Button.RenderTransform>
+                            <TranslateTransform Y="0"/>
+                        </Button.RenderTransform>
+                        <Button.Triggers>
+                            <EventTrigger RoutedEvent="Loaded">
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetProperty="(Button.RenderTransform).(TranslateTransform.Y)"
+                                                         From="0" To="-8" Duration="0:0:2"
+                                                         AutoReverse="True" RepeatBehavior="Forever"
+                                                         BeginTime="0:0:0.3" EasingFunction="{StaticResource CubicEaseOut}"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                        </Button.Triggers>
+                    </Button>
+
                     <Button Content="Settings" 
                             Style="{StaticResource MainMenuButtonStyle}" 
-                            Command="{Binding SettingsCommand}"/>
+                            Command="{Binding SettingsCommand}"
+                            RenderTransformOrigin="0.5,0.5"
+                            MouseEnter="Button_MouseEnter">
+                        <Button.RenderTransform>
+                            <TranslateTransform Y="0"/>
+                        </Button.RenderTransform>
+                        <Button.Triggers>
+                            <EventTrigger RoutedEvent="Loaded">
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetProperty="(Button.RenderTransform).(TranslateTransform.Y)"
+                                                         From="0" To="-8" Duration="0:0:2"
+                                                         AutoReverse="True" RepeatBehavior="Forever"
+                                                         BeginTime="0:0:0.1" EasingFunction="{StaticResource CubicEaseOut}"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                        </Button.Triggers>
+                    </Button>
+
                     <Button Content="Quit" 
                             Style="{StaticResource MainMenuButtonStyle}" 
-                            Command="{Binding QuitGameCommand}"/>
+                            Command="{Binding QuitGameCommand}"
+                            RenderTransformOrigin="0.5,0.5"
+                            MouseEnter="Button_MouseEnter">
+                        <Button.RenderTransform>
+                            <TranslateTransform Y="0"/>
+                        </Button.RenderTransform>
+                        <Button.Triggers>
+                            <EventTrigger RoutedEvent="Loaded">
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation Storyboard.TargetProperty="(Button.RenderTransform).(TranslateTransform.Y)"
+                                                         From="0" To="-8" Duration="0:0:2"
+                                                         AutoReverse="True" RepeatBehavior="Forever"
+                                                         BeginTime="0:0:0.4" EasingFunction="{StaticResource CubicEaseOut}"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                        </Button.Triggers>
+                    </Button>
+
                 </StackPanel>
             </Border>
 
-            <Viewbox Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,100,60" MaxWidth="500">
+            <TextBlock Text="Every morning felt the same... until that day."
+                       FontFamily="{StaticResource GameFont}"
+                       Foreground="White" Opacity="0.15"
+                       FontSize="14"
+                       VerticalAlignment="Bottom"
+                       HorizontalAlignment="Left"
+                       Margin="40,0,0,30"
+                       Grid.Column="0"/>
+
+            <Viewbox Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Bottom" 
+                     Margin="0,0,100,60" MaxWidth="500"
+                     RenderTransformOrigin="0.5,0.5">
+
+                <Viewbox.RenderTransform>
+                    <ScaleTransform x:Name="TitleScale" ScaleX="1" ScaleY="1"/>
+                </Viewbox.RenderTransform>
+                <Viewbox.Triggers>
+                    <EventTrigger RoutedEvent="MouseEnter">
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetName="TitleScale"
+                                     Storyboard.TargetProperty="ScaleX"
+                                     To="1.03" Duration="0:0:0.2"/>
+                                <DoubleAnimation Storyboard.TargetName="TitleScale"
+                                     Storyboard.TargetProperty="ScaleY"
+                                     To="1.03" Duration="0:0:0.2"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+
+                    <EventTrigger RoutedEvent="MouseLeave">
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetName="TitleScale"
+                                     Storyboard.TargetProperty="ScaleX"
+                                     To="1.0" Duration="0:0:0.2"/>
+                                <DoubleAnimation Storyboard.TargetName="TitleScale"
+                                     Storyboard.TargetProperty="ScaleY"
+                                     To="1.0" Duration="0:0:0.2"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+                </Viewbox.Triggers>
+
                 <TextBlock Text="Alex &amp; Mai" 
                            Foreground="White" 
-                           FontFamily="{StaticResource GameFont}"
-                           Opacity="0.8">
+                           FontFamily="{StaticResource GameFont}">
                     <TextBlock.Effect>
                         <DropShadowEffect ShadowDepth="2" BlurRadius="10" Color="Black" Opacity="0.6"/>
                     </TextBlock.Effect>
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Opacity" Value="0"/>
+                            <Style.Triggers>
+                                <EventTrigger RoutedEvent="Loaded">
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetProperty="Opacity" 
+                                                             From="0" To="0.8" 
+                                                             Duration="0:0:2" 
+                                                             BeginTime="0:0:1"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </EventTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
                 </TextBlock>
             </Viewbox>
 

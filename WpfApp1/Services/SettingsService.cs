@@ -9,14 +9,20 @@ using Alex_Mai.Models;
 
 namespace Alex_Mai.Services
 {
+    // Bu xidməti "Singleton" edirik ki, bütün proqram eyni tənzimləmə obyektindən istifadə etsin.
     public class SettingsService
     {
-        private readonly string _settingsFilePath;
+        private static readonly Lazy<SettingsService> lazy = new Lazy<SettingsService>(() => new SettingsService());
+        public static SettingsService Instance => lazy.Value;
 
-        public SettingsService()
+        private readonly string _settingsFilePath;
+        private GameSettings _cachedSettings; // Tənzimləmələri yaddaşda saxlamaq üçün
+
+        // Konstruktoru 'private' edirik ki, kimsə kənardan yenisini yarada bilməsin
+        private SettingsService()
         {
             string appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-            string gameFolderName = "Alex_Mai"; // SaveLoadService-dəki adla eyni olsun
+            string gameFolderName = "Alex_Mai";
             string settingsFolderPath = Path.Combine(appDataPath, gameFolderName);
 
             Directory.CreateDirectory(settingsFolderPath);
@@ -24,30 +30,42 @@ namespace Alex_Mai.Services
             _settingsFilePath = Path.Combine(settingsFolderPath, "settings.json");
         }
 
-        public void SaveSettings(GameSettings settings)
+        // Tənzimləmələri yükləyən (və ya yaddaşdan gətirən) əsas metod
+        public GameSettings GetSettings()
         {
+            if (_cachedSettings == null)
+            {
+                _cachedSettings = LoadSettingsFromFile();
+            }
+            return _cachedSettings;
+        }
+
+        // Yaddaşdakı tənzimləmələri fayla yazır
+        public void SaveSettings()
+        {
+            if (_cachedSettings == null) return; // Yaddaşda heç nə yoxdursa, heç nə etmə
+
             var options = new JsonSerializerOptions { WriteIndented = true };
-            string jsonString = JsonSerializer.Serialize(settings, options);
+            string jsonString = JsonSerializer.Serialize(_cachedSettings, options);
             File.WriteAllText(_settingsFilePath, jsonString);
         }
 
-        public GameSettings LoadSettings()
+        // Fayldan yükləyən daxili metod
+        private GameSettings LoadSettingsFromFile()
         {
             if (!File.Exists(_settingsFilePath))
             {
-                // Əgər settings faylı yoxdursa, standart dəyərlərlə yenisini yarat
-                return new GameSettings();
+                return new GameSettings(); // Standart tənzimləmələr
             }
 
             string jsonString = File.ReadAllText(_settingsFilePath);
             try
             {
-                return JsonSerializer.Deserialize<GameSettings>(jsonString);
+                return JsonSerializer.Deserialize<GameSettings>(jsonString) ?? new GameSettings();
             }
             catch
             {
-                // Əgər fayl zədəlidirsə, yenə də standart dəyərlərlə başla
-                return new GameSettings();
+                return new GameSettings(); // Zədəli fayl halında standart
             }
         }
     }

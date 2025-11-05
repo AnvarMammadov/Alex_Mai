@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <None Remove="Assets\Audio\SFX\click.wav" />
+    <None Remove="Assets\Audio\SFX\neutral_click.mp3" />
     <None Remove="Assets\Backgrounds\alex_home.png" />
     <None Remove="Assets\Backgrounds\alex_home_message.png" />
     <None Remove="Assets\Backgrounds\alex_quest_room.png" />
@@ -104,6 +105,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="Assets\Audio\SFX\neutral_click.mp3">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Resource Include="Assets\Backgrounds\bed.jpg">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
@@ -183,12 +187,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Assets\Audio\BGM\morning_theme.mp3">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Assets\Audio\SFX\click.wav">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Resource>
+    <Content Include="Assets\Audio\BGM\morning_theme.mp3">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Audio\SFX\click.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Resource Include="Assets\Backgrounds\alex_home.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
