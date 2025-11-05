@@ -106,8 +106,6 @@ namespace Alex_Mai.ViewModels
             _parentViewModel.NavigateToWallet(); // Call the method in PhoneViewModel
         }
 
-        // *** YENİ METOD ***
-
 
         // *** YENİ: Cleanup metodu ***
         public void Cleanup()

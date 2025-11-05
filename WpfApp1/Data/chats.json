@@ -1,35 +1,323 @@
-
 {
-    "conversations": { 
-        "mai_initial": {
-            "history": [ 
-                {
-                    "sender": "Mai",
-                    "text": "Hey Alex, how are you doing?"
-                }
-            ],
-            "responses": { 
-                "Hi Mai! I'm good, just relaxing.": "mai_resp_initial_1",
-                "Not much, just woke up.": "mai_resp_initial_2",
-                "Mesajlarimizi Terane muellime gorur...": "mai_resp_terane",
-                "default": "mai_resp_generic_hmm" 
-            }
+    "meta": {
+        "version": "1.0.0",
+        "locale": "az-AZ",
+        "character": {
+            "id": "mai",
+            "displayName": "Mai",
+            "typingDelaysMs": {
+                "min": 350,
+                "max": 1100
+            },
+            "availableHours": [ 10, 23 ]
+        }
+    },
+
+    "nlp": {
+        "similarity": {
+            "threshold": 0.72,
+            "fallbackThreshold": 0.45
         },
-        "mai_day2_afternoon": {
+        "intents": [
+            {
+                "id": "greeting",
+                "keywords": [ "salam", "hi", "hey", "hello", "selam" ],
+                "regex": "(?i)^(salam|hi|hey|hello|selam)\\b"
+            },
+            {
+                "id": "status_chill",
+                "keywords": [ "yaxşıyam", "relaks", "istirahət", "chill", "rahat" ],
+                "regex": "(?i)(rahat|relaks|istirah)"
+            },
+            {
+                "id": "woke_up",
+                "keywords": [ "indi oyandım", "yenicə oyandım", "yeni oyandim", "just woke up" ],
+                "regex": "(?i)(yeni(c|cə)? oyand|just woke)"
+            },
+            {
+                "id": "plan_suggest",
+                "keywords": [ "nəsə edək", "birlikdə", "görüş", "gəzinti", "film", "plan" ],
+                "regex": "(?i)(n[eə]s[eə] ed[əe]k|birl[iı]kd[əe]|g[eə]zint|film|plan)"
+            },
+            {
+                "id": "relax_home",
+                "keywords": [ "evdə dincəlirəm", "evdə", "istirahət evdə", "relaks ev" ],
+                "regex": "(?i)(evd[əe].*din[cç][eə]l|evd[əe] (ol|qal))"
+            },
+            {
+                "id": "teacher_secret",
+                "keywords": [ "Terane müəllimə", "Təranə müəllimə", "mesajlarımızı görür" ],
+                "regex": "(?i)(teran[eə].*m[uü][əa]llim[eə]|mesajlar[iı]m[iı]z[ıi] g[oö]r[uü]r)"
+            }
+        ]
+    },
+
+    "state": {
+        "variables": {
+            "day": 1,
+            "timeOfDay": "morning",
+            "affinityMai": 0,
+            "flags": {
+                "maiSeenStudyMsg": false,
+                "playerSuggestedPlan": false,
+                "teacherJokeUnlocked": false
+            },
+            "playerName": "Alex"
+        }
+    },
+
+    "templates": {
+        "greet_back": "Salam, {playerName}! ☀️ Necəsən?",
+        "ask_plans": "Bugün ({timeOfDay}) nə planın var?",
+        "affinity_up": "+1 yaxınlıq 😊",
+        "done_study": "Bugünlük oxuma bitdi! ✨ Nə edək indi?"
+    },
+
+    "attachments": {
+        "mai_study_photo": {
+            "type": "image",
+            "path": "res/images/mai_study_desk.png",
+            "caption": "Dərs bitdi! 📚✨"
+        }
+    },
+
+    "events": {
+        "unlock_cafe_date": {
+            "type": "quest",
+            "id": "q_cafe_day2",
+            "progress": "available"
+        },
+        "give_small_gift": {
+            "type": "flag",
+            "name": "giftStickerUnlocked",
+            "value": true
+        }
+    },
+
+    "dialogs": [
+        {
+            "id": "mai_initial",
+            "when": {
+                "day": [ 1 ],
+                "timeOfDay": [ "morning", "noon", "evening" ]
+            },
             "history": [
                 {
                     "sender": "Mai",
-                    "text": "Finished studying for today! Finally free. ✨ Any plans for the afternoon?"
+                    "text": "Hey {playerName}, how are you doing?"
                 }
             ],
-            "responses": {
-                "Maybe we could do something?": "mai_resp_day2_suggest",
-                "Just planning to relax at home.": "mai_resp_day2_relax",
-                "default": "mai_resp_generic_ok"
+            "choices": [
+                {
+                    "playerText": "Hi Mai! I'm good, just relaxing.",
+                    "intent": "status_chill",
+                    "goTo": "mai_resp_initial_1",
+                    "effects": { "affinityMai": { "add": 1 } }
+                },
+                {
+                    "playerText": "Not much, just woke up.",
+                    "intent": "woke_up",
+                    "goTo": "mai_resp_initial_2"
+                },
+                {
+                    "playerText": "Mesajlarimizi Terane muellime gorur...",
+                    "intent": "teacher_secret",
+                    "goTo": "mai_resp_terane",
+                    "effects": { "flags.teacherJokeUnlocked": true }
+                },
+                {
+                    "playerText": "__free_text__",
+                    "fallback": true,
+                    "goTo": "mai_resp_generic_hmm"
+                }
+            ]
+        },
+
+        {
+            "id": "mai_resp_initial_1",
+            "history": [
+                {
+                    "sender": "Mai",
+                    "text": "That's good to hear. 😊 What are you up to?"
+                }
+            ],
+            "system": {
+                "suggestIntents": [ "plan_suggest", "relax_home" ],
+                "cooldownSec": 20
             }
+        },
+
+        {
+            "id": "mai_resp_initial_2",
+            "history": [
+                {
+                    "sender": "Mai",
+                    "text": "Good morning then! 😴☕ Yuxunu ala bildin?"
+                }
+            ],
+            "system": { "suggestIntents": [ "plan_suggest", "relax_home" ] }
+        },
+
+        {
+            "id": "mai_resp_terane",
+            "history": [
+                {
+                    "sender": "Mai",
+                    "text": "Salam Terane muellime <3"
+                }
+            ],
+            "system": {
+                "onEnter": [ { "event": "give_small_gift" } ]
+            }
+        },
+
+        {
+            "id": "mai_day2_afternoon",
+            "when": {
+                "day": [ 2 ],
+                "timeOfDay": [ "afternoon" ],
+                "flags": { "maiSeenStudyMsg": false }
+            },
+            "history": [
+                {
+                    "sender": "Mai",
+                    "text": "{templates.done_study}"
+                },
+                { "attachment": "mai_study_photo" }
+            ],
+            "choices": [
+                {
+                    "playerText": "Maybe we could do something?",
+                    "intent": "plan_suggest",
+                    "goTo": "mai_resp_day2_suggest",
+                    "effects": {
+                        "flags.playerSuggestedPlan": true,
+                        "affinityMai": { "add": 1 }
+                    }
+                },
+                {
+                    "playerText": "Just planning to relax at home.",
+                    "intent": "relax_home",
+                    "goTo": "mai_resp_day2_relax",
+                    "effects": { "affinityMai": { "add": 0 } }
+                },
+                {
+                    "playerText": "__free_text__",
+                    "fallback": true,
+                    "goTo": "mai_resp_generic_ok"
+                }
+            ],
+            "system": {
+                "onExit": [ { "set": { "flags.maiSeenStudyMsg": true } } ]
+            }
+        },
+
+        {
+            "id": "mai_resp_day2_suggest",
+            "history": [
+                {
+                    "sender": "Mai",
+                    "text": "Like what? I'm open to ideas!"
+                }
+            ],
+            "reactiveRoutes": [
+                {
+                    "match": { "keywords": [ "kafe", "çay", "coffee" ] },
+                    "onMatch": {
+                        "reply": {
+                            "sender": "Mai",
+                            "text": "Kafe ideyası gözəldir ☕️ yaxınlarda yeni bir kafe açılıb!"
+                        },
+                        "effects": {
+                            "event": "unlock_cafe_date",
+                            "affinityMai": { "add": 1 }
+                        },
+                        "end": true
+                    }
+                },
+                {
+                    "match": { "keywords": [ "park", "gəzinti", "walk" ] },
+                    "onMatch": {
+                        "reply": {
+                            "sender": "Mai",
+                            "text": "Parkda gəzinti superdir 🌿 gəlin gün batımına yetişək."
+                        },
+                        "effects": { "affinityMai": { "add": 1 } },
+                        "end": true
+                    }
+                }
+            ],
+            "fallback": { "goTo": "mai_resp_generic_ok" }
+        },
+
+        {
+            "id": "mai_resp_day2_relax",
+            "history": [
+                {
+                    "sender": "Mai",
+                    "text": "Okay, enjoy your rest! Yenə də darıxsan, yaz 😉"
+                }
+            ]
+        },
+
+        {
+            "id": "mai_smalltalk_bank",
+            "type": "smalltalk",
+            "rules": [
+                {
+                    "match": { "intent": "greeting" },
+                    "responses": [
+                        {
+                            "sender": "Mai",
+                            "text": "{templates.greet_back}"
+                        },
+                        {
+                            "sender": "Mai",
+                            "text": "Bugün {timeOfDay} sənin ruh halın necədir?"
+                        }
+                    ],
+                    "cooldownSec": 60
+                },
+                {
+                    "match": { "keywords": [ "ne edirsən", "nə var nə yox" ] },
+                    "responses": [
+                        {
+                            "sender": "Mai",
+                            "text": "Bir az notlarımı düzənləyirəm 📒"
+                        },
+                        {
+                            "sender": "Mai",
+                            "text": "Səndə nə var?"
+                        }
+                    ]
+                }
+            ]
+        },
+
+        {
+            "id": "fallbacks",
+            "genericHmm": [
+                {
+                    "sender": "Mai",
+                    "text": "Hmm? 🤔"
+                },
+                {
+                    "sender": "Mai",
+                    "text": "Tam başa düşmədim, bir az açıqlayarsan?"
+                }
+            ],
+            "genericOk": [
+                {
+                    "sender": "Mai",
+                    "text": "Okay."
+                },
+                {
+                    "sender": "Mai",
+                    "text": "Qeyd etdim."
+                }
+            ]
         }
-       
-    },
+    ],
 
     "responseMessages": {
         "mai_resp_initial_1": [

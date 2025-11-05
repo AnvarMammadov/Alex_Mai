@@ -4,19 +4,53 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Alex_Mai.Views"
-             mc:Ignorable="d"
+             mc:Ignorable="d" 
              d:DesignHeight="720" d:DesignWidth="1280">
 
     <Grid>
-        <!-- Background Image -->
-        <Image Source="\Assets\Backgrounds\mmbg.jpg" Stretch="Fill"/>
+        <Image Source="\Assets\Backgrounds\mmbg.jpg" Stretch="UniformToFill"/>
 
-        <!-- Burada UI elementləri əlavə olunacaq -->
-        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-            <Button Content="Start Game" Style="{StaticResource GameButtonStyle}" Width="300" Margin="0,10"  Command="{Binding StartGameCommand}"/>
-            <Button Content="Load Game" Style="{StaticResource GameButtonStyle}" Width="300" Margin="0,10" Command="{Binding LoadGameCommand}"/>
-            <Button Content="Settings" Style="{StaticResource GameButtonStyle}" Width="300" Margin="0,10" Command="{Binding SettingsCommand}"/>
-            <Button Content="Quit" Style="{StaticResource GameButtonStyle}" Width="300" Margin="0,10" Command="{Binding QuitGameCommand}"/>
-        </StackPanel>
+        <Border Background="#80000000"/>
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Border Background="#30000000" 
+                    HorizontalAlignment="Left" 
+                    VerticalAlignment="Stretch"
+                    Width="400"
+                    Padding="40,0,0,0">
+
+                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Left">
+                    <Button Content="Start Game" 
+                            Style="{StaticResource MainMenuButtonStyle}" 
+                            Command="{Binding StartGameCommand}"/>
+                    <Button Content="Load Game" 
+                            Style="{StaticResource MainMenuButtonStyle}" 
+                            Command="{Binding LoadGameCommand}"/>
+                    <Button Content="Settings" 
+                            Style="{StaticResource MainMenuButtonStyle}" 
+                            Command="{Binding SettingsCommand}"/>
+                    <Button Content="Quit" 
+                            Style="{StaticResource MainMenuButtonStyle}" 
+                            Command="{Binding QuitGameCommand}"/>
+                </StackPanel>
+            </Border>
+
+            <Viewbox Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,100,60" MaxWidth="500">
+                <TextBlock Text="Alex &amp; Mai" 
+                           Foreground="White" 
+                           FontFamily="{StaticResource GameFont}"
+                           Opacity="0.8">
+                    <TextBlock.Effect>
+                        <DropShadowEffect ShadowDepth="2" BlurRadius="10" Color="Black" Opacity="0.6"/>
+                    </TextBlock.Effect>
+                </TextBlock>
+            </Viewbox>
+
+        </Grid>
     </Grid>
 </UserControl>

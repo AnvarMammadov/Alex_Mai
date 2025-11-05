@@ -9,6 +9,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Assets\Animations\**" />
+    <Compile Remove="Assets\UI\**" />
+    <EmbeddedResource Remove="Assets\Animations\**" />
+    <EmbeddedResource Remove="Assets\UI\**" />
+    <None Remove="Assets\Animations\**" />
+    <None Remove="Assets\UI\**" />
+    <Page Remove="Assets\Animations\**" />
+    <Page Remove="Assets\UI\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Assets\Audio\SFX\click.wav" />
     <None Remove="Assets\Backgrounds\alex_home.png" />
     <None Remove="Assets\Backgrounds\alex_home_message.png" />
@@ -165,11 +176,6 @@
     <Content Include="Data\recipes.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Assets\Animations\" />
-    <Folder Include="Assets\UI\" />
   </ItemGroup>
 
   <ItemGroup>

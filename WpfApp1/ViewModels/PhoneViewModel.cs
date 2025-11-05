@@ -65,7 +65,7 @@ namespace Alex_Mai.ViewModels
             _walletViewModel?.Cleanup();
             _chatViewModel?.Cleanup(); // ChatViewModel-də də Cleanup metodu olmalıdır
             _statsViewModel?.Cleanup(); // StatsViewModel-də də Cleanup metodu olmalıdır
-            _galleryViewModel?.Cleanup(); // GalleryViewModel-də də Cleanup metodu olmalıdır
+            _galleryViewModel?.Cleanup(); // GalleryViewModel-də də Cleanup metodu olmalıdır 
         }
         public void NavigateToGallery()
         {
