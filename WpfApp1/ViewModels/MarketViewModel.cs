@@ -40,12 +40,13 @@ namespace Alex_Mai.ViewModels
             }
         }
 
-        [RelayCommand]
-        private void BuyItem(MarketItem item)
+        // --- ADDIM 1 DƏYİŞİKLİYİ ---
+        [RelayCommand] // <-- DƏYİŞİKLİK
+        private async Task BuyItem(MarketItem item) // <-- DƏYİŞİKLİK
         {
             if (item == null) return;
             // Alış-veriş məntiqini GameViewModel-ə ötürürük
-            _parentViewModel.PurchaseItem(item);
+            await _parentViewModel.PurchaseItem(item); // <-- DƏYİŞİKLİK
         }
 
         [RelayCommand]

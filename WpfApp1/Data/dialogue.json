@@ -12,41 +12,45 @@
 
     "hub_alex_room": {
         "character": "Alex",
-        "text": "",
+        "text": "Otağına qayıtdın.",
         "choices": [
             {
                 "text": "...",
-                "nextNodeId": "day2_questroom_hub"
+                "nextNodeId": "day2_questroom_hub",
+                "actionCost": 0
             }
         ]
     },
     "hub_mai_room": {
         "character": "Mai",
-        "text": "",
+        "text": "Mai-nin otağına keçdin.",
         "choices": [
             {
                 "text": "...",
-                "nextNodeId": "day2_morning_hub"
+                "nextNodeId": "day2_morning_hub",
+                "actionCost": 0
             }
         ]
     },
     "hub_kitchen": {
         "character": "Sema Teyzə",
-        "text": "",
+        "text": "Mətbəxə keçdin.",
         "choices": [
             {
                 "text": "...",
-                "nextNodeId": "day2_kitchen_hub"
+                "nextNodeId": "day2_kitchen_hub",
+                "actionCost": 0
             }
         ]
     },
     "hub_bathroom": {
         "character": "Alex",
-        "text": "",
+        "text": "Hamama keçdin.",
         "choices": [
             {
                 "text": "...",
-                "nextNodeId": "day2_bathroom_hub"
+                "nextNodeId": "day2_bathroom_hub",
+                "actionCost": 0
             }
         ]
     },
@@ -56,37 +60,41 @@
         "choices": [
             {
                 "text": "...",
-                "nextNodeId": "day2_living_room_hub"
+                "nextNodeId": "day2_living_room_hub",
+                "actionCost": 0
             }
         ]
     },
     "hub_part_time": {
         "character": "Alex",
-        "text": "",
+        "text": "Qonaq otagindayam..",
         "choices": [
             {
                 "text": "...",
-                "nextNodeId": "day2_part_time_hub"
+                "nextNodeId": "day2_part_time_hub",
+                "actionCost": 0
             }
         ]
     },
     "hub_market": {
         "character": "Alex",
-        "text": "",
+        "text": "Marketdeyem..",
         "choices": [
             {
                 "text": "...",
-                "nextNodeId": "day2_market_hub"
+                "nextNodeId": "day2_market_hub",
+                "actionCost": 0
             }
         ]
     },
     "hub_park": {
         "character": "Alex",
-        "text": "",
+        "text": "Parkdayam..",
         "choices": [
             {
                 "text": "...",
-                "nextNodeId": "day2_park_hub"
+                "nextNodeId": "day2_park_hub",
+                "actionCost": 0
             }
         ]
     },
@@ -97,7 +105,8 @@
         "choices": [
             {
                 "text": "...",
-                "nextNodeId": "hub_mai_room"
+                "nextNodeId": "hub_mai_room",
+                "actionCost": 0
             }
         ]
     },
@@ -107,7 +116,8 @@
         "choices": [
             {
                 "text": "...",
-                "nextNodeId": "hub_alex_room"
+                "nextNodeId": "hub_alex_room",
+                "actionCost": 0
             }
         ]
     },
@@ -117,7 +127,8 @@
         "choices": [
             {
                 "text": "...",
-                "nextNodeId": "hub_bathroom"
+                "nextNodeId": "hub_bathroom",
+                "actionCost": 0
             }
         ]
     },
@@ -130,7 +141,8 @@
         "choices": [
             {
                 "text": "Mesaja bax.",
-                "nextNodeId": "university_message"
+                "nextNodeId": "university_message",
+                "actionCost": 0
             }
         ]
     },
@@ -141,7 +153,8 @@
         "choices": [
             {
                 "text": "Sema teyzəyə zəng et.",
-                "nextNodeId": "call_sema"
+                "nextNodeId": "call_sema",
+                "actionCost": 0
             }
         ]
     },
@@ -151,7 +164,8 @@
         "choices": [
             {
                 "text": "Yola düş.",
-                "nextNodeId": "train_journey"
+                "nextNodeId": "train_journey",
+                "actionCost": 0
             }
         ]
     },
@@ -163,7 +177,8 @@
         "choices": [
             {
                 "text": "...",
-                "nextNodeId": "arrive_at_night"
+                "nextNodeId": "arrive_at_night",
+                "actionCost": 0
             }
         ]
     },
@@ -177,6 +192,7 @@
             {
                 "text": "Təşəkkür edirəm, Sema teyzə. Çox yorulmuşam.",
                 "nextNodeId": "meet_mai",
+                "actionCost": 0,
                 "actions": [
                     {
                         "stat": "Trust",
@@ -188,6 +204,7 @@
             {
                 "text": "Sizi görməyimə şad oldum. Xüsusilə də Mai üçün darıxmışdım.",
                 "nextNodeId": "meet_mai_flirt",
+                "actionCost": 0,
                 "actions": [
                     {
                         "stat": "Affection",
@@ -206,7 +223,8 @@
         "choices": [
             {
                 "text": "Səni də gördüyümə şadam.",
-                "nextNodeId": "go_to_sleep"
+                "nextNodeId": "go_to_sleep",
+                "actionCost": 0
             }
         ]
     },
@@ -225,7 +243,8 @@
         "choices": [
             {
                 "text": "Utandığını görmək xoşdur.",
-                "nextNodeId": "go_to_sleep"
+                "nextNodeId": "go_to_sleep",
+                "actionCost": 0
             }
         ]
     },
@@ -239,6 +258,7 @@
             {
                 "text": "Səhər oyandın...",
                 "nextNodeId": "day2_morning_hub",
+                "actionCost": 0,
                 "actions": [
                     {
                         "stat": "CurrentDay",
@@ -258,15 +278,18 @@
         "choices": [
             {
                 "text": "Danış",
-                "nextNodeId": "day2_morning_talk_hub"
+                "nextNodeId": "day2_morning_talk_hub",
+                "actionCost": 0
             },
             {
                 "text": "Toxun",
-                "nextNodeId": "day2_morning_touch_hub"
+                "nextNodeId": "day2_morning_touch_hub",
+                "actionCost": 0
             },
             {
                 "text": "Zarafat Et",
-                "nextNodeId": "day2_morning_joke_hub"
+                "nextNodeId": "day2_morning_joke_hub",
+                "actionCost": 0
             }
         ]
     },
@@ -279,6 +302,7 @@
             {
                 "text": "Hal-əhval soruş.",
                 "nextNodeId": "reaction_talk_howareyou",
+                "actionCost": 1,
                 "actions": [
                     {
                         "stat": "Trust",
@@ -286,23 +310,19 @@
                         "value": 2
                     },
                     {
-                        "stat": "TimeAdvance",
-                        "operator": "Add",
-                        "value": 1
+                        "stat": "Energy",
+                        "operator": "Subtract",
+                        "value": 2
                     }
                 ]
             },
             {
                 "text": "Dərsləri haqqında soruş.",
                 "nextNodeId": "reaction_talk_lessons",
+                "actionCost": 1,
                 "actions": [
                     {
                         "stat": "Trust",
-                        "operator": "Add",
-                        "value": 1
-                    },
-                    {
-                        "stat": "TimeAdvance",
                         "operator": "Add",
                         "value": 1
                     }
@@ -310,7 +330,8 @@
             },
             {
                 "text": "Geri qayıt.",
-                "nextNodeId": "day2_morning_hub"
+                "nextNodeId": "day2_morning_hub",
+                "actionCost": 0
             }
         ]
     },
@@ -323,22 +344,19 @@
             {
                 "text": "Başını oxşa.",
                 "nextNodeId": "reaction_touch_pathead",
+                "actionCost": 1,
                 "actions": [
                     {
                         "stat": "Affection",
                         "operator": "Add",
                         "value": 3
-                    },
-                    {
-                        "stat": "TimeAdvance",
-                        "operator": "Add",
-                        "value": 1
                     }
                 ]
             },
             {
                 "text": "[TƏLƏB: Sevgi > 20] Əlindən tut.",
                 "nextNodeId": "reaction_touch_holdhand",
+                "actionCost": 1,
                 "conditions": [
                     {
                         "stat": "Affection",
@@ -356,17 +374,13 @@
                         "stat": "Trust",
                         "operator": "Add",
                         "value": 5
-                    },
-                    {
-                        "stat": "TimeAdvance",
-                        "operator": "Add",
-                        "value": 1
                     }
                 ]
             },
             {
                 "text": "[TƏLƏB: Pis Niyyət > 10] Onu qıdıqla.",
                 "nextNodeId": "reaction_touch_tickle",
+                "actionCost": 1,
                 "conditions": [
                     {
                         "stat": "Corruption",
@@ -384,17 +398,13 @@
                         "stat": "Trust",
                         "operator": "Subtract",
                         "value": 3
-                    },
-                    {
-                        "stat": "TimeAdvance",
-                        "operator": "Add",
-                        "value": 1
                     }
                 ]
             },
             {
                 "text": "Geri qayıt.",
-                "nextNodeId": "day2_morning_hub"
+                "nextNodeId": "day2_morning_hub",
+                "actionCost": 0
             }
         ]
     },
@@ -405,16 +415,12 @@
             {
                 "text": "...",
                 "nextNodeId": "reaction_joke_good",
+                "actionCost": 1,
                 "actions": [
                     {
                         "stat": "Affection",
                         "operator": "Add",
                         "value": 2
-                    },
-                    {
-                        "stat": "TimeAdvance",
-                        "operator": "Add",
-                        "value": 1
                     }
                 ]
             }
@@ -428,7 +434,8 @@
         "choices": [
             {
                 "text": "...",
-                "nextNodeId": "day2_morning_hub"
+                "nextNodeId": "day2_morning_hub",
+                "actionCost": 0
             }
         ]
     },
@@ -440,7 +447,8 @@
         "choices": [
             {
                 "text": "...",
-                "nextNodeId": "day2_morning_hub"
+                "nextNodeId": "day2_morning_hub",
+                "actionCost": 0
             }
         ]
     },
@@ -452,7 +460,8 @@
         "choices": [
             {
                 "text": "...",
-                "nextNodeId": "day2_morning_hub"
+                "nextNodeId": "day2_morning_hub",
+                "actionCost": 0
             }
         ]
     },
@@ -464,7 +473,8 @@
         "choices": [
             {
                 "text": "...",
-                "nextNodeId": "day2_morning_hub"
+                "nextNodeId": "day2_morning_hub",
+                "actionCost": 0
             }
         ]
     },
@@ -476,7 +486,8 @@
         "choices": [
             {
                 "text": "...",
-                "nextNodeId": "day2_morning_hub"
+                "nextNodeId": "day2_morning_hub",
+                "actionCost": 0
             }
         ]
     },
@@ -488,7 +499,8 @@
         "choices": [
             {
                 "text": "...",
-                "nextNodeId": "day2_morning_hub"
+                "nextNodeId": "day2_morning_hub",
+                "actionCost": 0
             }
         ]
     },
@@ -502,9 +514,15 @@
             {
                 "text": "Kömək təklif et.",
                 "nextNodeId": "reaction_kitchen_help",
+                "actionCost": 1,
                 "actions": [
                     {
-                        "stat": "TimeAdvance",
+                        "stat": "Energy",
+                        "operator": "Subtract",
+                        "value": 5
+                    },
+                    {
+                        "stat": "Trust",
                         "operator": "Add",
                         "value": 1
                     }
@@ -512,7 +530,8 @@
             },
             {
                 "text": "Yemək Bişir",
-                "nextNodeId": "start_cooking_minigame"
+                "nextNodeId": "start_cooking_minigame",
+                "actionCost": 1
             }
         ]
     },
@@ -526,15 +545,11 @@
             {
                 "text": "İşini gör",
                 "nextNodeId": "day2_bathroom_hub_help",
+                "actionCost": 1,
                 "actions": [
                     {
                         "stat": "Stress",
                         "operator": "Subtract",
-                        "value": 1
-                    },
-                    {
-                        "stat": "TimeAdvance",
-                        "operator": "Add",
                         "value": 1
                     }
                 ]
@@ -549,7 +564,8 @@
         "choices": [
             {
                 "text": "...",
-                "nextNodeId": "day2_bathroom_hub"
+                "nextNodeId": "day2_bathroom_hub",
+                "actionCost": 0
             }
         ]
     },
@@ -561,20 +577,9 @@
         "sprite": null,
         "choices": [
             {
-                "text": "Yat",
-                "nextNodeId": "day2_questroom_hub_help",
-                "actions": [
-                    {
-                        "stat": "Energy",
-                        "operator": "Add",
-                        "value": 10
-                    },
-                    {
-                        "stat": "TimeAdvance",
-                        "operator": "Add",
-                        "value": 1
-                    }
-                ]
+                "text": "Yat (Günü Bitir)",
+                "nextNodeId": "go_to_sleep",
+                "actionCost": 0
             }
         ]
     },
@@ -586,7 +591,8 @@
         "choices": [
             {
                 "text": "...",
-                "nextNodeId": "day2_questroom_hub"
+                "nextNodeId": "day2_questroom_hub",
+                "actionCost": 0
             }
         ]
     },
@@ -599,11 +605,13 @@
         "choices": [
             {
                 "text": "Sema Teyzə ilə danış",
-                "nextNodeId": "kitchen_talk_hub"
+                "nextNodeId": "kitchen_talk_hub",
+                "actionCost": 0
             },
             {
                 "text": "Soyuducuya bax",
-                "nextNodeId": "reaction_kitchen_fridge"
+                "nextNodeId": "reaction_kitchen_fridge",
+                "actionCost": 0
             }
         ]
     },
@@ -613,11 +621,13 @@
         "choices": [
             {
                 "text": "Kömək təklif et.",
-                "nextNodeId": "reaction_kitchen_help"
+                "nextNodeId": "reaction_kitchen_help",
+                "actionCost": 1
             },
             {
                 "text": "Heç nə, sadəcə baxırdım.",
-                "nextNodeId": "generic_kitchen_hub"
+                "nextNodeId": "generic_kitchen_hub",
+                "actionCost": 0
             }
         ]
     },
@@ -627,7 +637,8 @@
         "choices": [
             {
                 "text": "...",
-                "nextNodeId": "generic_kitchen_hub"
+                "nextNodeId": "generic_kitchen_hub",
+                "actionCost": 0
             }
         ]
     },
@@ -639,7 +650,8 @@
         "choices": [
             {
                 "text": "...",
-                "nextNodeId": "day2_kitchen_hub"
+                "nextNodeId": "day2_kitchen_hub",
+                "actionCost": 0
             }
         ]
     },
@@ -669,17 +681,13 @@
                 "stat": "Trust",
                 "operator": "Add",
                 "value": 5
-            },
-            {
-                "stat": "TimeAdvance",
-                "operator": "Add",
-                "value": 1
             }
         ],
         "choices": [
             {
                 "text": "...",
-                "nextNodeId": "day2_kitchen_hub"
+                "nextNodeId": "day2_kitchen_hub",
+                "actionCost": 0
             }
         ]
     },
@@ -692,17 +700,13 @@
                 "stat": "Stress",
                 "operator": "Add",
                 "value": 5
-            },
-            {
-                "stat": "TimeAdvance",
-                "operator": "Add",
-                "value": 1
             }
         ],
         "choices": [
             {
                 "text": "...",
-                "nextNodeId": "day2_kitchen_hub"
+                "nextNodeId": "day2_kitchen_hub",
+                "actionCost": 0
             }
         ]
     },
@@ -717,17 +721,13 @@
                 "stat": "Stress",
                 "operator": "Subtract",
                 "value": 10
-            },
-            {
-                "stat": "TimeAdvance",
-                "operator": "Add",
-                "value": 1
             }
         ],
         "choices": [
             {
                 "text": "...",
-                "nextNodeId": "day2_morning_hub"
+                "nextNodeId": "day2_morning_hub",
+                "actionCost": 0
             }
         ]
     },
@@ -739,17 +739,13 @@
                 "stat": "Stress",
                 "operator": "Subtract",
                 "value": 5
-            },
-            {
-                "stat": "TimeAdvance",
-                "operator": "Add",
-                "value": 1
             }
         ],
         "choices": [
             {
                 "text": "...",
-                "nextNodeId": "day2_morning_hub"
+                "nextNodeId": "day2_morning_hub",
+                "actionCost": 0
             }
         ]
     },
@@ -759,7 +755,8 @@
         "choices": [
             {
                 "text": "...",
-                "nextNodeId": "day2_morning_hub"
+                "nextNodeId": "day2_morning_hub",
+                "actionCost": 0
             }
         ]
     },
@@ -772,15 +769,18 @@
         "choices": [
             {
                 "text": "TV-yə bax",
-                "nextNodeId": "event_living_tv"
+                "nextNodeId": "event_living_tv",
+                "actionCost": 1
             },
             {
                 "text": "Pəncərəni aç",
-                "nextNodeId": "event_living_window"
+                "nextNodeId": "event_living_window",
+                "actionCost": 1
             },
             {
                 "text": "Divanda dincəl",
-                "nextNodeId": "event_living_rest"
+                "nextNodeId": "event_living_rest",
+                "actionCost": 1
             }
         ]
     },
@@ -792,34 +792,25 @@
                 "stat": "Stress",
                 "operator": "Subtract",
                 "value": 2
-            },
-            {
-                "stat": "TimeAdvance",
-                "operator": "Add",
-                "value": 1
             }
         ],
         "choices": [
             {
                 "text": "...",
-                "nextNodeId": "day2_living_room_hub"
+                "nextNodeId": "day2_living_room_hub",
+                "actionCost": 0
             }
         ]
     },
     "event_living_window": {
         "character": "Alex",
         "text": "Təmiz hava otağa dolur. Özünü təravətli hiss edirsən.",
-        "actions": [
-            {
-                "stat": "TimeAdvance",
-                "operator": "Add",
-                "value": 1
-            }
-        ],
+        "actions": [],
         "choices": [
             {
                 "text": "...",
-                "nextNodeId": "day2_living_room_hub"
+                "nextNodeId": "day2_living_room_hub",
+                "actionCost": 0
             }
         ]
     },
@@ -836,17 +827,13 @@
                 "stat": "Energy",
                 "operator": "Add",
                 "value": 5
-            },
-            {
-                "stat": "TimeAdvance",
-                "operator": "Add",
-                "value": 1
             }
         ],
         "choices": [
             {
                 "text": "...",
-                "nextNodeId": "day2_living_room_hub"
+                "nextNodeId": "day2_living_room_hub",
+                "actionCost": 0
             }
         ]
     },
@@ -859,11 +846,13 @@
         "choices": [
             {
                 "text": "İşləmək istədiyini de.",
-                "nextNodeId": "event_pt_schedule"
+                "nextNodeId": "event_pt_schedule",
+                "actionCost": 0
             },
             {
                 "text": "Geri qayıt.",
-                "nextNodeId": "day2_morning_hub"
+                "nextNodeId": "day2_morning_hub",
+                "actionCost": 0
             }
         ]
     },
@@ -874,11 +863,13 @@
         "choices": [
             {
                 "text": "Bəli, başlayım",
-                "nextNodeId": "start_part_time_minigame"
+                "nextNodeId": "start_part_time_minigame",
+                "actionCost": 1
             },
             {
                 "text": "Xeyr, bu gün istirahət edəcəm.",
-                "nextNodeId": "day2_part_time_hub"
+                "nextNodeId": "day2_part_time_hub",
+                "actionCost": 0
             }
         ]
     },
@@ -898,12 +889,22 @@
         "text": "“Əla iş idi, Alex! Bu da sənin bugünkü qazancın.”",
         "sprite": "manager_happy.png",
         "actions": [
-            { "stat": "TimeAdvance" }
+            {
+                "stat": "Money",
+                "operator": "Add",
+                "value": 120
+            },
+            {
+                "stat": "Energy",
+                "operator": "Subtract",
+                "value": 15
+            }
         ],
         "choices": [
             {
                 "text": "...",
-                "nextNodeId": "day2_questroom_hub"
+                "nextNodeId": "day2_questroom_hub",
+                "actionCost": 0
             }
         ]
     },
@@ -912,12 +913,22 @@
         "text": "“Bugün bir az yavaş idin. Narahat olma, sabah daha yaxşı olarsan.”",
         "sprite": "manager_neutral.png",
         "actions": [
-            { "stat": "TimeAdvance" }
+            {
+                "stat": "Stress",
+                "operator": "Add",
+                "value": 3
+            },
+            {
+                "stat": "Energy",
+                "operator": "Subtract",
+                "value": 10
+            }
         ],
         "choices": [
             {
                 "text": "...",
-                "nextNodeId": "generic_day_quest_room_hub"
+                "nextNodeId": "generic_day_questroom_hub",
+                "actionCost": 0
             }
         ]
     },
@@ -939,17 +950,13 @@
                 "stat": "Money",
                 "operator": "Add",
                 "value": 60
-            },
-            {
-                "stat": "TimeAdvance",
-                "operator": "Add",
-                "value": 1
             }
         ],
         "choices": [
             {
                 "text": "...",
-                "nextNodeId": "day2_part_time_hub"
+                "nextNodeId": "day2_part_time_hub",
+                "actionCost": 0
             }
         ]
     },
@@ -962,11 +969,13 @@
         "choices": [
             {
                 "text": "Rəflərə göz gəzdir",
-                "action": "market_interface"
+                "action": "market_interface",
+                "actionCost": 0
             },
             {
                 "text": "Əsas ərzaqları al",
-                "nextNodeId": "event_market_buy"
+                "nextNodeId": "event_market_buy",
+                "actionCost": 1
             }
         ]
     },
@@ -983,17 +992,13 @@
                 "stat": "Money",
                 "operator": "Subtract",
                 "value": 20
-            },
-            {
-                "stat": "TimeAdvance",
-                "operator": "Add",
-                "value": 1
             }
         ],
         "choices": [
             {
                 "text": "...",
-                "nextNodeId": "day2_market_hub"
+                "nextNodeId": "day2_market_hub",
+                "actionCost": 0
             }
         ]
     },
@@ -1006,15 +1011,18 @@
         "choices": [
             {
                 "text": "Skamyada otur",
-                "nextNodeId": "event_park_sit"
+                "nextNodeId": "event_park_sit",
+                "actionCost": 1
             },
             {
                 "text": "Dərin nəfəs al",
-                "nextNodeId": "event_park_breathe"
+                "nextNodeId": "event_park_breathe",
+                "actionCost": 1
             },
             {
                 "text": "Mai-ı yığ (telefon)",
-                "nextNodeId": "event_park_callmai"
+                "nextNodeId": "event_park_callmai",
+                "actionCost": 1
             }
         ]
     },
@@ -1026,17 +1034,13 @@
                 "stat": "Stress",
                 "operator": "Subtract",
                 "value": 2
-            },
-            {
-                "stat": "TimeAdvance",
-                "operator": "Add",
-                "value": 1
             }
         ],
         "choices": [
             {
                 "text": "...",
-                "nextNodeId": "day2_park_hub"
+                "nextNodeId": "day2_park_hub",
+                "actionCost": 0
             }
         ]
     },
@@ -1048,17 +1052,13 @@
                 "stat": "Stress",
                 "operator": "Subtract",
                 "value": 4
-            },
-            {
-                "stat": "TimeAdvance",
-                "operator": "Add",
-                "value": 1
             }
         ],
         "choices": [
             {
                 "text": "...",
-                "nextNodeId": "day2_park_hub"
+                "nextNodeId": "day2_park_hub",
+                "actionCost": 0
             }
         ]
     },
@@ -1070,17 +1070,13 @@
                 "stat": "Affection",
                 "operator": "Add",
                 "value": 1
-            },
-            {
-                "stat": "TimeAdvance",
-                "operator": "Add",
-                "value": 1
             }
         ],
         "choices": [
             {
                 "text": "...",
-                "nextNodeId": "day2_park_hub"
+                "nextNodeId": "day2_park_hub",
+                "actionCost": 0
             }
         ]
     }

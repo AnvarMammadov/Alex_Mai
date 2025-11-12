@@ -76,6 +76,9 @@
             <Border BorderBrush="Black" BorderThickness="2" Background="#CCF5F5F5" 
             CornerRadius="5" Padding="5" Margin="0,5,0,0">
                 <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Slots: " Padding="5,2" FontSize="14" FontFamily="{StaticResource GameFont}" Foreground="Black" FontWeight="Bold"/>
+                    <TextBlock Text="{Binding CurrentGameState.CurrentEventSlots}" Padding="0,2,5,2" FontSize="14" FontFamily="{StaticResource GameFont}" Foreground="Black" FontWeight="Bold"/>
+                    <TextBlock Text="|" Padding="0,2,5,2" FontSize="14" FontFamily="{StaticResource GameFont}" Foreground="LightGray"/>
                     <TextBlock Text="{Binding NextTimeSlot1}" Padding="5,2" FontSize="14" FontFamily="{StaticResource GameFont}" Foreground="Gray"/>
                     <TextBlock Text="|" Padding="5,2" FontSize="14" FontFamily="{StaticResource GameFont}" Foreground="LightGray"/>
                     <TextBlock Text="{Binding NextTimeSlot2}" Padding="5,2" FontSize="14" FontFamily="{StaticResource GameFont}" Foreground="Gray"/>

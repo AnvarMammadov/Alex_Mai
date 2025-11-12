@@ -24,8 +24,10 @@ namespace Alex_Mai.Models
         public List<GameAction> Actions { get; set; } = new List<GameAction>();
         public List<Condition> Conditions { get; set; } = new List<Condition>();
 
+
         // --- YENİ SAHƏLƏR ---
         public string Action { get; set; } // məsələn "open_map"
+        public int ActionCost { get; set; } = 1; // Default olaraq 1 təyin edirik
         public List<Requirement> Requirements { get; set; } = new List<Requirement>();
         public int? CooldownMinutes { get; set; }
         public string Tooltip { get; set; }

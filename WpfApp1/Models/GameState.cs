@@ -15,6 +15,8 @@ namespace Alex_Mai.Models
         [ObservableProperty]
         private int _currentDay = 1;
 
+        // DƏYİŞİKLİK: TimeOfDay dəyişdikdə, CurrentEventSlots-u sıfırlamalıyıq.
+        [NotifyPropertyChangedFor(nameof(CurrentEventSlots))] // <-- YENİ
         [ObservableProperty]
         private TimeOfDay _timeOfDay = TimeOfDay.Morning;
 
@@ -25,6 +27,23 @@ namespace Alex_Mai.Models
         private int _currentEnergy = 74;
 
         public int MaxEnergy { get; } = 100; // Maksimum enerji
+
+
+        // --- YENİ HADİSƏ SLOTU SİSTEMİ (ADDIM 2) ---
+        public int MaxEventSlots { get; } = 2; // Hər hissədə neçə hadisə ola bilər
+
+        [ObservableProperty]
+        private int _currentEventSlots = 2; // Başlanğıcda slotlar doludur
+
+        // --- YENİ: Zaman dəyişdikdə slotları sıfırlamaq üçün xüsusi metod ---
+        partial void OnTimeOfDayChanged(TimeOfDay value)
+        {
+            // Zaman hissəsi dəyişəndə (Səhərdən Günortaya)
+            // hadisə slotlarını yenidən doldururuq.
+            // "Night" üçün də doldurulur, lakin istifadəsi məhdudlaşdırılacaq.
+            CurrentEventSlots = MaxEventSlots;
+        }
+        // --- HADİSƏ SLOTU SİSTEMİ SONU ---
 
         // *** YENİ: Əməliyyat Tarixçəsi ***
         public ObservableCollection<Transaction> Transactions { get; } = new ObservableCollection<Transaction>();

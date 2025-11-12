@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
 using System.Windows;
+using System.Threading.Tasks;
 
 namespace Alex_Mai.ViewModels
 {
@@ -27,21 +28,16 @@ namespace Alex_Mai.ViewModels
             Items.Add(new InventoryItem { ItemId = "phone", Name = "SmartPhone", IconPath = "/Assets/Icons/icon_phone.jpeg" });
         }
 
+        // --- ADDIM 1 DƏYİŞİKLİYİ ---
         [RelayCommand]
-        private void UseItem(InventoryItem item)
+        private async Task UseItem(InventoryItem item)
         {
             if (item == null) return;
 
-            if (item.ItemId == "phone")
-            {
-                _parentViewModel.TogglePhoneView();
-            }
-            else
-            {
-                // Köhnə məntiq
-                _parentViewModel.UseInventoryItem(item.ItemId);
-            }
+            // Bütün əşya istifadə sorğularını mərkəzi mühərrikə göndər
+            await _parentViewModel.UseInventoryItem(item.ItemId);
         }
+        // --- DƏYİŞİKLİK SONU ---
 
         public void AddItem(InventoryItem newItem)
         {

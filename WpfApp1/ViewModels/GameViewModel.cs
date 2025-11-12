@@ -6,6 +6,9 @@ using Alex_Mai.Services;
 using Alex_Mai.ViewModels;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using System.Threading.Tasks; // <-- YENİ
+using System.Linq; // <-- ƏLAVƏ EDİLDİ
+using System;
 
 namespace Alex_Mai.ViewModels
 {
@@ -21,6 +24,13 @@ namespace Alex_Mai.ViewModels
         public MarketViewModel Market { get; }
 
         private Dictionary<string, string> _locationIndex;///
+        private string _currentNodeId = ""; // <-- YENİ (Addım 4 üçün)
+
+        // Cari məkan (map keçidlərindən sonra yenilənir)
+        private string _currentPlaceId = null;
+
+        // locationIndex-in tərsi: nodeId -> placeId
+        private Dictionary<string, string> _nodeToPlace;
 
 
         [NotifyPropertyChangedFor(nameof(MainTimeOfDay))]
@@ -53,6 +63,9 @@ namespace Alex_Mai.ViewModels
         [ObservableProperty] private bool _isWorkMinigameOpen = false;
         [ObservableProperty] private bool _isMarketOpen = false;
         [ObservableProperty] private bool _isNotificationVisible = false;
+
+        [ObservableProperty]
+        private bool _isBusy = false;
 
         public ObservableCollection<Choice> CurrentChoices { get; set; } = new ObservableCollection<Choice>();
 
@@ -142,6 +155,7 @@ namespace Alex_Mai.ViewModels
 
 
             ShowDialogue("start_game");
+            _currentNodeId = "start_game"; // Başlanğıc nodu təyin edirik
         }
 
         private async Task ShowNotification(string message, int durationMs = 2000)
@@ -170,7 +184,7 @@ namespace Alex_Mai.ViewModels
                         break; // Döngünü dayandır
                     }
                     CurrentDialogueText += c;
-                    await Task.Delay(50);
+                    await Task.Delay(10);
                 }
             }
             finally
@@ -191,6 +205,7 @@ namespace Alex_Mai.ViewModels
         // BU METOD YENİLƏNİB
         private async void ShowDialogue(string nodeId)
         {
+            _currentNodeId = nodeId; // YENİ: Cari nodu həmişə izləyirik
             AreChoicesVisible = false; // <-- BU SƏTRİ ƏLAVƏ EDİN
             CurrentChoices.Clear();    // <-- Bu sətri də bura köçürün
 
@@ -198,6 +213,11 @@ namespace Alex_Mai.ViewModels
             if (node != null)
             {
                 CharacterName = node.Character;
+                // Əgər göstərilən node hər hansı məkana aiddirsə, cari placeId-i yenilə
+                if (_nodeToPlace != null && _nodeToPlace.TryGetValue(nodeId, out var placeFromNode))
+                {
+                    _currentPlaceId = placeFromNode;
+                }
                 await AnimateDialogueText(node.Text);
 
                 // 1. Şəkil məntiqi
@@ -250,62 +270,70 @@ namespace Alex_Mai.ViewModels
             // İstəsəniz, "Oyun yadda saxlanıldı" kimi bir mesaj göstərə bilərsiniz
         }
 
-        // BU METOD YENİLƏNİB
-        // Seçim klikində də vaxt/enerji JSON-dan gələ bilər (ProcessActions ilə)
+        /// <summary>
+        /// Dialoq seçimi üçün əsas komanda.
+        /// </summary>
         [RelayCommand]
-        private void SelectChoice(Choice choice)
+        private async Task SelectChoice(Choice choice)
         {
-            _audioService.PlaySFX("click.wav");
+            if (IsBusy) return;
             if (choice == null) return;
+            IsBusy = true;
 
-            ProcessActions(choice.Actions); // vaxt/enerji/pul burada dəyişə bilər
-
-            if (!string.IsNullOrEmpty(choice.NextNodeId))
+            try
             {
-                if (choice.NextNodeId == "start_cooking_minigame") StartCookingMinigame();
-                else if (choice.NextNodeId == "start_part_time_minigame") { StartWorkMinigame(); }
-                else if (choice.NextNodeId == "go_to_sleep") { SleepAndRecover(); ShowDialogue("day2_morning_hub"); }     
-                else ShowDialogue(choice.NextNodeId);
-            }
+                _audioService.PlaySFX("click.wav");
 
-            // Əgər seçimdə xüsusi bir "action" varsa, onu icra et.
-            if (!string.IsNullOrEmpty(choice.Action))
-            {
-                switch (choice.Action)
+                // --- BUG 2 HƏLLİ ---
+                // 1. Enerji Tələbatını Yoxla
+                int energyCost = GetEnergyCostFromActions(choice.Actions);
+                // YALNIZ enerji SƏRF EDƏN hadisələr yoxlanılmalıdır
+                if (energyCost > 0 && energyCost > CurrentGameState.CurrentEnergy)
                 {
-                    case "market_interface":
-                        ToggleMarket();
-                        break;
+                    await ShowNotification("Enerjiniz çatmır...");
+                    return; // Hərəkəti blokla
+                }
+                // --- HƏLLİN SONU ---
 
-                        // Gələcəkdə bura "OpenMap", "OpenPhone" kimi başqa əmrlər də əlavə edə bilərik.
+                // 2. Slotu Sərf Etməyə Cəhd Et
+                if (!await TryUseEventSlot(choice.ActionCost))
+                {
+                    return; // Hərəkəti blokla (Gecə və slot = 0)
+                }
+
+                // 3. Hərəkəti İcra Et
+                ProcessActions(choice.Actions);
+
+                // 4. Növbəti Addımı Təyin Et
+                if (!string.IsNullOrEmpty(choice.NextNodeId))
+                {
+                    if (choice.NextNodeId == "start_cooking_minigame") StartCookingMinigame();
+                    else if (choice.NextNodeId == "start_part_time_minigame") { StartWorkMinigame(); }
+                    else if (choice.NextNodeId == "go_to_sleep")
+                    {
+                        SleepAndRecover(); // Yalnız bu komanda yeni günə keçirir
+                        ShowDialogue("go_to_sleep"); // (Bu, "go_to_sleep" nodunun içindəki nextNodeId olmalıdır)
+                    }
+                    else ShowDialogue(choice.NextNodeId);
+                }
+
+                if (!string.IsNullOrEmpty(choice.Action))
+                {
+                    switch (choice.Action)
+                    {
+                        case "market_interface":
+                            ToggleMarket();
+                            break;
+                    }
                 }
             }
-
-
-        }
-
-
-        private void AdvanceTime(int steps = 1)
-        {
-            for (int i = 0; i < steps; i++)
+            finally
             {
-                switch (CurrentGameState.TimeOfDay)
-                {
-                    case TimeOfDay.Morning:
-                        CurrentGameState.TimeOfDay = TimeOfDay.Afternoon; break;
-                    case TimeOfDay.Afternoon:
-                        CurrentGameState.TimeOfDay = TimeOfDay.Evening; break;
-                    case TimeOfDay.Evening:
-                        CurrentGameState.TimeOfDay = TimeOfDay.Night; break;
-                    case TimeOfDay.Night:
-                    default:
-                        CurrentGameState.TimeOfDay = TimeOfDay.Morning;
-                        CurrentGameState.CurrentDay += 1; // yeni gün
-                        break;
-                }
+                IsBusy = false;
             }
-            // NextSlot-lar üçün PropertyChanged yuxarıda subscription ilə gələcək
         }
+
+    
 
         private void ApplyEnergy(int delta)
         {
@@ -315,20 +343,9 @@ namespace Alex_Mai.ViewModels
             CurrentGameState.CurrentEnergy = v;
         }
 
-        private void SleepAndRecover()
-        {
-            // Gecə deyilsə gecəyə ötür, sonra səhərə keç və günü artır
-            if (CurrentGameState.TimeOfDay != TimeOfDay.Night)
-                CurrentGameState.TimeOfDay = TimeOfDay.Night;
-
-            AdvanceTime(1); // Night -> Morning (+1 gün)
-            ApplyEnergy(+CurrentGameState.MaxEnergy); // tam doldur (clamp var)
-        }
-
-
-
-        // BU, YENİ METODDUR
-        // === ACTION PROCESSING genişləndirildi ===
+        /// <summary>
+        /// Statları (Enerji, Pul, Sevgi) tətbiq edir.
+        /// </summary>
         private void ProcessActions(List<GameAction> actions)
         {
             if (actions == null) return;
@@ -337,45 +354,34 @@ namespace Alex_Mai.ViewModels
             {
                 switch (action.Stat)
                 {
+                    // "TimeAdvance" və "Sleep" sətirləri buradan tamamilə silinib (bu, düzgündür).
                     case "Affection":
                         if (action.Operator == "Add") MainCharacterStats.Affection += action.Value;
                         else if (action.Operator == "Subtract") MainCharacterStats.Affection -= action.Value;
                         else if (action.Operator == "Set") MainCharacterStats.Affection = action.Value;
                         break;
-
                     case "Trust":
                         if (action.Operator == "Add") MainCharacterStats.Trust += action.Value;
                         else if (action.Operator == "Subtract") MainCharacterStats.Trust -= action.Value;
                         else if (action.Operator == "Set") MainCharacterStats.Trust = action.Value;
                         break;
-
                     case "Stress":
                         if (action.Operator == "Add") MainCharacterStats.Stress += action.Value;
                         else if (action.Operator == "Subtract") MainCharacterStats.Stress -= action.Value;
                         else if (action.Operator == "Set") MainCharacterStats.Stress = action.Value;
                         break;
-
-                    // ⬇️ YENİ: vaxt irəliləyişi
-                    case "TimeAdvance":
-                        // Add -> həmin qədər slot irəli; Set -> dəqiq addım sayı kimi istifadə edirik
-                        if (action.Operator == "Add" || action.Operator == "Set")
-                            AdvanceTime(Math.Max(1, action.Value));
-                        break;
-
-                    // ⬇️ YENİ: enerji idarəsi
                     case "Energy":
                         if (action.Operator == "Add") ApplyEnergy(+action.Value);
                         else if (action.Operator == "Subtract") ApplyEnergy(-action.Value);
                         else if (action.Operator == "Set") CurrentGameState.CurrentEnergy = Math.Clamp(action.Value, 0, CurrentGameState.MaxEnergy);
                         break;
-
-                    // ⬇️ YENİ: pul
                     case "Money":
                         int previousMoney = CurrentGameState.PlayerMoney;
                         int amount = action.Value;
-                        TransactionType type = TransactionType.Expense; // Default
-                        string description = "Unknown Transaction"; // Default
-                        if (action.Operator == "Add") {
+                        TransactionType type = TransactionType.Expense;
+                        string description = "Unknown Transaction";
+                        if (action.Operator == "Add")
+                        {
                             CurrentGameState.PlayerMoney += amount;
                             type = TransactionType.Income;
                             description = "Received Money";
@@ -384,31 +390,21 @@ namespace Alex_Mai.ViewModels
                         {
                             CurrentGameState.PlayerMoney -= amount;
                             type = TransactionType.Expense;
-                            description = "Spent Money"; // Daha yaxşı description dialoqdan gələ bilər
+                            description = "Spent Money";
                         }
                         else if (action.Operator == "Set")
                         {
-                            // Set üçün tarixçə əlavə etmək mürəkkəb ola bilər, fərqi hesablamaq lazımdır
-                            // Hələlik bunu buraxaq və ya fərqi hesablayıb əlavə edək
                             CurrentGameState.PlayerMoney = amount;
-                            // Opsional: Fərqi hesablayıb əlavə et
                             int difference = amount - previousMoney;
                             if (difference != 0)
                             {
                                 CurrentGameState.AddTransaction("Balance Set (Dialogue)", Math.Abs(difference), difference > 0 ? TransactionType.Income : TransactionType.Expense, DateTime.Now);
                             }
                         }
-                        // Əgər pul dəyişibsə əməliyyatı qeyd et (Set xaricində)
                         if (action.Operator == "Add" || action.Operator == "Subtract")
                         {
                             CurrentGameState.AddTransaction(description, amount, type, DateTime.Now);
                         }
-                        break;
-
-                    // ⬇️ İstəsən “Sleep” kimi flag da dəstəkləyə bilərik
-                    case "Sleep":
-                        // hər hansı seçimdən sonra yatmaq üçün
-                        SleepAndRecover();
                         break;
                 }
             }
@@ -428,6 +424,7 @@ namespace Alex_Mai.ViewModels
                     case "Affection": statValue = MainCharacterStats.Affection; break;
                     case "Trust": statValue = MainCharacterStats.Trust; break;
                     case "Stress": statValue = MainCharacterStats.Stress; break;
+                    case "Energy": statValue = CurrentGameState.CurrentEnergy; break; // <-- ŞƏRTLƏR ÜÇÜN ENERJİNİ ƏLAVƏ ETDİM
                 }
 
                 bool conditionMet = false;
@@ -464,30 +461,63 @@ namespace Alex_Mai.ViewModels
         [RelayCommand]
         public void ToggleInventory()
         {
+     
             IsInventoryOpen = !IsInventoryOpen;
         }
 
-        public void UseInventoryItem(string itemId)
+        /// <summary>
+        /// İnventar əşyasını istifadə etmək üçün əsas komanda.
+        /// </summary>
+        public async Task UseInventoryItem(string itemId)
         {
-            // Bir əşya istifadə edildikdə, rahatlıq üçün inventar pəncərəsini bağlayırıq.
-            IsInventoryOpen = false;
 
-            // Hansı əşyanın istifadə edildiyini yoxlayıb, müvafiq hadisəni başlayırıq.
-            switch (itemId)
+            IsBusy = true;
+
+            try
             {
-                case "cigarette":
-                    ShowDialogue("event_use_cigarette");
-                    break;
+                IsInventoryOpen = false;
 
-                case "zippo":
-                    ShowDialogue("event_use_zippo");
-                    break;
+                switch (itemId)
+                {
+                    case "cigarette":
+                        if (!await TryUseEventSlot(1)) return;
+                        ShowDialogue("event_use_cigarette");
+                        break;
 
-                case "phone":
-                    // Gələcəkdə bu, xüsusi telefon pəncərəsini açacaq.
-                    // Hələlik test üçün sadə bir dialoq başladaq.
-                    ShowDialogue("event_use_phone");
-                    break;
+                    case "zippo":
+                        if (!await TryUseEventSlot(1)) return;
+                        ShowDialogue("event_use_zippo");
+                        break;
+
+                    case "soda":
+                        if (CurrentGameState.CurrentEnergy >= CurrentGameState.MaxEnergy)
+                        {
+                            await ShowNotification("Enerjiniz artıq maksimumdur.");
+                            return;
+                        }
+                        if (!await TryUseEventSlot(1)) return; // 1 slot aparır
+
+                        ApplyEnergy(15);
+                        await ShowNotification("+15 Enerji bərpa olundu");
+                        // TODO: Inventardan əşyanı silmək məntiqi
+                        break;
+
+                    // --- BUG 1 HƏLLİ ---
+                    case "phone":
+                        // Telefonu açmaq PULSUZ olmalıdır (0 slot)
+                        if (!await TryUseEventSlot(0)) return;
+                        TogglePhoneView();
+                        break;
+                    // --- HƏLLİN SONU ---
+
+                    default:
+                        IsInventoryOpen = true;
+                        break;
+                }
+            }
+            finally
+            {
+                IsBusy = false;
             }
         }
 
@@ -500,23 +530,65 @@ namespace Alex_Mai.ViewModels
         [RelayCommand]
         public void ToggleMap()
         {
+            if (IsBusy) return;
             IsMapOpen = !IsMapOpen;
         }
 
-        // === NAVİQASİYA: otağa keçəndə enerjini və vaxtı hərəkət etdir (opsional) ===
-        public void GoToPlace(string placeId)
+        /// <summary>
+        /// Məkana getmək üçün əsas komanda.
+        /// </summary>
+        public async Task GoToPlace(string placeId)
         {
-            IsMapOpen = false;
-            IsMarketOpen = false;
+            if (IsBusy) return;
+            IsBusy = true;
 
-            if (_locationIndex != null && _locationIndex.TryGetValue(placeId, out var nodeId) && !string.IsNullOrEmpty(nodeId))
+            try
             {
-                // hər otaq keçidi 1 slot vaxt aparsın və 3 enerji xərcləsin (istəyə görə dəyiş)
-                AdvanceTime(1);
-                ApplyEnergy(-3);
-                ShowDialogue(nodeId);
+                IsMapOpen = false;
+                IsMarketOpen = false;
+
+                if (_locationIndex != null
+                    && _locationIndex.TryGetValue(placeId, out var nodeId)
+                    && !string.IsNullOrEmpty(nodeId))
+                {
+                    if (_currentNodeId == nodeId) return;
+
+                    // --- SLOT QAYDASI ---
+                    // Home -> Home  : 0 slot (pulsuz)
+                    // Home <-> Out  : 1 slot
+                    // Out  -> Out   : 1 slot
+                    int slotsToUse = 1; // default
+
+                    bool fromIsHome = IsHomePlace(_currentPlaceId ?? "alex_room"); // ilk dəfə üçün fallback
+                    bool toIsHome = IsHomePlace(placeId);
+
+                    if (fromIsHome && toIsHome)
+                        slotsToUse = 0;
+
+                    if (!await TryUseEventSlot(slotsToUse)) return;
+
+                    // Uğurlu oldu — dialoqa keç və cari yeri yenilə
+                    ShowDialogue(nodeId);
+                    _currentPlaceId = placeId;
+                }
+            }
+            finally
+            {
+                IsBusy = false;
             }
         }
+
+        // Ev daxilindəki yerləri yoxlayan köməkçi metod (klassın içinə əlavə et)
+        private static bool IsHomePlace(string placeId)
+        {
+            // Səndə map-də bu id-lər var: alex_room, mai_room, kitchen, bathroom, living_room
+            return placeId == "alex_room"
+                || placeId == "mai_room"
+                || placeId == "kitchen"
+                || placeId == "bathroom"
+                || placeId == "living_room";
+        }
+
 
         // Yeni metodları əlavə edin
         public void ToggleMarket()
@@ -527,16 +599,108 @@ namespace Alex_Mai.ViewModels
 
         private void LoadLocationIndex()
         {
-            // Ən yaxşısı: _dialogueService.GetLocationIndex();
-            // Minimal: sərt kodla (JSON-a əlavə etdikcə buranı da doldur):
-            _locationIndex = new Dictionary<string, string>
+            _locationIndex = _dialogueService.GetLocationIndex();
+
+            // nodeId -> placeId tərs xəritəsi
+            _nodeToPlace = new Dictionary<string, string>();
+            if (_locationIndex != null)
             {
-                ["alex_room"] = "hub_alex_room",
-                ["mai_room"] = "hub_mai_room",
-                ["kitchen"] = "hub_kitchen",
-                ["bathroom"] = "hub_bathroom"
-            };
+                foreach (var kv in _locationIndex)
+                {
+                    var placeId = kv.Key;      // məsələn "kitchen"
+                    var nodeId = kv.Value;    // məsələn "hub_kitchen" və ya "day2_kitchen_hub"
+                    if (!string.IsNullOrEmpty(nodeId))
+                        _nodeToPlace[nodeId] = placeId;
+                }
+            }
         }
+
+
+
+
+        /// <summary>
+        /// Mərkəzi metod: Hadisə slotunu sərf etməyə CƏHD EDİR.
+        /// </summary>
+        private async Task<bool> TryUseEventSlot(int slotsToUse = 1)
+        {
+            if (slotsToUse == 0) return true; // Pulsuz hərəkətlər həmişə uğurludur
+
+            // GECƏ MƏNTİQİ: Gecədirsə və slot qalmayıbsa, hərəkətə icazə verilmir.
+            if (CurrentGameState.TimeOfDay == TimeOfDay.Night && CurrentGameState.CurrentEventSlots <= 0)
+            {
+                await ShowNotification("Artıq çox gecdir... Yatmalısan.");
+                return false; // Hərəkət bloklandı
+            }
+
+            // Slotu Sərf Et
+            if (CurrentGameState.CurrentEventSlots > 0)
+            {
+                CurrentGameState.CurrentEventSlots -= slotsToUse;
+            }
+
+            // Slotlar Bitdisə, Zamanı İrəli Çək (GECƏ XARİC)
+            if (CurrentGameState.CurrentEventSlots <= 0 && CurrentGameState.TimeOfDay != TimeOfDay.Night)
+            {
+                await AdvanceTime();
+                await ShowNotification("Zaman irəliləyir...");
+            }
+
+            return true; // Hərəkət uğurludur
+        }
+
+
+
+        /// <summary>
+        /// Zamanı 1 addım irəli aparır. GECƏDƏ DAYANIR.
+        /// </summary>
+        private async Task AdvanceTime()
+        {
+            switch (CurrentGameState.TimeOfDay)
+            {
+                case TimeOfDay.Morning:
+                    CurrentGameState.TimeOfDay = TimeOfDay.Afternoon;
+                    break;
+                case TimeOfDay.Afternoon:
+                    CurrentGameState.TimeOfDay = TimeOfDay.Evening;
+                    break;
+                case TimeOfDay.Evening:
+                    CurrentGameState.TimeOfDay = TimeOfDay.Night;
+                    ShowNotification("Artıq gecədir...");
+                    break;
+                case TimeOfDay.Night:
+                default:
+                    // Gecə vaxtı avtomatik günə keçmirik. "SleepAndRecover" gözlənilir.
+                    break;
+            }
+        }
+
+
+        /// <summary>
+        /// Yalnız bu metod yeni günə başlayır.
+        /// </summary>
+        private void SleepAndRecover()
+        {
+            CurrentGameState.TimeOfDay = TimeOfDay.Morning;
+            CurrentGameState.CurrentDay += 1; // Yeni gün
+            ApplyEnergy(+CurrentGameState.MaxEnergy); // Enerjini tam doldur
+        }
+
+
+
+        /// <summary>
+        /// Bir hadisənin (actions) nə qədər enerji sərf edəcəyini yoxlayır (tətbiq etmir).
+        /// </summary>
+        private int GetEnergyCostFromActions(List<GameAction> actions)
+        {
+            if (actions == null) return 0;
+
+            // Biz yalnız "Energy" ilə "Subtract" əməliyyatını axtarırıq.
+            // "Add" (məsələn, yatmaq) bir "xərc" deyil.
+            var energyAction = actions.FirstOrDefault(a => a.Stat == "Energy" && a.Operator == "Subtract");
+
+            return energyAction?.Value ?? 0; // Əgər yoxdursa 0 qaytarır
+        }
+
 
 
 
@@ -570,7 +734,7 @@ namespace Alex_Mai.ViewModels
         public void EndWorkMinigame(int moneyEarned)
         {
             IsWorkMinigameOpen = false;
-            CurrentGameState.PlayerMoney += moneyEarned; // Qazanılan pulu əlavə et
+           // CurrentGameState.PlayerMoney += moneyEarned; // Qazanılan pulu əlavə et
 
             if (moneyEarned > 0)
             {
@@ -580,13 +744,17 @@ namespace Alex_Mai.ViewModels
                 // Və ya AddTransaction metodunu balansı ayrıca alacaq şəkildə dəyişmək
                 // Hələlik:
                 int balanceBefore = CurrentGameState.PlayerMoney;
-                CurrentGameState.PlayerMoney += moneyEarned; // Pul əlavə et
+               CurrentGameState.PlayerMoney += moneyEarned; // Pul əlavə et
                 CurrentGameState.AddTransaction("Part-time Job Earnings", moneyEarned, TransactionType.Income, DateTime.Now);   // *** DƏYİŞİKLİK: Birbaşa GameState-ə əlavə et ***
                 ShowDialogue("reaction_work_end_success");
             }
             else
             {
-                CurrentGameState.PlayerMoney += moneyEarned; // For potential negative earnings/fees? Update if needed.
+                if (moneyEarned < 0)
+                {
+                    CurrentGameState.PlayerMoney += moneyEarned; // azaldır
+                    CurrentGameState.AddTransaction("Work Penalty", -moneyEarned, TransactionType.Expense, DateTime.Now);
+                }
                                                              // Optionally log failed work attempt if needed
                 ShowDialogue("reaction_work_end_fail");
             }
@@ -597,45 +765,51 @@ namespace Alex_Mai.ViewModels
             // TODO: Pulun dəyişdiyi digər yerlərdə də (məsələn, dialoq actionları) AddTransactionToWallet çağırılmalıdır.
         }
 
-        public async void PurchaseItem(MarketItem item)
+        /// <summary>
+        /// Marketdən əşya almaq üçün əsas komanda.
+        /// </summary>
+        public async Task PurchaseItem(MarketItem item)
         {
-            const int MAX_ITEM_STACK = 3; // Maksimum say limiti
-            int currentItemCount = Inventory.GetItemCount(item.ItemId);
+            if (IsBusy) return;
+            IsBusy = true;
 
-            // Limiti yoxla
-            if (currentItemCount >= MAX_ITEM_STACK)
+            try
             {
-                await ShowNotification("Bu əşyadan kifayət qədər var!");
-                return;
-            }
+                // Alış-veriş 1 slot aparır
+                if (!await TryUseEventSlot(1)) return;
 
-            // Pulu yoxla
-            if (CurrentGameState.PlayerMoney >= item.Price)
-            {
-                // Pulu çıx
-                CurrentGameState.PlayerMoney -= item.Price;
+                const int MAX_ITEM_STACK = 3;
+                int currentItemCount = Inventory.GetItemCount(item.ItemId);
 
-                // *** DƏYİŞİKLİK: Birbaşa GameState-ə əlavə et ***
-                CurrentGameState.AddTransaction($"Purchased: {item.Name}", item.Price, TransactionType.Expense, DateTime.Now);
-
-                // İnventara əlavə et
-                Inventory.AddItem(new InventoryItem
+                if (currentItemCount >= MAX_ITEM_STACK)
                 {
-                    ItemId = item.ItemId,
-                    Name = item.Name,
-                    IconPath = item.IconPath
-                });
+                    await ShowNotification("Bu əşyadan kifayət qədər var!");
+                    return;
+                }
 
-                // Uğurlu alış-veriş bildirişi
-                await ShowNotification($"+1 {item.Name}");
+                if (CurrentGameState.PlayerMoney >= item.Price)
+                {
+                    CurrentGameState.PlayerMoney -= item.Price;
+                    CurrentGameState.AddTransaction($"Purchased: {item.Name}", item.Price, TransactionType.Expense, DateTime.Now);
+
+                    Inventory.AddItem(new InventoryItem
+                    {
+                        ItemId = item.ItemId,
+                        Name = item.Name,
+                        IconPath = item.IconPath
+                    });
+                    await ShowNotification($"+1 {item.Name}");
+                }
+                else
+                {
+                    await ShowNotification("Kifayət qədər pulunuz yoxdur!");
+                }
             }
-            else
+            finally
             {
-                // Kifayət qədər pul yoxdur bildirişi
-                await ShowNotification("Kifayət qədər pulunuz yoxdur!");
+                IsBusy = false;
             }
         }
-
 
         public string MaiMood
         {
