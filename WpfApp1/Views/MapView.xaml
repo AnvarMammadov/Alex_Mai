@@ -4,66 +4,303 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Alex_Mai.Views"
+             xmlns:converters="clr-namespace:Alex_Mai.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="600">
-    <Border Background="{StaticResource GameBackgroundBrush}" 
-            BorderBrush="{StaticResource GameBorderBrush}" 
-            BorderThickness="2" CornerRadius="5" Padding="15" Opacity="0.8">
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
 
-            <Grid Grid.Row="0" Margin="0,0,0,15">
-                <TextBlock Text="NAVIGATION" FontFamily="{StaticResource GameFont}" FontSize="28" FontWeight="Bold" VerticalAlignment="Center"/>
-                <Button Content="CLOSE" Style="{StaticResource GameButtonStyle}" HorizontalAlignment="Right" Padding="15,5"
-                        Command="{Binding CloseMapCommand}"/>
+    <UserControl.Resources>
+        <converters:BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+
+        <SolidColorBrush x:Key="IsoTileBase" Color="#FFF5F6F7"/>
+        <LinearGradientBrush x:Key="IsoTileFill" StartPoint="0,0" EndPoint="0,1">
+            <GradientStop Color="#FFFFFFFF" Offset="0"/>
+            <GradientStop Color="#FFF0F2F5" Offset="1"/>
+        </LinearGradientBrush>
+        <SolidColorBrush x:Key="IsoTileStroke" Color="#33000000"/>
+        <SolidColorBrush x:Key="IsoTileHoverStroke" Color="#66000000"/>
+
+        <SolidColorBrush x:Key="RoomWallBrush" Color="#FF888888"/>
+        <SolidColorBrush x:Key="RoomFillBrush" Color="#FFEEEEEE"/>
+        <SolidColorBrush x:Key="RoomTextBrush" Color="#FF333333"/>
+        <SolidColorBrush x:Key="RoomHotspotHoverBrush" Color="#22FFFFFF"/>
+        <SolidColorBrush x:Key="RoomBaseBrush" Color="#FFEEEEEE"/>
+
+        <Style x:Key="MapHotspotStyle" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Panel.ZIndex" Value="10"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderThickness="{TemplateBinding BorderThickness}"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="{StaticResource RoomHotspotHoverBrush}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="IsoTileButtonStyle" TargetType="Button">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Grid x:Name="Root" RenderTransformOrigin="0.5,0.5">
+                            <Grid.Effect>
+                                <DropShadowEffect BlurRadius="8" ShadowDepth="3" Opacity="0.25"/>
+                            </Grid.Effect>
+                            <Image x:Name="TileImage"
+                                   Source="{TemplateBinding Tag}" 
+                                   Stretch="Fill"
+                                   RenderOptions.BitmapScalingMode="Fant" />
+                            <Border x:Name="TileBorder"
+                                    BorderBrush="{StaticResource IsoTileStroke}"
+                                    BorderThickness="1.2"
+                                    Background="Transparent"/>
+                            <TextBlock x:Name="Label"
+                                       Text="{TemplateBinding Content}"
+                                       FontFamily="{StaticResource GameFont}"
+                                       FontSize="14"
+                                       TextAlignment="Center"
+                                       TextWrapping="Wrap"
+                                       Margin="0"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center">
+                                <TextBlock.Effect>
+                                    <DropShadowEffect ShadowDepth="1" BlurRadius="2" Opacity="0.7" Color="Black"/>
+                                </TextBlock.Effect>
+                            </TextBlock>
+                            <Ellipse x:Name="Badge"
+                                     Width="14" Height="14"
+                                     Fill="#FF4DD38A"
+                                     Stroke="#88000000"
+                                     StrokeThickness="1"
+                                     HorizontalAlignment="Right"
+                                     VerticalAlignment="Top"
+                                     Margin="0,6,6,0"
+                                     Visibility="Collapsed"/>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="TileImage" Property="Opacity" Value="0.45"/>
+                                <Setter TargetName="TileBorder" Property="Opacity" Value="0.45"/>
+                                <Setter TargetName="Label" Property="Opacity" Value="0.45"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="TileBorder" Property="BorderBrush" Value="{StaticResource IsoTileHoverStroke}"/>
+                                <Setter TargetName="TileBorder" Property="BorderThickness" Value="1.5"/>
+                                <Setter Property="Cursor" Value="Hand"/>
+                                <Setter Property="Panel.ZIndex" Value="10"/>
+                                <Setter TargetName="Root" Property="RenderTransform">
+                                    <Setter.Value>
+                                        <ScaleTransform ScaleX="1.02" ScaleY="1.02"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="Root" Property="RenderTransform">
+                                    <Setter.Value>
+                                        <ScaleTransform ScaleX="0.99" ScaleY="0.99"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                            <DataTrigger Binding="{Binding HasNpc}" Value="True">
+                                <Setter TargetName="Badge" Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="IsoTileOutStyle" BasedOn="{StaticResource IsoTileButtonStyle}" TargetType="Button">
+            <Setter Property="Width" Value="160"/>
+            <Setter Property="Height" Value="120"/>
+            <Setter Property="Margin" Value="8"/>
+        </Style>
+
+    </UserControl.Resources>
+
+    <!-- Yeni layout: arxa overlay + mərkəzdə kart -->
+    <Grid Background="Transparent">
+        <!-- Arxanı bir az qaraldır -->
+        <Rectangle Fill="#80000000"/>
+
+        <!-- Əsas navigation kartı -->
+        <Border HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                MaxWidth="760"
+                MaxHeight="420"
+                Background="{StaticResource GameBackgroundBrush}"
+                BorderBrush="{StaticResource GameBorderBrush}"
+                BorderThickness="2"
+                CornerRadius="14"
+                Padding="18"
+                Opacity="0.94">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <!-- HEADER -->
+                <Grid Grid.Row="0" Margin="0,0,0,14">
+                    <TextBlock Text="NAVIGATION" FontFamily="{StaticResource GameFont}"
+                               FontSize="28" FontWeight="Bold" VerticalAlignment="Center"/>
+                    <Button Content="CLOSE" Style="{StaticResource GameButtonStyle}"
+                            HorizontalAlignment="Right" Padding="15,5"
+                            Command="{Binding CloseMapCommand}"/>
+                </Grid>
+
+                <!-- HOME / OUT düymələri -->
+                <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,10">
+                    <Button Content="HOME" Command="{Binding ShowHomeCommand}" Margin="0,0,10,0">
+                        <Button.Style>
+                            <Style TargetType="Button" BasedOn="{StaticResource GameButtonStyle}">
+                                <Setter Property="FontWeight" Value="SemiBold"/>
+                                <Setter Property="Padding" Value="14,6"/>
+                                <Setter Property="MinWidth" Value="90"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsShowingHome}" Value="False">
+                                        <Setter Property="Opacity" Value="0.6"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                    <Button Content="OUT" Command="{Binding ShowOutCommand}">
+                        <Button.Style>
+                            <Style TargetType="Button" BasedOn="{StaticResource GameButtonStyle}">
+                                <Setter Property="FontWeight" Value="SemiBold"/>
+                                <Setter Property="Padding" Value="14,6"/>
+                                <Setter Property="MinWidth" Value="90"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsShowingHome}" Value="True">
+                                        <Setter Property="Opacity" Value="0.6"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                </StackPanel>
+
+                <!-- Xəritə / OUT hissəsi -->
+                <Grid Grid.Row="2">
+
+                    <!-- HOME xəritəsi -->
+                    <Viewbox Stretch="Uniform"
+                             StretchDirection="DownOnly"
+                             Margin="0,0,0,4"
+                             Visibility="{Binding IsShowingHome, Converter={StaticResource BoolToVisibilityConverter}}">
+                        <Canvas Width="500" Height="280">
+
+                            <Border Canvas.Left="0" Canvas.Top="0"
+                                    Width="500" Height="280"
+                                    Background="{StaticResource RoomBaseBrush}"
+                                    BorderBrush="{StaticResource RoomWallBrush}"
+                                    BorderThickness="1" CornerRadius="4"/>
+
+                            <Border Canvas.Left="10" Canvas.Top="10"
+                                    Width="200" Height="260"
+                                    Background="{StaticResource RoomFillBrush}"
+                                    BorderBrush="{StaticResource RoomWallBrush}"
+                                    BorderThickness="2" CornerRadius="3"/>
+                            <TextBlock Text="Living Room" Canvas.Left="10" Canvas.Top="130" Width="200"
+                                       FontFamily="{StaticResource GameFont}" FontSize="16" TextAlignment="Center"
+                                       Foreground="{StaticResource RoomTextBrush}" IsHitTestVisible="False"/>
+
+                            <Border Canvas.Left="220" Canvas.Top="10"
+                                    Width="150" Height="120"
+                                    Background="{StaticResource RoomFillBrush}"
+                                    BorderBrush="{StaticResource RoomWallBrush}"
+                                    BorderThickness="2" CornerRadius="3"/>
+                            <TextBlock Text="Alex's Room" Canvas.Left="220" Canvas.Top="60" Width="150"
+                                       FontFamily="{StaticResource GameFont}" FontSize="16" TextAlignment="Center"
+                                       Foreground="{StaticResource RoomTextBrush}" IsHitTestVisible="False"/>
+
+                            <Border Canvas.Left="380" Canvas.Top="10"
+                                    Width="110" Height="120"
+                                    Background="{StaticResource RoomFillBrush}"
+                                    BorderBrush="{StaticResource RoomWallBrush}"
+                                    BorderThickness="2" CornerRadius="3"/>
+                            <TextBlock Text="Mai's Room" Canvas.Left="380" Canvas.Top="60" Width="110"
+                                       FontFamily="{StaticResource GameFont}" FontSize="16" TextAlignment="Center"
+                                       Foreground="{StaticResource RoomTextBrush}" IsHitTestVisible="False"/>
+
+                            <Border Canvas.Left="220" Canvas.Top="140"
+                                    Width="150" Height="130"
+                                    Background="{StaticResource RoomFillBrush}"
+                                    BorderBrush="{StaticResource RoomWallBrush}"
+                                    BorderThickness="2" CornerRadius="3"/>
+                            <TextBlock Text="Kitchen" Canvas.Left="220" Canvas.Top="190" Width="150"
+                                       FontFamily="{StaticResource GameFont}" FontSize="16" TextAlignment="Center"
+                                       Foreground="{StaticResource RoomTextBrush}" IsHitTestVisible="False"/>
+
+                            <Border Canvas.Left="380" Canvas.Top="140"
+                                    Width="110" Height="130"
+                                    Background="{StaticResource RoomFillBrush}"
+                                    BorderBrush="{StaticResource RoomWallBrush}"
+                                    BorderThickness="2" CornerRadius="3"/>
+                            <TextBlock Text="Bathroom" Canvas.Left="380" Canvas.Top="190" Width="110"
+                                       FontFamily="{StaticResource GameFont}" FontSize="16" TextAlignment="Center"
+                                       Foreground="{StaticResource RoomTextBrush}" IsHitTestVisible="False"/>
+
+                            <Button Style="{StaticResource MapHotspotStyle}"
+                                    Command="{Binding NavigateToCommand}" CommandParameter="living_room"
+                                    Canvas.Left="10" Canvas.Top="10"
+                                    Width="200" Height="260"/>
+
+                            <Button Style="{StaticResource MapHotspotStyle}"
+                                    Command="{Binding NavigateToCommand}" CommandParameter="alex_room"
+                                    Canvas.Left="220" Canvas.Top="10"
+                                    Width="150" Height="120"/>
+
+                            <Button Style="{StaticResource MapHotspotStyle}"
+                                    Command="{Binding NavigateToCommand}" CommandParameter="mai_room"
+                                    Canvas.Left="380" Canvas.Top="10"
+                                    Width="110" Height="120"/>
+
+                            <Button Style="{StaticResource MapHotspotStyle}"
+                                    Command="{Binding NavigateToCommand}" CommandParameter="kitchen"
+                                    Canvas.Left="220" Canvas.Top="140"
+                                    Width="150" Height="130"/>
+
+                            <Button Style="{StaticResource MapHotspotStyle}"
+                                    Command="{Binding NavigateToCommand}" CommandParameter="bathroom"
+                                    Canvas.Left="380" Canvas.Top="140"
+                                    Width="110" Height="130"/>
+
+                        </Canvas>
+                    </Viewbox>
+
+                    <!-- OUT xəritəsi -->
+                    <ScrollViewer VerticalScrollBarVisibility="Auto"
+                                  Visibility="{Binding IsShowingHome, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=Invert}">
+                        <ItemsControl ItemsSource="{Binding OutLocations}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel HorizontalAlignment="Center" Margin="10,0,10,10"/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Button Style="{StaticResource IsoTileOutStyle}"
+                                            Content="{Binding Name}"
+                                            IsEnabled="{Binding IsEnabled}"
+                                            Command="{Binding DataContext.NavigateToCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                            CommandParameter="{Binding PlaceId}"/>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+
+                </Grid>
             </Grid>
-
-            <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,10">
-                <Button Content="HOME" Command="{Binding ShowHomeCommand}" Margin="0,0,10,0">
-                    <Button.Style>
-                        <Style TargetType="Button" BasedOn="{StaticResource GameButtonStyle}">
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding IsShowingHome}" Value="False">
-                                    <Setter Property="Opacity" Value="0.5"/>
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Button.Style>
-                </Button>
-                <Button Content="OUT" Command="{Binding ShowOutCommand}">
-                    <Button.Style>
-                        <Style TargetType="Button" BasedOn="{StaticResource GameButtonStyle}">
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding IsShowingHome}" Value="True">
-                                    <Setter Property="Opacity" Value="0.5"/>
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Button.Style>
-                </Button>
-            </StackPanel>
-
-            <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto">
-                <ItemsControl ItemsSource="{Binding CurrentLocations}">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <WrapPanel/>
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <Button Content="{Binding Name}" Style="{StaticResource GameButtonStyle}" Margin="5" Width="170"
-                                    IsEnabled="{Binding IsEnabled}"
-                                    Command="{Binding DataContext.NavigateToCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                    CommandParameter="{Binding}"/>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-            </ScrollViewer>
-        </Grid>
-    </Border>
+        </Border>
+    </Grid>
 </UserControl>

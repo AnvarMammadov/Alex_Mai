@@ -249,6 +249,30 @@
                                 FontFamily="{StaticResource GameFont}"/>
                 </StackPanel>
             </Button>
+            <Button Style="{StaticResource AppIconStyle}" Command="{Binding NavigateToCalendarCommand}">
+                <StackPanel HorizontalAlignment="Center">
+                    <Border Width="60" Height="60"
+                             Background="White"
+                             CornerRadius="12">
+                        <!-- 
+                        QEYD: /Assets/Icons/icon_phone_calendar.png ikonunu əlavə etməlisiniz.
+                        Hələlik, mən Settings ikonunu istifadə edəcəyəm.
+                        Siz düzgün ikonu tapdıqdan sonra Source-u dəyişin.
+                        -->
+                        <Image Source="/Assets/Icons/icon_phone_calendar.png" 
+                               Width="45" Height="45"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Center"
+                               Stretch="Uniform"/>
+                    </Border>
+                    <TextBlock Text="Calendar"
+                                Foreground="White"
+                                TextAlignment="Center"
+                                Margin="0,8,0,0"
+                                FontFamily="{StaticResource GameFont}"/>
+                </StackPanel>
+            </Button>
+
         </WrapPanel>
     </Grid>
 </UserControl>

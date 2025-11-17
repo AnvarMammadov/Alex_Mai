@@ -14,11 +14,12 @@ namespace Alex_Mai.ViewModels
     {
         private readonly GameViewModel _parentViewModel;
 
+        // Bu kolleksiyalar olduğu kimi qalır
         public ObservableCollection<Location> HomeLocations { get; set; }
         public ObservableCollection<Location> OutLocations { get; set; }
 
         [ObservableProperty]
-        private ObservableCollection<Location> _currentLocations;
+        private ObservableCollection<Location> _currentLocations; // Bu, "OUT" üçün istifadə olunacaq
 
         [ObservableProperty]
         private bool _isShowingHome = true;
@@ -31,7 +32,7 @@ namespace Alex_Mai.ViewModels
             {
                  new Location { Name = "Alex's Room", PlaceId = "alex_room" },
                  new Location { Name = "Mai's Room",  PlaceId = "mai_room"  },
-                 new Location { Name = "Living Room", PlaceId = "living_room"}, // hələ səhnə yox
+                 new Location { Name = "Living Room", PlaceId = "living_room"},
                  new Location { Name = "Kitchen",     PlaceId = "kitchen"   },
                  new Location { Name = "Bathroom",    PlaceId = "bathroom"  }
             };
@@ -43,30 +44,42 @@ namespace Alex_Mai.ViewModels
                 new Location { Name = "Park",          PlaceId = "park",   }
             };
 
-            // Başlanğıcda Ev məkanlarını göstər
-            CurrentLocations = HomeLocations;
+            // "OUT" üçün siyahını ilkin olaraq təyin edirik
+            CurrentLocations = OutLocations;
         }
 
         [RelayCommand]
         private void ShowHome()
         {
-            CurrentLocations = HomeLocations;
+            // CurrentLocations-u dəyişmirik, sadəcə nəyin görünəcəyini idarə edirik
             IsShowingHome = true;
         }
 
         [RelayCommand]
         private void ShowOut()
         {
-            CurrentLocations = OutLocations;
+            // CurrentLocations artıq OutLocations-a bərabərdir
             IsShowingHome = false;
         }
 
+        // --- DƏYİŞİKLİK BURADADIR ---
+        // Metod artıq 'Location' obyekti yox, birbaşa 'string placeId' qəbul edir.
         [RelayCommand]
-        private void NavigateTo(Location location)
+        private void NavigateTo(string placeId)
         {
-            if (location == null || !location.IsEnabled) return;
-            _parentViewModel.GoToPlace(location.PlaceId);
+            // Yoxlama string-ə görə aparılır
+            if (string.IsNullOrEmpty(placeId)) return;
+
+            // Model yoxlaması (opsional, amma yaxşıdır):
+            var locationExists = HomeLocations.Any(l => l.PlaceId == placeId) ||
+                                 OutLocations.Any(l => l.PlaceId == placeId);
+
+            if (!locationExists) return; // Belə bir məkan yoxdursa
+
+            // Birbaşa string placeId-ni GameViewModel-ə ötürürük
+            _parentViewModel.GoToPlace(placeId);
         }
+        // --- DƏYİŞİKLİK SONU ---
 
         [RelayCommand]
         private void CloseMap()

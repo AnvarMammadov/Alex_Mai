@@ -23,6 +23,7 @@ namespace Alex_Mai.ViewModels
         private ChatViewModel _chatViewModel;
         private GalleryViewModel _galleryViewModel;
         private WalletViewModel _walletViewModel;
+        private CalendarViewModel _calendarViewModel;
 
         public PhoneViewModel(GameViewModel parent, GameState gameState)
         {
@@ -66,6 +67,7 @@ namespace Alex_Mai.ViewModels
             _chatViewModel?.Cleanup(); // ChatViewModel-də də Cleanup metodu olmalıdır
             _statsViewModel?.Cleanup(); // StatsViewModel-də də Cleanup metodu olmalıdır
             _galleryViewModel?.Cleanup(); // GalleryViewModel-də də Cleanup metodu olmalıdır 
+            _calendarViewModel?.Cleanup();
         }
         public void NavigateToGallery()
         {
@@ -87,6 +89,20 @@ namespace Alex_Mai.ViewModels
             }
         }
 
+        // <-- BU YENİ METODU ƏLAVƏ EDİN -->
+        public void NavigateToCalendar()
+        {
+            if (_gameState != null)
+            {
+                _calendarViewModel ??= new CalendarViewModel(this, _gameState);
+                CurrentScreenViewModel = _calendarViewModel;
+            }
+            else
+            {
+                System.Windows.MessageBox.Show("Error: Cannot access game state for Calendar.");
+            }
+        }
+
 
 
         // *** YENİ: Cleanup metodu / IDisposable implementasiyası ***
@@ -99,6 +115,7 @@ namespace Alex_Mai.ViewModels
             _chatViewModel?.Cleanup();
             _galleryViewModel?.Cleanup();
             _walletViewModel?.Cleanup();
+            _calendarViewModel?.Cleanup();
 
             // Clear cache references (optional, depends if PhoneViewModel itself is long-lived)
             _homeScreenViewModel = null;
@@ -106,6 +123,7 @@ namespace Alex_Mai.ViewModels
             _chatViewModel = null;
             _galleryViewModel = null;
             _walletViewModel = null;
+            _calendarViewModel = null;
         }
 
 

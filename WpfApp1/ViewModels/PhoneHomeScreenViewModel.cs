@@ -106,6 +106,13 @@ namespace Alex_Mai.ViewModels
             _parentViewModel.NavigateToWallet(); // Call the method in PhoneViewModel
         }
 
+        // <-- BU YENİ ƏMRİ (COMMAND) ƏLAVƏ EDİN -->
+        [RelayCommand]
+        private void NavigateToCalendar()
+        {
+            _parentViewModel.NavigateToCalendar();
+        }
+
 
         // *** YENİ: Cleanup metodu ***
         public void Cleanup()

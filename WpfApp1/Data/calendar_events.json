@@ -1,0 +1,27 @@
+[
+    {
+        "Day": 2,
+        "Title": "First Day at Sema's House",
+        "IconKey": "Home"
+    },
+    {
+        "Day": 3,
+        "Title": "Explore the Town",
+        "IconKey": "Explore"
+    },
+    {
+        "Day": 5,
+        "Title": "Mai's First Exam",
+        "IconKey": "Exam"
+    },
+    {
+        "Day": 10,
+        "Title": "Summer Festival",
+        "IconKey": "Festival"
+    },
+    {
+        "Day": 14,
+        "Title": "Mai's Birthday!",
+        "IconKey": "Birthday"
+    }
+]

@@ -55,6 +55,7 @@
     <None Remove="Assets\Icons\icon_omlet.png" />
     <None Remove="Assets\Icons\icon_onion.png" />
     <None Remove="Assets\Icons\icon_phone.jpeg" />
+    <None Remove="Assets\Icons\icon_phone_calendar.png" />
     <None Remove="Assets\Icons\icon_phone_camera.png" />
     <None Remove="Assets\Icons\icon_phone_cg.png" />
     <None Remove="Assets\Icons\icon_phone_chat.png" />
@@ -87,6 +88,7 @@
     <None Remove="Assets\Sprites\pan_with_milk.png" />
     <None Remove="Assets\Sprites\pan_with_oil.png" />
     <None Remove="Assets\Sprites\talking%28day1_alex_mai_sema%29.png" />
+    <None Remove="Data\calendar_events.json" />
     <None Remove="Data\chats.json" />
     <None Remove="Data\dialogue.json" />
     <None Remove="Data\gallery_items.json" />
@@ -139,6 +141,9 @@
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Assets\Icons\icon_desktop_browser.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Assets\Icons\icon_phone_calendar.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Assets\Icons\icon_phone_camera.png">
@@ -330,6 +335,9 @@
     <Resource Include="Assets\Sprites\talking(day1_alex_mai_sema).png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
+    <Content Include="Data\calendar_events.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>
