@@ -466,7 +466,7 @@ namespace Alex_Mai.ViewModels
         }
 
         /// <summary>
-        /// İnventar əşyasını istifadə etmək üçün əsas komanda.
+        /// Use inventory item
         /// </summary>
         public async Task UseInventoryItem(string itemId)
         {
@@ -492,7 +492,7 @@ namespace Alex_Mai.ViewModels
                     case "soda":
                         if (CurrentGameState.CurrentEnergy >= CurrentGameState.MaxEnergy)
                         {
-                            await ShowNotification("Enerjiniz artıq maksimumdur.");
+                            await ShowNotification("Your energy is maximum..");
                             return;
                         }
                         if (!await TryUseEventSlot(1)) return; // 1 slot aparır

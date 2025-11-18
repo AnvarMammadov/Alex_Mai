@@ -9,10 +9,9 @@
         "market": "day2_market_hub",
         "park": "day2_park_hub"
     },
-
     "hub_alex_room": {
         "character": "Alex",
-        "text": "Otağına qayıtdın.",
+        "text": "You returned to your room.",
         "choices": [
             {
                 "text": "...",
@@ -23,7 +22,7 @@
     },
     "hub_mai_room": {
         "character": "Mai",
-        "text": "Mai-nin otağına keçdin.",
+        "text": "You entered Mai's room.",
         "choices": [
             {
                 "text": "...",
@@ -33,8 +32,8 @@
         ]
     },
     "hub_kitchen": {
-        "character": "Sema Teyzə",
-        "text": "Mətbəxə keçdin.",
+        "character": "Aunt Shema",
+        "text": "You went to the kitchen.",
         "choices": [
             {
                 "text": "...",
@@ -45,7 +44,7 @@
     },
     "hub_bathroom": {
         "character": "Alex",
-        "text": "Hamama keçdin.",
+        "text": "You went to the bathroom.",
         "choices": [
             {
                 "text": "...",
@@ -67,7 +66,7 @@
     },
     "hub_part_time": {
         "character": "Alex",
-        "text": "Qonaq otagindayam..",
+        "text": "I'm in the living room..",
         "choices": [
             {
                 "text": "...",
@@ -78,7 +77,7 @@
     },
     "hub_market": {
         "character": "Alex",
-        "text": "Marketdeyem..",
+        "text": "I'm at the market..",
         "choices": [
             {
                 "text": "...",
@@ -89,7 +88,7 @@
     },
     "hub_park": {
         "character": "Alex",
-        "text": "Parkdayam..",
+        "text": "I'm at the park..",
         "choices": [
             {
                 "text": "...",
@@ -98,7 +97,6 @@
             }
         ]
     },
-
     "generic_day_morning_hub": {
         "character": "",
         "text": "",
@@ -132,15 +130,14 @@
             }
         ]
     },
-
     "start_game": {
         "character": "Alex",
-        "text": "Evdə tək oturub televizora baxırdım ki, telefonumun bildiriş səsi gəldi.",
+        "text": "I was sitting at home alone watching TV when I heard my phone's notification sound.",
         "background": "alex_home.png",
         "sprite": null,
         "choices": [
             {
-                "text": "Mesaja bax.",
+                "text": "Check the message.",
                 "nextNodeId": "university_message",
                 "actionCost": 0
             }
@@ -149,21 +146,21 @@
     "university_message": {
         "character": "Alex",
         "background": "alex_home_message.png",
-        "text": "Bu ki, universitet nəticələridir! ...Və qəbul olmuşam! Bir dəqiqə, bu şəhər ki... Sema teyzəgilin yaşadığı yerdir.",
+        "text": "These are the university results! ...And I've been accepted! Wait a minute, this city... it's where Aunt Sema lives.",
         "choices": [
             {
-                "text": "Sema teyzəyə zəng et.",
+                "text": "Call Aunt Shema.",
                 "nextNodeId": "call_sema",
                 "actionCost": 0
             }
         ]
     },
     "call_sema": {
-        "character": "Sema Teyzə (Telefonda)",
-        "text": "Nə yaxşı xəbərdir, Alex oğlum! Gözümüz aydın olsun! Əlbəttə, nə deməkdir, ev tapana qədər bizdə qala bilərsən. Gözləyirik!",
+        "character": "Aunt Shema (Telefonda)",
+        "text": "What wonderful news, my dear Alex! Congratulations! Of course, what a question, you can stay with us until you find a place. We'll be waiting!",
         "choices": [
             {
-                "text": "Yola düş.",
+                "text": "Head out.",
                 "nextNodeId": "train_journey",
                 "actionCost": 0
             }
@@ -171,7 +168,7 @@
     },
     "train_journey": {
         "character": "",
-        "text": "Qatarın səsi və yavaşca dəyişən mənzərə... Yeni bir həyat başlayır.",
+        "text": "The sound of the train and the slowly changing scenery... A new life is beginning.",
         "background": "train_alex.png",
         "bgm": "",
         "choices": [
@@ -183,14 +180,14 @@
         ]
     },
     "arrive_at_night": {
-        "character": "Sema Teyzə",
-        "text": "Xoş gəlmisən, Alex oğlum! Gəl içəri, Mai də səni gözləyir.",
+        "character": "Aunt Shema",
+        "text": "Welcome, my dear Alex! Come inside, Mai is waiting for you too.",
         "background": "day1_end_semahomeyard.png",
         "sprite": "alex_normal.png",
         "bgm": "",
         "choices": [
             {
-                "text": "Təşəkkür edirəm, Sema teyzə. Çox yorulmuşam.",
+                "text": "Thank you, Aunt Shema. I'm very tired.",
                 "nextNodeId": "meet_mai",
                 "actionCost": 0,
                 "actions": [
@@ -202,7 +199,7 @@
                 ]
             },
             {
-                "text": "Sizi görməyimə şad oldum. Xüsusilə də Mai üçün darıxmışdım.",
+                "text": "I'm happy to see you. I especially missed Mai.",
                 "nextNodeId": "meet_mai_flirt",
                 "actionCost": 0,
                 "actions": [
@@ -217,12 +214,12 @@
     },
     "meet_mai": {
         "character": "Mai",
-        "text": "Xoş gəlmisən, Alex...",
+        "text": "Welcome, Alex...",
         "background": "day1_mai_talking.png",
         "sprite": null,
         "choices": [
             {
-                "text": "Səni də gördüyümə şadam.",
+                "text": "I'm glad to see you too.",
                 "nextNodeId": "go_to_sleep",
                 "actionCost": 0
             }
@@ -230,7 +227,7 @@
     },
     "meet_mai_flirt": {
         "character": "Mai",
-        "text": "M-mən də... Xoş gəlmisən...",
+        "text": "M-me too... Welcome...",
         "background": "mai_bedroom.jpeg",
         "sprite": "mai_happy.png",
         "actions": [
@@ -242,7 +239,7 @@
         ],
         "choices": [
             {
-                "text": "Utandığını görmək xoşdur.",
+                "text": "It's nice to see you blush.",
                 "nextNodeId": "go_to_sleep",
                 "actionCost": 0
             }
@@ -250,13 +247,13 @@
     },
     "go_to_sleep": {
         "character": "Alex",
-        "text": "Səhər görüşərik deyib otağıma keçdim. Yorğunluqdan dərhal yuxuya getdim.",
+        "text": "I said 'see you in the morning' and went to my room. I fell asleep immediately from exhaustion.",
         "background": "alex_quest_room.png",
         "sprite": "alex_normal.png",
         "bgm": null,
         "choices": [
             {
-                "text": "Səhər oyandın...",
+                "text": "You woke up in the morning...",
                 "nextNodeId": "day2_morning_hub",
                 "actionCost": 0,
                 "actions": [
@@ -269,25 +266,24 @@
             }
         ]
     },
-
     "day2_morning_hub": {
         "character": "Mai",
-        "text": "Səhərdir. Mai otağında masasının arxasında oturub dərslərinə baxır. Nə edirsən?",
+        "text": "It's morning. Mai is sitting at her bed in her room. What do you do?",
         "background": "mai_sit_on_bed_bedroom.png",
         "sprite": null,
         "choices": [
             {
-                "text": "Danış",
+                "text": "Talk",
                 "nextNodeId": "day2_morning_talk_hub",
                 "actionCost": 0
             },
             {
-                "text": "Toxun",
+                "text": "Touch",
                 "nextNodeId": "day2_morning_touch_hub",
                 "actionCost": 0
             },
             {
-                "text": "Zarafat Et",
+                "text": "Make a Joke",
                 "nextNodeId": "day2_morning_joke_hub",
                 "actionCost": 0
             }
@@ -295,12 +291,12 @@
     },
     "day2_morning_talk_hub": {
         "character": "Mai",
-        "text": "Onunla nə haqqında danışmaq istəyirsən?",
+        "text": "What do you want to talk to her about?",
         "background": "mai_bedroom.jpeg",
         "sprite": "mai_norm.png",
         "choices": [
             {
-                "text": "Hal-əhval soruş.",
+                "text": "Ask how she is.",
                 "nextNodeId": "reaction_talk_howareyou",
                 "actionCost": 1,
                 "actions": [
@@ -317,7 +313,7 @@
                 ]
             },
             {
-                "text": "Dərsləri haqqında soruş.",
+                "text": "Ask about her lessons.",
                 "nextNodeId": "reaction_talk_lessons",
                 "actionCost": 1,
                 "actions": [
@@ -329,7 +325,7 @@
                 ]
             },
             {
-                "text": "Geri qayıt.",
+                "text": "Go back.",
                 "nextNodeId": "day2_morning_hub",
                 "actionCost": 0
             }
@@ -337,12 +333,12 @@
     },
     "day2_morning_touch_hub": {
         "character": "Mai",
-        "text": "Nə etmək istəyirsən?",
+        "text": "What do you want to do?",
         "background": "mai_bedroom.jpeg",
         "sprite": "mai_sad.png",
         "choices": [
             {
-                "text": "Başını oxşa.",
+                "text": "Pat her head.",
                 "nextNodeId": "reaction_touch_pathead",
                 "actionCost": 1,
                 "actions": [
@@ -354,7 +350,7 @@
                 ]
             },
             {
-                "text": "[TƏLƏB: Sevgi > 20] Əlindən tut.",
+                "text": "[REQUIREMENT: Affection > 20] Hold her hand.",
                 "nextNodeId": "reaction_touch_holdhand",
                 "actionCost": 1,
                 "conditions": [
@@ -378,7 +374,7 @@
                 ]
             },
             {
-                "text": "[TƏLƏB: Pis Niyyət > 10] Onu qıdıqla.",
+                "text": "[REQUIREMENT: Corruption > 10] Tickle her.",
                 "nextNodeId": "reaction_touch_tickle",
                 "actionCost": 1,
                 "conditions": [
@@ -402,7 +398,7 @@
                 ]
             },
             {
-                "text": "Geri qayıt.",
+                "text": "Go back.",
                 "nextNodeId": "day2_morning_hub",
                 "actionCost": 0
             }
@@ -410,7 +406,7 @@
     },
     "day2_morning_joke_hub": {
         "character": "Alex",
-        "text": "Bir zarafat edərək onun kefini açmağa çalışırsan.",
+        "text": "You try to cheer her up by telling a joke.",
         "choices": [
             {
                 "text": "...",
@@ -428,7 +424,7 @@
     },
     "reaction_talk_howareyou": {
         "character": "Mai",
-        "text": "'Yaxşıyam... Sadəcə bir az yorğunam.' deyə cavab verir və sənə yüngülcə gülümsəyir.",
+        "text": "'I'm fine... Just a little tired,' she replies and gives you a slight smile.",
         "background": "mai_bedroom.jpeg",
         "sprite": "mai_happy.png",
         "choices": [
@@ -441,7 +437,7 @@
     },
     "reaction_talk_lessons": {
         "character": "Mai",
-        "text": "'Çətindir... amma maraqlıdır' deyir. Dərsləri haqqında danışmaqdan məmnun görünür.",
+        "text": "'It's hard... but interesting,' she says. She seems pleased to talk about her lessons.",
         "background": "mai_bedroom.jpeg",
         "sprite": "mai_norm.png",
         "choices": [
@@ -454,7 +450,7 @@
     },
     "reaction_touch_pathead": {
         "character": "Mai",
-        "text": "Toxunuşundan xoşhal olur və yüngülcə qızarır.",
+        "text": "She seems happy with your touch and blushes slightly.",
         "background": "mai_bedroom.jpeg",
         "sprite": "mai_love.png",
         "choices": [
@@ -467,7 +463,7 @@
     },
     "reaction_touch_holdhand": {
         "character": "Mai",
-        "text": "Gözləri böyüyür, amma əlini çəkmir. Ürəyinin daha sürətli döyündüyünü hiss edirsən.",
+        "text": "Her eyes widen, but she doesn't pull her hand away. You feel your heart beat faster.",
         "background": "mai_bedroom.jpeg",
         "sprite": "mai_love.png",
         "choices": [
@@ -480,7 +476,7 @@
     },
     "reaction_touch_tickle": {
         "character": "Mai",
-        "text": "'Dayan!' deyərək diksinir. Bu hərəkətin heç xoşuna gəlmədiyi bəllidir.",
+        "text": "'Stop!' she exclaims, flinching. It's clear she didn't like that at all.",
         "background": "mai_bedroom.jpeg",
         "sprite": "mai_sad.png",
         "choices": [
@@ -493,7 +489,7 @@
     },
     "reaction_joke_good": {
         "character": "Mai",
-        "text": "Zarafatına yüngülcə kıkırdayır. 'Çox gülməlisən, Alex.'",
+        "text": "She giggles lightly at your joke. 'You're so funny, Alex.'",
         "background": "mai_bedroom.jpeg",
         "sprite": "mai_happy.png",
         "choices": [
@@ -504,15 +500,14 @@
             }
         ]
     },
-
     "day2_kitchen_hub": {
-        "character": "Sema Teyzə",
-        "text": "Sema teyzə mətbəxdə yemək hazırlayır.",
+        "character": "Aunt Shema",
+        "text": "Aunt Shema is in the kitchen, cooking.",
         "background": "kitchen.png",
         "sprite": null,
         "choices": [
             {
-                "text": "Kömək təklif et.",
+                "text": "Offer to help.",
                 "nextNodeId": "reaction_kitchen_help",
                 "actionCost": 1,
                 "actions": [
@@ -529,21 +524,20 @@
                 ]
             },
             {
-                "text": "Yemək Bişir",
+                "text": "Cook a meal",
                 "nextNodeId": "start_cooking_minigame",
                 "actionCost": 1
             }
         ]
     },
-
     "day2_bathroom_hub": {
         "character": "Alex",
-        "text": "Burdayam. Bir az sərinlənmək yaxşı olar.",
+        "text": "I'm here. It would be good to cool down a bit.",
         "background": "bathroom.png",
         "sprite": null,
         "choices": [
             {
-                "text": "İşini gör",
+                "text": "Freshen up",
                 "nextNodeId": "day2_bathroom_hub_help",
                 "actionCost": 1,
                 "actions": [
@@ -558,7 +552,7 @@
     },
     "day2_bathroom_hub_help": {
         "character": "Alex",
-        "text": "Özünü bir az yığışdırdın. Daha yaxşısan.",
+        "text": "You've pulled yourself together a bit. You feel better.",
         "background": "bathroom.png",
         "sprite": null,
         "choices": [
@@ -569,15 +563,14 @@
             }
         ]
     },
-
     "day2_questroom_hub": {
         "character": "Alex",
-        "text": "Otaq sakitdir. Bir az dincələ bilərsən.",
+        "text": "The room is quiet. You can rest a bit.",
         "background": "alex_quest_room.png",
         "sprite": null,
         "choices": [
             {
-                "text": "Yat (Günü Bitir)",
+                "text": "Sleep (End Day)",
                 "nextNodeId": "go_to_sleep",
                 "actionCost": 0
             }
@@ -585,7 +578,7 @@
     },
     "day2_questroom_hub_help": {
         "character": "Alex",
-        "text": "Qısa mürgü vurub özünü yüngülləşmiş hiss edirsən.",
+        "text": "You take a short nap and feel refreshed.",
         "background": "alex_quest_room.png",
         "sprite": null,
         "choices": [
@@ -596,36 +589,35 @@
             }
         ]
     },
-
     "generic_kitchen_hub": {
-        "character": "Sema Teyzə",
-        "text": "Sobadan ləzzətli qoxu gəlir. Mətbəx səliqəlidir.",
+        "character": "Aunt Shema",
+        "text": "A delicious smell is coming from the oven. The kitchen is tidy.",
         "background": "kitchen.png",
         "sprite": null,
         "choices": [
             {
-                "text": "Sema Teyzə ilə danış",
+                "text": "Talk to Aunt Shema",
                 "nextNodeId": "kitchen_talk_hub",
                 "actionCost": 0
             },
             {
-                "text": "Soyuducuya bax",
+                "text": "Look in the fridge",
                 "nextNodeId": "reaction_kitchen_fridge",
                 "actionCost": 0
             }
         ]
     },
     "kitchen_talk_hub": {
-        "character": "Sema Teyzə",
-        "text": "Bəli, oğlum?",
+        "character": "Aunt Shema",
+        "text": "Yes, my dear?",
         "choices": [
             {
-                "text": "Kömək təklif et.",
+                "text": "Offer to help.",
                 "nextNodeId": "reaction_kitchen_help",
                 "actionCost": 1
             },
             {
-                "text": "Heç nə, sadəcə baxırdım.",
+                "text": "Nothing, I was just looking.",
                 "nextNodeId": "generic_kitchen_hub",
                 "actionCost": 0
             }
@@ -633,7 +625,7 @@
     },
     "reaction_kitchen_fridge": {
         "character": "Alex",
-        "text": "Soyuducu demək olar ki, boşdur. Görünür, alış-veriş lazımdır.",
+        "text": "The fridge is almost empty. It looks like shopping is needed.",
         "choices": [
             {
                 "text": "...",
@@ -643,8 +635,8 @@
         ]
     },
     "reaction_kitchen_help": {
-        "character": "Sema Teyzə",
-        "text": "'Narahat olma, oğlum, özüm edərəm. Sən get Mai ilə vaxt keçir.'",
+        "character": "Aunt Shema",
+        "text": "'Don't worry, dear, I'll do it myself. You go spend time with Mai.'",
         "background": "kitchen.png",
         "sprite": null,
         "choices": [
@@ -655,9 +647,8 @@
             }
         ]
     },
-
     "start_cooking_minigame": {
-        "text": "Yemək bişirmə mini-oyunu başlayır...",
+        "text": "Cooking mini-game starts...",
         "actions": [
             {
                 "stat": "StartCookingMinigame",
@@ -669,7 +660,7 @@
     },
     "reaction_cook_success": {
         "character": "Mai",
-        "text": "Vau, çox dadlıdır! Sən çox bacarıqlısan, Alex.",
+        "text": "Wow, this is delicious! You're very talented, Alex.",
         "sprite": "mai_happy.png",
         "actions": [
             {
@@ -693,7 +684,7 @@
     },
     "reaction_cook_fail": {
         "character": "Alex",
-        "text": "Deyəsən, nəsə düz getmədi... Bu, yeyiləsi deyil. Yeməyi zibilə atırsan.",
+        "text": "Looks like something went wrong... This isn't edible. You throw the food in the trash.",
         "sprite": "alex_sad.png",
         "actions": [
             {
@@ -710,10 +701,9 @@
             }
         ]
     },
-
     "event_use_cigarette": {
         "character": "Alex",
-        "text": "Balkona çıxıb bir siqaret yandırırsan. Duman ciyərlərinə dolduqca bir az sakitləşirsən.",
+        "text": "You go out to the balcony and light a cigarette. You calm down a bit as the smoke fills your lungs.",
         "background": "alex_smoking_room.jpeg",
         "sprite": null,
         "actions": [
@@ -733,7 +723,7 @@
     },
     "event_use_zippo": {
         "character": "Alex",
-        "text": "Zipponu çıxarıb alovu ilə oynayırsan. Bu, nədənsə sənə rahatlıq verir.",
+        "text": "You take out your Zippo and play with the flame. For some reason, this calms you.",
         "actions": [
             {
                 "stat": "Stress",
@@ -751,7 +741,7 @@
     },
     "event_use_phone": {
         "character": "Alex",
-        "text": "Telefonunu çıxarıb ekrana baxırsan. Bir neçə cavabsız zəng... və Mai-nin sosial media profili.",
+        "text": "You take out your phone and look at the screen. A few missed calls... and Mai's social media profile.",
         "choices": [
             {
                 "text": "...",
@@ -760,25 +750,24 @@
             }
         ]
     },
-
     "day2_living_room_hub": {
         "character": "Alex",
-        "text": "Qonaq otağı isti və rahatdır. Televizor sakitcə işıqlanır.",
+        "text": "The living room is warm and comfortable. The TV is glowing quietly.",
         "background": "living_room.jpg",
         "sprite": null,
         "choices": [
             {
-                "text": "TV-yə bax",
+                "text": "Watch TV",
                 "nextNodeId": "event_living_tv",
                 "actionCost": 1
             },
             {
-                "text": "Pəncərəni aç",
+                "text": "Open the window",
                 "nextNodeId": "event_living_window",
                 "actionCost": 1
             },
             {
-                "text": "Divanda dincəl",
+                "text": "Rest on the sofa",
                 "nextNodeId": "event_living_rest",
                 "actionCost": 1
             }
@@ -786,7 +775,7 @@
     },
     "event_living_tv": {
         "character": "Alex",
-        "text": "Bir neçə dəqiqə xəbərlərə baxırsan. Beynin dağıldı.",
+        "text": "You watch the news for a few minutes. It clears your head a bit.",
         "actions": [
             {
                 "stat": "Stress",
@@ -804,7 +793,7 @@
     },
     "event_living_window": {
         "character": "Alex",
-        "text": "Təmiz hava otağa dolur. Özünü təravətli hiss edirsən.",
+        "text": "Fresh air fills the room. You feel refreshed.",
         "actions": [],
         "choices": [
             {
@@ -816,7 +805,7 @@
     },
     "event_living_rest": {
         "character": "Alex",
-        "text": "Bir az uzanırsan. Yorğunluq azalır.",
+        "text": "You lie down for a bit. The fatigue lessens.",
         "actions": [
             {
                 "stat": "Stress",
@@ -837,20 +826,19 @@
             }
         ]
     },
-
     "day2_part_time_hub": {
         "character": "Menecer",
-        "text": "Part-time iş yerinin qarşısındasan. İçəridə menecer sənə yaxınlaşır.",
+        "text": "You are in front of your part-time workplace. The manager approaches you inside.",
         "background": "part_time_job_earn_money.jpg",
         "sprite": "manager_neutral.png",
         "choices": [
             {
-                "text": "İşləmək istədiyini de.",
+                "text": "Say you want to work.",
                 "nextNodeId": "event_pt_schedule",
                 "actionCost": 0
             },
             {
-                "text": "Geri qayıt.",
+                "text": "Go back.",
                 "nextNodeId": "day2_morning_hub",
                 "actionCost": 0
             }
@@ -858,23 +846,23 @@
     },
     "event_pt_schedule": {
         "character": "Menecer",
-        "text": "“Bu gün 60 deqiqilik boş növbə var. Götürmək istəyirsən?”",
+        "text": "“There's an open 60-minute shift today. Do you want to take it?”",
         "sprite": "manager_neutral.png",
         "choices": [
             {
-                "text": "Bəli, başlayım",
+                "text": "Yes, I'll start",
                 "nextNodeId": "start_part_time_minigame",
                 "actionCost": 1
             },
             {
-                "text": "Xeyr, bu gün istirahət edəcəm.",
+                "text": "No, I'll rest today.",
                 "nextNodeId": "day2_part_time_hub",
                 "actionCost": 0
             }
         ]
     },
     "start_part_time_minigame": {
-        "text": "Artiq baslayiriq...",
+        "text": "We're starting now...",
         "actions": [
             {
                 "stat": "StartWorkMinigame",
@@ -886,7 +874,7 @@
     },
     "reaction_work_end_success": {
         "character": "Menecer",
-        "text": "“Əla iş idi, Alex! Bu da sənin bugünkü qazancın.”",
+        "text": "“Great job, Alex! Here's your pay for today.”",
         "sprite": "manager_happy.png",
         "actions": [
             {
@@ -910,7 +898,7 @@
     },
     "reaction_work_end_fail": {
         "character": "Menecer",
-        "text": "“Bugün bir az yavaş idin. Narahat olma, sabah daha yaxşı olarsan.”",
+        "text": "“You were a bit slow today. Don't worry, you'll do better tomorrow.”",
         "sprite": "manager_neutral.png",
         "actions": [
             {
@@ -934,7 +922,7 @@
     },
     "event_pt_short_shift": {
         "character": "Alex",
-        "text": "Bir neçə saat işlədin. Özünü faydalı hiss edirsən.",
+        "text": "You worked for a few hours. You feel useful.",
         "actions": [
             {
                 "stat": "Stress",
@@ -960,20 +948,19 @@
             }
         ]
     },
-
     "day2_market_hub": {
         "character": "Alex",
-        "text": "Marketə girdin. Rəflər doludur.",
+        "text": "You entered the market. The shelves are full.",
         "background": "market_store.jpeg",
         "sprite": null,
         "choices": [
             {
-                "text": "Rəflərə göz gəzdir",
+                "text": "Browse the shelves",
                 "action": "market_interface",
                 "actionCost": 0
             },
             {
-                "text": "Əsas ərzaqları al",
+                "text": "Buy basic groceries",
                 "nextNodeId": "event_market_buy",
                 "actionCost": 1
             }
@@ -981,7 +968,7 @@
     },
     "event_market_buy": {
         "character": "Alex",
-        "text": "Bir neçə əsas məhsul aldın. Evdəkilər sevinəcək.",
+        "text": "You bought a few basic items. The folks at home will be happy.",
         "actions": [
             {
                 "stat": "Trust",
@@ -1002,25 +989,24 @@
             }
         ]
     },
-
     "day2_park_hub": {
         "character": "Alex",
-        "text": "Parkda quşların səsi eşidilir. Külək yüngül əsir.",
+        "text": "Birds are chirping in the park. A light breeze is blowing.",
         "background": "park_.jpg",
         "sprite": null,
         "choices": [
             {
-                "text": "Skamyada otur",
+                "text": "Sit on the bench",
                 "nextNodeId": "event_park_sit",
                 "actionCost": 1
             },
             {
-                "text": "Dərin nəfəs al",
+                "text": "Take a deep breath",
                 "nextNodeId": "event_park_breathe",
                 "actionCost": 1
             },
             {
-                "text": "Mai-ı yığ (telefon)",
+                "text": "Call Mai (phone)",
                 "nextNodeId": "event_park_callmai",
                 "actionCost": 1
             }
@@ -1028,7 +1014,7 @@
     },
     "event_park_sit": {
         "character": "Alex",
-        "text": "Bir müddət ətrafı izləyirsən. Zaman yavaşlayır.",
+        "text": "You watch your surroundings for a while. Time slows down.",
         "actions": [
             {
                 "stat": "Stress",
@@ -1046,7 +1032,7 @@
     },
     "event_park_breathe": {
         "character": "Alex",
-        "text": "Bir neçə dəqiqə nəfəs məşqi edirsən. Daha rahat və aydınsan.",
+        "text": "You do a breathing exercise for a few minutes. You feel more relaxed and clear-headed.",
         "actions": [
             {
                 "stat": "Stress",
@@ -1064,7 +1050,7 @@
     },
     "event_park_callmai": {
         "character": "Mai (Telefonda)",
-        "text": "“Hə, Alex? Hər şey qaydasındadır? Park gözəldir, hə?”",
+        "text": "“Yeah, Alex? Is everything okay? The park is nice, huh?”",
         "actions": [
             {
                 "stat": "Affection",

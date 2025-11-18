@@ -43,8 +43,7 @@
                     <StackPanel Margin="10,0,0,0" VerticalAlignment="Center">
                         <TextBlock Text="Alex" FontFamily="{StaticResource GameFont}" FontWeight="Bold" FontSize="16"/>
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="Money: " FontFamily="{StaticResource GameFont}" FontSize="14" Foreground="#333"/>
-                            <TextBlock Text="{Binding CurrentGameState.PlayerMoney}" FontFamily="{StaticResource GameFont}" FontSize="14" Foreground="#333"/>
+
                         </StackPanel>
                         <ProgressBar Width="100" Height="10" Value="{Binding CurrentGameState.CurrentEnergy}" Maximum="100" Margin="0,2,0,0" Foreground="Gray" Background="DarkGray"/>
                     </StackPanel>
