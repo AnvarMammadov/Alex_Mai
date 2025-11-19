@@ -103,6 +103,22 @@
             }
         }
     },
+    "triggers": [
+        {
+            "id": "park_checkin",
+            "condition": "Location == park && TimeOfDay == Afternoon",
+            "dialogId": "mai_park_msg",
+            "chance": 1.0,
+            "repeatable": false
+        },
+        {
+            "id": "random_miss_you",
+            "condition": "TimeOfDay == Evening && Location == part_time",
+            "dialogId": "mai_miss_msg",
+            "chance": 0.5,
+            "repeatable": true
+        }
+    ],
     "dialogs": [
         {
             "id": "mai_initial",
@@ -114,7 +130,7 @@
                     "sender": "Mai",
                     "textOptions": [
                         "Hey {playerName}! 👋 Finally caught you online.",
-                        "Hii {playerName}! ✨ How's your day going?",
+                        "Hi  {playerName}! ✨ How's your day going?",
                         "Yo {playerName}~ I need a distraction from studying 📚",
                         "{playerName}! I was literally just thinking about you 👀"
                     ]
@@ -195,8 +211,53 @@
                     "goTo": "mai_resp_fallback_dynamic"
                 }
             ]
+        },
+        {
+            "id": "mai_park_msg",
+            "history": [
+                {
+                    "sender": "Mai",
+                    "text": "Hey Alex! 🌳 I saw you went to the park. Is the weather nice?"
+                }
+            ],
+            "choices": [
+                {
+                    "playerText": "Yeah, it's beautiful here.",
+                    "intent": "status_positive",
+                    "goTo": "mai_resp_status_pos",
+                    "effects": { "affinityMai": { "add": 1 } }
+                },
+                {
+                    "playerText": "It's okay, just clearing my head.",
+                    "intent": "status_negative",
+                    "goTo": "mai_resp_status_neg"
+                }
+            ]
+        },
+        {
+            "id": "mai_miss_msg",
+            "history": [
+                {
+                    "sender": "Mai",
+                    "text": "Working hard? 💪 Don't forget to take a break. Miss you at home!"
+                }
+            ],
+            "choices": [
+                {
+                    "playerText": "Miss you too, Mai.",
+                    "intent": "flirt",
+                    "goTo": "mai_resp_flirt_generic",
+                    "effects": { "affinityMai": { "add": 2 } }
+                },
+                {
+                    "playerText": "Thanks, almost done.",
+                    "intent": "thanks",
+                    "goTo": "mai_resp_thanks"
+                }
+            ]
         }
     ],
+
     "responseMessages": {
         "mai_resp_status_pos": [
             {

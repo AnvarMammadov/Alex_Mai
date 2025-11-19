@@ -12,8 +12,21 @@ namespace Alex_Mai.Services
     public class ChatRoot
     {
         public NlpData Nlp { get; set; }
+        public GameState State { get; set; } // Əgər yoxdursa
         public List<DialogFlow> Dialogs { get; set; }
         public Dictionary<string, List<JsonChatMessage>> ResponseMessages { get; set; }
+        // YENİ: Triggerləri oxumaq üçün
+        public List<ChatTrigger> Triggers { get; set; }
+    }
+
+    // YENİ KLASS
+    public class ChatTrigger
+    {
+        public string Id { get; set; }
+        public string Condition { get; set; } // Məs: "Location == park"
+        public string DialogId { get; set; }
+        public double Chance { get; set; } // 0.0 - 1.0
+        public bool Repeatable { get; set; }
     }
 
     public class NlpData
@@ -291,5 +304,30 @@ namespace Alex_Mai.Services
             }
             return d[n, m];
         }
+
+        public string CheckForTrigger(string locationId, TimeOfDay timeOfDay)
+        {
+            if (_chatData?.Triggers == null) return null;
+
+            var random = new Random();
+
+            foreach (var trigger in _chatData.Triggers)
+            {
+                // Sadə şərt yoxlanışı (Daha mürəkkəb parser gələcəkdə yazıla bilər)
+                bool locationMatch = trigger.Condition.Contains($"Location == {locationId}") || !trigger.Condition.Contains("Location");
+                bool timeMatch = trigger.Condition.Contains($"TimeOfDay == {timeOfDay}") || !trigger.Condition.Contains("TimeOfDay");
+
+                if (locationMatch && timeMatch)
+                {
+                    // Şans faktoru (məsələn 50% ehtimal)
+                    if (random.NextDouble() <= trigger.Chance)
+                    {
+                        return trigger.DialogId; // Dialoqun ID-sini qaytar
+                    }
+                }
+            }
+            return null;
+        }
+
     }
 }

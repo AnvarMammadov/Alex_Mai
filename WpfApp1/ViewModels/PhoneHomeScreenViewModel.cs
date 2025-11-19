@@ -84,6 +84,8 @@ namespace Alex_Mai.ViewModels
         [RelayCommand]
         private void NavigateToChat()
         {
+            // Mesajları oxunmuş sayırıq
+            if (_gameState != null) _gameState.UnreadMessageCount = 0;
             _parentViewModel.NavigateToChat();
         }
 

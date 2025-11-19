@@ -29,6 +29,9 @@ namespace Alex_Mai.Models
         public int MaxEnergy { get; } = 100; // Maksimum enerji
 
 
+        [ObservableProperty]
+        private int _unreadMessageCount = 0;
+
         // --- YENİ HADİSƏ SLOTU SİSTEMİ (ADDIM 2) ---
         public int MaxEventSlots { get; } = 2; // Hər hissədə neçə hadisə ola bilər
 

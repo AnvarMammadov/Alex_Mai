@@ -4,8 +4,19 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Alex_Mai.Views"
+             xmlns:converters="clr-namespace:Alex_Mai.Converters" 
              mc:Ignorable="d" 
-             d:DesignHeight="500" d:DesignWidth="700">
+             d:DesignHeight="500" d:DesignWidth="700"
+             Focusable="True">
+
+    <UserControl.Resources>
+        <converters:BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+    </UserControl.Resources>
+
+    <UserControl.InputBindings>
+        <KeyBinding Key="Space" Command="{Binding CommitQteCommand}"/>
+    </UserControl.InputBindings>
+
     <Border Width="700" Height="500" Background="{StaticResource GameBackgroundBrush}" 
             BorderBrush="{StaticResource GameBorderBrush}" BorderThickness="2" CornerRadius="5">
         <Grid Margin="15">
@@ -16,17 +27,17 @@
             </Grid.RowDefinitions>
 
             <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,10">
-                <TextBlock Text="Vaxt:" FontFamily="{StaticResource GameFont}" FontSize="20"/>
+                <TextBlock Text="Time:" FontFamily="{StaticResource GameFont}" FontSize="20"/>
                 <ProgressBar Width="200" Height="20" Margin="10,0" Maximum="60" Value="{Binding TimeRemaining}"/>
                 <TextBlock Text="{Binding TimeRemaining}" FontFamily="{StaticResource GameFont}" FontSize="20"/>
-                <TextBlock Text="Qazanc: " Margin="50,0,10,0" FontFamily="{StaticResource GameFont}" FontSize="20"/>
+                <TextBlock Text="Earnings: " Margin="50,0,10,0" FontFamily="{StaticResource GameFont}" FontSize="20"/>
                 <TextBlock Text="{Binding MoneyEarned}" FontFamily="{StaticResource GameFont}" FontSize="20" FontWeight="Bold"/>
                 <TextBlock Text=" $" FontFamily="{StaticResource GameFont}" FontSize="20"/>
             </StackPanel>
 
             <Border Grid.Row="1" BorderBrush="Gray" BorderThickness="0,2,0,2" Margin="0,10" Padding="10">
                 <StackPanel>
-                    <TextBlock Text="Sifariş:" FontFamily="{StaticResource GameFont}" FontSize="18"/>
+                    <TextBlock Text="Order:" FontFamily="{StaticResource GameFont}" FontSize="18"/>
                     <ItemsControl ItemsSource="{Binding CurrentOrder.ProductOrder}">
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
@@ -58,6 +69,35 @@
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
+
+            <Grid Grid.RowSpan="3" Background="#CC000000" 
+                  Visibility="{Binding IsQteActive, Converter={StaticResource BoolToVisibilityConverter}}">
+
+                <Border Background="White" BorderBrush="Black" BorderThickness="2" 
+                        CornerRadius="10" Width="400" Height="200" VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <StackPanel VerticalAlignment="Center">
+                        <TextBlock Text="Preparing..." HorizontalAlignment="Center" FontSize="24" FontFamily="{StaticResource GameFont}" Margin="0,0,0,20"/>
+
+                        <Border Width="300" Height="30" BorderBrush="Black" BorderThickness="2" Background="#EEE" Margin="0,0,0,10">
+                            <Canvas x:Name="QteCanvas">
+                                <Rectangle Height="26" Fill="#9955FF55"
+                                           Width="{Binding TargetWidth}"
+                                           Canvas.Left="{Binding TargetPosition}"
+                                           Canvas.Top="0"/>
+
+                                <Rectangle Width="4" Height="26" Fill="Black"
+                                           Canvas.Left="{Binding QteCursorPosition}"
+                                           Canvas.Top="0"/>
+                            </Canvas>
+                        </Border>
+
+                        <TextBlock Text="{Binding QteResultText}" HorizontalAlignment="Center" FontSize="20" FontWeight="Bold" Foreground="Red" Height="30"/>
+
+                        <Button Content="STOP (Space)" Command="{Binding CommitQteCommand}" 
+                                Style="{StaticResource GameButtonStyle}" Width="150" Margin="0,10,0,0"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
         </Grid>
     </Border>
 </UserControl>

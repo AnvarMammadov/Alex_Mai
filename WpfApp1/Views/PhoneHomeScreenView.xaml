@@ -4,10 +4,12 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:Alex_Mai.Views"
+             xmlns:converters="clr-namespace:Alex_Mai.Converters"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="300">
 
     <UserControl.Resources>
+        <converters:CountToVisibilityConverter x:Key="CountToVisibilityConverter"/>
         <Style x:Key="AppIconStyle" TargetType="Button">
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="BorderThickness" Value="0"/>
@@ -176,20 +178,28 @@
 
             <Button Style="{StaticResource AppIconStyle}" Command="{Binding NavigateToChatCommand}">
                 <StackPanel HorizontalAlignment="Center">
-                    <Border Width="60" Height="60"
-                             Background="White"
-                             CornerRadius="12">
-                        <Image Source="/Assets/Icons/icon_phone_chat.png"
-                                Width="45" Height="45"
-                                VerticalAlignment="Center"
-                                HorizontalAlignment="Center"
-                                Stretch="Uniform"/>
-                    </Border>
-                    <TextBlock Text="Chat"
-                                Foreground="White"
-                                TextAlignment="Center"
-                                Margin="0,8,0,0"
-                                FontFamily="{StaticResource GameFont}"/>
+                    <Grid>
+                        <Border Width="60" Height="60" Background="White" CornerRadius="12">
+                            <Image Source="/Assets/Icons/icon_phone_chat.png"
+                                   Width="45" Height="45"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Center"
+                                   Stretch="Uniform"/>
+                        </Border>
+
+                        <Border Background="#AA000000" CornerRadius="100" Padding="5,2"
+                                HorizontalAlignment="Right" VerticalAlignment="Top" Margin="-5,-5,-5,0"
+                                Visibility="{Binding DataContext.CurrentGameState.UnreadMessageCount, 
+                                             RelativeSource={RelativeSource AncestorType=local:GameView}, 
+                                             Converter={StaticResource CountToVisibilityConverter},
+                                             ConverterParameter=NotZero}">
+                            <TextBlock Text="{Binding DataContext.CurrentGameState.UnreadMessageCount, 
+                                              RelativeSource={RelativeSource AncestorType=local:GameView}}" 
+                                       Foreground="White" FontWeight="Bold" FontSize="12"/>
+                        </Border>
+                    </Grid>
+
+                    <TextBlock Text="Chat" Foreground="White" TextAlignment="Center" Margin="0,8,0,0" FontFamily="{StaticResource GameFont}"/>
                 </StackPanel>
             </Button>
 
