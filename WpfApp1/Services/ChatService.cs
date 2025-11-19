@@ -1,155 +1,295 @@
-﻿// Services/ChatService.cs
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
-using Alex_Mai.Models; // ChatMessage modelinə çıxış üçün
+using System.Text.RegularExpressions;
+using Alex_Mai.Models; // CharacterStats və ChatMessage üçün
 
 namespace Alex_Mai.Services
 {
-    // JSON strukturuna uyğun köməkçi siniflər (internal qalması daha yaxşıdır)
-    internal class JsonChatMessage
+    // --- JSON Strukturu üçün Köməkçi Siniflər ---
+    public class ChatRoot
+    {
+        public NlpData Nlp { get; set; }
+        public List<DialogFlow> Dialogs { get; set; }
+        public Dictionary<string, List<JsonChatMessage>> ResponseMessages { get; set; }
+    }
+
+    public class NlpData
+    {
+        public List<Intent> Intents { get; set; }
+    }
+
+    public class Intent
+    {
+        public string Id { get; set; }
+        public string Regex { get; set; }
+        public List<string> Keywords { get; set; }
+    }
+
+    public class DialogFlow
+    {
+        public string Id { get; set; }
+        public List<JsonChatMessage> History { get; set; }
+        public List<DialogChoice> Choices { get; set; }
+    }
+
+    public class DialogChoice
+    {
+        public string Intent { get; set; }
+        public string GoTo { get; set; }
+        public bool Fallback { get; set; }
+    }
+
+    public class JsonChatMessage
     {
         public string Sender { get; set; }
         public string Text { get; set; }
+        public List<string> TextOptions { get; set; }
+
+        // *** YENİ: Şərt sahəsi (məs: "Affection > 50") ***
+        public string Condition { get; set; }
     }
 
-    internal class ConversationData
-    {
-        public List<JsonChatMessage> History { get; set; } = new List<JsonChatMessage>();
-        // Alex-in mesajlarına qarşı case-insensitive müqayisə üçün
-        public Dictionary<string, string> Responses { get; set; } = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-    }
-
-    internal class ChatFileStructure
-    {
-        // Söhbət ID-ləri üçün case-insensitive müqayisə
-        public Dictionary<string, ConversationData> Conversations { get; set; } = new Dictionary<string, ConversationData>(StringComparer.OrdinalIgnoreCase);
-        // Cavab ID-ləri üçün case-insensitive müqayisə
-        public Dictionary<string, List<JsonChatMessage>> ResponseMessages { get; set; } = new Dictionary<string, List<JsonChatMessage>>(StringComparer.OrdinalIgnoreCase);
-    }
-
-    // Əsas servis sinfi
+    // --- Əsas Servis ---
     public class ChatService
     {
-        private ChatFileStructure _chatData = new ChatFileStructure(); // Bütün JSON məlumatını burada saxlayırıq
+        private ChatRoot _chatData;
         private readonly string _filePath;
 
         public ChatService(string filePath = "Data/chats.json")
         {
             _filePath = filePath;
-            LoadConversations(); // Konstruktorda faylı yükləyirik
+            LoadChatData();
         }
 
-        // JSON faylını oxuyub _chatData obyektinə deserializasiya edən metod
-        private void LoadConversations()
+        private void LoadChatData()
         {
             try
             {
-                var jsonText = File.ReadAllText(_filePath);
-                var options = new JsonSerializerOptions
+                if (File.Exists(_filePath))
                 {
-                    PropertyNameCaseInsensitive = true, // JSON açarlarının böyük/kiçik hərfinə həssas olmaması üçün
-                    AllowTrailingCommas = true // JSON-da sondakı vergüllərə icazə verir (rahatlıq üçün)
-                };
-
-                // Bütün JSON strukturunu birbaşa _chatData obyektinə deserializasiya edirik
-                var loadedData = JsonSerializer.Deserialize<ChatFileStructure>(jsonText, options);
-                if (loadedData != null)
-                {
-                    _chatData = loadedData;
+                    var jsonText = File.ReadAllText(_filePath);
+                    var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+                    _chatData = JsonSerializer.Deserialize<ChatRoot>(jsonText, options);
                 }
                 else
                 {
-                    // Əgər fayl boşdursa və ya struktur uyğun gəlmirsə, _chatData boş qalacaq
-                    Console.WriteLine($"Warning: Chat file '{_filePath}' is empty or has an incorrect structure.");
-                    _chatData = new ChatFileStructure(); // Boş obyektlə başlatmaq daha təhlükəsizdir
+                    _chatData = new ChatRoot();
                 }
             }
-            catch (FileNotFoundException)
+            catch (Exception ex)
             {
-                Console.WriteLine($"Error: Chat file not found at '{_filePath}'");
-                _chatData = new ChatFileStructure(); // Fayl tapılmasa da boş obyektlə başlat
-            }
-            catch (JsonException ex)
-            {
-                Console.WriteLine($"Error parsing chat file '{_filePath}': {ex.Message}");
-                _chatData = new ChatFileStructure(); // JSON xətası olsa da boş obyektlə başlat
-            }
-            catch (Exception ex) // Digər gözlənilməz xətalar üçün
-            {
-                Console.WriteLine($"An unexpected error occurred while loading chats: {ex.Message}");
-                _chatData = new ChatFileStructure(); // Digər xətalar olsa da boş obyektlə başlat
+                System.Diagnostics.Debug.WriteLine($"Chat Data Load Error: {ex.Message}");
+                _chatData = new ChatRoot();
             }
         }
 
-        // Verilən ID-li söhbətin yalnız ilkin tarixçəsini (history) qaytaran metod
-        public List<ChatMessage> GetConversationHistory(string conversationId)
+        // 1. Tarixçəni yükləyir
+        public List<ChatMessage> GetConversationHistory(string dialogId)
         {
             var messages = new List<ChatMessage>();
-            // Əgər _chatData-da həmin conversationId varsa və onun History siyahısı boş deyilsə
-            if (_chatData.Conversations.TryGetValue(conversationId, out var conversationData) && conversationData.History != null)
+            if (_chatData?.Dialogs == null) return messages;
+
+            var dialog = _chatData.Dialogs.FirstOrDefault(d => d.Id == dialogId);
+            if (dialog != null && dialog.History != null)
             {
-                // Hər bir JsonChatMessage-i ChatMessage-ə çevirib siyahıya əlavə et
-                foreach (var jsonMsg in conversationData.History)
+                foreach (var jsonMsg in dialog.History)
                 {
                     messages.Add(ConvertJsonMessage(jsonMsg));
                 }
             }
-            return messages; // Tapılmasa boş siyahı qaytarır
+            return messages;
         }
 
-        // Alex-in mesajına uyğun cavabı (və ya cavabları) tapan metod
-        public List<ChatMessage> FindResponse(string conversationId, string alexMessage)
+        // 2. Əsas "BEYİN" hissəsi: İndi CharacterStats qəbul edir
+        public List<ChatMessage> FindResponse(string currentDialogId, string userText, CharacterStats stats)
         {
-            var responseMessages = new List<ChatMessage>();
-            string responseId = null; // Tapılacaq cavabın ID-si
+            var responses = new List<ChatMessage>();
+            if (_chatData == null) return responses;
 
-            // Əgər həmin conversationId mövcuddursa
-            if (_chatData.Conversations.TryGetValue(conversationId, out var conversationData))
+            // A. Cari dialoqu tapırıq
+            var currentDialog = _chatData.Dialogs?.FirstOrDefault(d => d.Id == currentDialogId);
+            if (currentDialog == null || currentDialog.Choices == null) return responses;
+
+            // B. İstifadəçinin yazdığı mətndən "Niyyət"i (Intent) tapırıq
+            string detectedIntentId = DetectIntent(userText);
+
+            // C. Bu niyyətə uyğun seçimi dialoqdan tapırıq
+            var matchedChoice = currentDialog.Choices.FirstOrDefault(c => c.Intent == detectedIntentId);
+
+            // Əgər niyyət tapılmadısa, "Fallback" seçimi yoxlayırıq
+            if (matchedChoice == null)
             {
-                // Əvvəlcə Alex-in mesajının tam uyğunluğunu yoxla
-                if (conversationData.Responses != null && conversationData.Responses.TryGetValue(alexMessage, out responseId))
+                matchedChoice = currentDialog.Choices.FirstOrDefault(c => c.Fallback);
+            }
+
+            // D. Nəticə varsa, cavab mesajlarını gətiririk və ŞƏRTLƏRİ yoxlayırıq
+            if (matchedChoice != null && !string.IsNullOrEmpty(matchedChoice.GoTo))
+            {
+                if (_chatData.ResponseMessages.TryGetValue(matchedChoice.GoTo, out var responseList))
                 {
-                    // Tam uyğun cavab tapıldı
-                }
-                // Əgər tam uyğunluq tapılmasa, "default" cavabı axtar
-                else if (conversationData.Responses != null && conversationData.Responses.TryGetValue("default", out responseId))
-                {
-                    // "default" cavab tapıldı
+                    foreach (var jsonMsg in responseList)
+                    {
+                        // *** AĞILLI MƏNTİQ: Şərt ödənirsə, bu mesajı seçirik ***
+                        if (CheckCondition(jsonMsg.Condition, stats))
+                        {
+                            responses.Add(ConvertJsonMessage(jsonMsg));
+
+                            // Əgər bir neçə ardıcıl mesaj göndərmək istəmirsənsə, burada 'break' edə bilərsən.
+                            // Amma adətən vizual romanlarda şərtə uyğun GƏLƏN İLK variantı götürmək daha təhlükəsizdir.
+                            break;
+                        }
+                    }
                 }
             }
 
-            // Əgər bir responseId tapdıqsa
-            if (responseId != null && _chatData.ResponseMessages.TryGetValue(responseId, out var jsonResponseMessages) && jsonResponseMessages != null)
-            {
-                // Həmin ID-yə uyğun mesajları (bir və ya bir neçə ola bilər) ChatMessage-ə çevir
-                foreach (var jsonMsg in jsonResponseMessages)
-                {
-                    responseMessages.Add(ConvertJsonMessage(jsonMsg));
-                }
-            }
-            // Əgər heç bir cavab ID-si tapılmadısa və söhbət Mai ilədirsə, standart "..." cavabı əlavə et
-            else if (responseId == null && conversationId.StartsWith("mai_", StringComparison.OrdinalIgnoreCase))
-            {
-                responseMessages.Add(new ChatMessage { Sender = "Mai", Text = "...", IsSentByUser = false, Timestamp = DateTime.Now });
-            }
-
-            return responseMessages; // Tapılan cavabları (və ya boş siyahını) qaytar
+            return responses;
         }
 
-        // JsonChatMessage-i ChatMessage-ə çevirən köməkçi metod
+        // *** YENİ: Şərtləri Pars edən və Yoxlayan Metod ***
+        private bool CheckCondition(string condition, CharacterStats stats)
+        {
+            // Şərt yoxdursa və ya boşdursa, true qaytar (göstərilsin)
+            if (string.IsNullOrEmpty(condition) || condition.Trim().ToLower() == "default") return true;
+            if (stats == null) return true; // Stats yoxdursa, hər şeyi göstər
+
+            try
+            {
+                // Nümunə format: "Affection > 50" və ya "Stress < 20"
+                var parts = condition.Trim().Split(' ');
+                if (parts.Length != 3) return false; // Format səhvdirsə göstərmə
+
+                string statName = parts[0];
+                string oper = parts[1];
+                int value = int.Parse(parts[2]);
+
+                int currentStatValue = 0;
+
+                // Statı tapırıq
+                switch (statName)
+                {
+                    case "Affection": currentStatValue = stats.Affection; break;
+                    case "Stress": currentStatValue = stats.Stress; break;
+                    case "Trust": currentStatValue = stats.Trust; break;
+                    // Lazım olsa digərlərini əlavə et
+                    default: return false;
+                }
+
+                // Müqayisə edirik
+                if (oper == ">") return currentStatValue > value;
+                if (oper == "<") return currentStatValue < value;
+                if (oper == ">=") return currentStatValue >= value;
+                if (oper == "<=") return currentStatValue <= value;
+                if (oper == "==") return currentStatValue == value;
+
+                return false;
+            }
+            catch
+            {
+                return false; // Xəta olsa göstərmə
+            }
+        }
+
+        // *** YENİLƏNMİŞ: Daha dəqiq Intent tapma ***
+        private string DetectIntent(string text)
+        {
+            if (_chatData?.Nlp?.Intents == null) return null;
+
+            // 1. Mətni normallaşdır
+            string normalizedText = NormalizeText(text);
+            string bestIntentId = null;
+            double bestScore = 0.0;
+
+            foreach (var intent in _chatData.Nlp.Intents)
+            {
+                // A. Regex Yoxlaması (Hələ də ən güclü prioritetdir)
+                if (!string.IsNullOrEmpty(intent.Regex) && Regex.IsMatch(text, intent.Regex))
+                    return intent.Id;
+
+                // B. Keywords ilə Fuzzy Matching (Score sistemi)
+                if (intent.Keywords != null)
+                {
+                    foreach (var keyword in intent.Keywords)
+                    {
+                        double similarity = CalculateSimilarity(normalizedText, keyword.ToLower());
+
+                        // Əgər oxşarlıq 0.75-dən böyükdürsə və indiki ən yaxşı nəticədən yüksəkdirsə
+                        if (similarity > 0.75 && similarity > bestScore)
+                        {
+                            bestScore = similarity;
+                            bestIntentId = intent.Id;
+                        }
+                    }
+                }
+            }
+            return bestIntentId;
+        }
+
+        private string NormalizeText(string input)
+        {
+            if (string.IsNullOrEmpty(input)) return "";
+            // Simvolları sil, kiçilt
+            string clean = Regex.Replace(input.ToLower(), @"[^\w\s]", "");
+            return clean.Trim();
+        }
+
         private ChatMessage ConvertJsonMessage(JsonChatMessage jsonMsg)
         {
-            if (jsonMsg == null) return null; // Null yoxlaması
+            string textToSend = jsonMsg.Text;
+
+            if (jsonMsg.TextOptions != null && jsonMsg.TextOptions.Count > 0)
+            {
+                var random = new Random();
+                textToSend = jsonMsg.TextOptions[random.Next(jsonMsg.TextOptions.Count)];
+            }
+
             return new ChatMessage
             {
-                Sender = jsonMsg.Sender ?? "Unknown", // Null olarsa "Unknown"
-                Text = jsonMsg.Text ?? "", // Null olarsa boş string
-                IsSentByUser = (jsonMsg.Sender ?? "").Equals("Alex", StringComparison.OrdinalIgnoreCase), // Sender null olarsa false
-                Timestamp = DateTime.Now // Yükləmə zamanı vaxtı təyin et
+                Sender = jsonMsg.Sender,
+                Text = textToSend,
+                Timestamp = DateTime.Now // Timestamp əlavə etmək faydalıdır
             };
+        }
+
+        // --- Levenshtein Distance (Dəyişilmədi) ---
+        public static double CalculateSimilarity(string source, string target)
+        {
+            if (string.IsNullOrEmpty(source) || string.IsNullOrEmpty(target)) return 0.0;
+
+            source = source.ToLower();
+            target = target.ToLower();
+
+            int distance = ComputeLevenshteinDistance(source, target);
+            int maxLength = Math.Max(source.Length, target.Length);
+
+            return 1.0 - ((double)distance / maxLength);
+        }
+
+        private static int ComputeLevenshteinDistance(string s, string t)
+        {
+            int n = s.Length;
+            int m = t.Length;
+            int[,] d = new int[n + 1, m + 1];
+
+            if (n == 0) return m;
+            if (m == 0) return n;
+
+            for (int i = 0; i <= n; d[i, 0] = i++) { }
+            for (int j = 0; j <= m; d[0, j] = j++) { }
+
+            for (int i = 1; i <= n; i++)
+            {
+                for (int j = 1; j <= m; j++)
+                {
+                    int cost = (t[j - 1] == s[i - 1]) ? 0 : 1;
+                    d[i, j] = Math.Min(
+                        Math.Min(d[i - 1, j] + 1, d[i, j - 1] + 1),
+                        d[i - 1, j - 1] + cost);
+                }
+            }
+            return d[n, m];
         }
     }
 }

@@ -8,20 +8,33 @@
              d:DesignHeight="720" d:DesignWidth="1280">
 
     <UserControl.Resources>
-        <Style x:Key="GameSliderStyle" TargetType="Slider">
+        <SolidColorBrush x:Key="MenuBackgroundBrush" Color="#E6000000"/>
+        <SolidColorBrush x:Key="AccentBrush" Color="White"/>
+        <SolidColorBrush x:Key="TextBrush" Color="White"/>
+        <SolidColorBrush x:Key="HoverBackgroundBrush" Color="White"/>
+        <SolidColorBrush x:Key="HoverTextBrush" Color="Black"/>
+
+        <Style x:Key="Noir_SliderStyle" TargetType="Slider">
             <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="Height" Value="20"/>
+            <Setter Property="Height" Value="30"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Slider">
                         <Grid VerticalAlignment="Center">
-                            <Border x:Name="Track" Height="4" Background="Gray" CornerRadius="2"/>
+                            <Border x:Name="Track" Height="4" Background="#40FFFFFF" CornerRadius="2" VerticalAlignment="Center"/>
+
                             <Track Name="PART_Track">
                                 <Track.Thumb>
                                     <Thumb Width="20" Height="20">
                                         <Thumb.Template>
                                             <ControlTemplate TargetType="Thumb">
-                                                <Ellipse Fill="Black" Stroke="White" StrokeThickness="2"/>
+                                                <Grid>
+                                                    <Ellipse Fill="Black" Stroke="{StaticResource AccentBrush}" StrokeThickness="2">
+                                                        <Ellipse.Effect>
+                                                            <DropShadowEffect Color="White" BlurRadius="5" ShadowDepth="0" Opacity="0.3"/>
+                                                        </Ellipse.Effect>
+                                                    </Ellipse>
+                                                </Grid>
                                             </ControlTemplate>
                                         </Thumb.Template>
                                     </Thumb>
@@ -32,34 +45,91 @@
                 </Setter.Value>
             </Setter>
         </Style>
+
+        <Style x:Key="Noir_ButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="{StaticResource TextBrush}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource AccentBrush}"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="FontFamily" Value="{StaticResource GameFont}"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" 
+                                Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}" 
+                                CornerRadius="15" 
+                                SnapsToDevicePixels="true">
+                            <ContentPresenter x:Name="contentPresenter" 
+                                              Focusable="False" 
+                                              HorizontalAlignment="Center" 
+                                              Margin="{TemplateBinding Padding}" 
+                                              RecognizesAccessKey="True" 
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter Property="Background" Value="{StaticResource HoverBackgroundBrush}"/>
+                                <Setter Property="Foreground" Value="{StaticResource HoverTextBrush}"/>
+                                <Setter TargetName="border" Property="Effect">
+                                    <Setter.Value>
+                                        <DropShadowEffect Color="White" BlurRadius="10" ShadowDepth="0" Opacity="0.4"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="true">
+                                <Setter TargetName="border" Property="Background" Value="#FFCCCCCC"/>
+                                <Setter Property="RenderTransform">
+                                    <Setter.Value>
+                                        <ScaleTransform ScaleX="0.98" ScaleY="0.98" CenterX="0.5" CenterY="0.5"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </UserControl.Resources>
 
     <Grid>
-        <Image Source="/Assets/Backgrounds/mmbg.jpg" Stretch="Fill" Opacity="0.5"/>
-        <Border Background="#80000000"/>
+        <Image Source="/Assets/Backgrounds/mmbg.jpg" Stretch="UniformToFill" Opacity="1"/>
 
-        <Border HorizontalAlignment="Center" VerticalAlignment="Center" Width="500"
-                Background="{StaticResource GameBackgroundBrush}"
-                BorderBrush="{StaticResource GameBorderBrush}"
-                BorderThickness="2" CornerRadius="5" Padding="30">
+        <Border Background="#B3000000"/>
+
+        <Border HorizontalAlignment="Center" VerticalAlignment="Center" Width="550"
+                Background="{StaticResource MenuBackgroundBrush}"
+                BorderBrush="{StaticResource AccentBrush}"
+                BorderThickness="1" CornerRadius="0" Padding="40">
+            <Border.Effect>
+                <DropShadowEffect Color="Black" BlurRadius="30" ShadowDepth="10" Opacity="0.8"/>
+            </Border.Effect>
 
             <StackPanel>
-                <TextBlock Text="Tənzimləmələr" FontSize="36" Foreground="Black" HorizontalAlignment="Center" Margin="0,0,0,30"
-                           FontFamily="{StaticResource GameFont}"/>
+                <TextBlock Text="Settings" FontSize="42" Foreground="{StaticResource TextBrush}" 
+                           HorizontalAlignment="Center" Margin="0,0,0,50"
+                           FontFamily="{StaticResource GameFont}" FontWeight="Light">
+                </TextBlock>
 
-                <TextBlock Text="Ümumi Səs" Foreground="Black" FontSize="18" FontFamily="{StaticResource GameFont}"/>
-                <Slider Style="{StaticResource GameSliderStyle}" Minimum="0" Maximum="100" Value="{Binding CurrentSettings.MasterVolume, Mode=TwoWay}" Margin="0,5,0,20"/>
+                <StackPanel Margin="20,0">
+                    <TextBlock Text="Master Volume" Foreground="{StaticResource TextBrush}" FontSize="18" FontFamily="{StaticResource GameFont}" Margin="0,0,0,5" Opacity="0.8"/>
+                    <Slider Style="{StaticResource Noir_SliderStyle}" Minimum="0" Maximum="100" Value="{Binding CurrentSettings.MasterVolume, Mode=TwoWay}" Margin="0,0,0,30"/>
 
-                <TextBlock Text="Musiqi Səsi" Foreground="Black" FontSize="18" FontFamily="{StaticResource GameFont}"/>
-                <Slider Style="{StaticResource GameSliderStyle}" Minimum="0" Maximum="100" Value="{Binding CurrentSettings.MusicVolume, Mode=TwoWay}" Margin="0,5,0,20"/>
+                    <TextBlock Text="Music Volume" Foreground="{StaticResource TextBrush}" FontSize="18" FontFamily="{StaticResource GameFont}" Margin="0,0,0,5" Opacity="0.8"/>
+                    <Slider Style="{StaticResource Noir_SliderStyle}" Minimum="0" Maximum="100" Value="{Binding CurrentSettings.MusicVolume, Mode=TwoWay}" Margin="0,0,0,30"/>
 
-                <TextBlock Text="Səs Effektləri" Foreground="Black" FontSize="18" FontFamily="{StaticResource GameFont}"/>
-                <Slider Style="{StaticResource GameSliderStyle}" Minimum="0" Maximum="100" Value="{Binding CurrentSettings.SfxVolume, Mode=TwoWay}" Margin="0,5,0,40"/>
+                    <TextBlock Text="SFX Volume" Foreground="{StaticResource TextBrush}" FontSize="18" FontFamily="{StaticResource GameFont}" Margin="0,0,0,5" Opacity="0.8"/>
+                    <Slider Style="{StaticResource Noir_SliderStyle}" Minimum="0" Maximum="100" Value="{Binding CurrentSettings.SfxVolume, Mode=TwoWay}" Margin="0,0,0,50"/>
+                </StackPanel>
 
-                <Button Content="Yadda Saxla və Geri Qayıt" Command="{Binding SaveAndBackCommand}" Height="45"
-                        Style="{StaticResource GameButtonStyle}"/>
+                <Button Content="Save &amp; Return" 
+                        Command="{Binding SaveAndBackCommand}" 
+                        Height="50" Width="300"
+                        Style="{StaticResource Noir_ButtonStyle}"/>
             </StackPanel>
-
         </Border>
     </Grid>
 </UserControl>

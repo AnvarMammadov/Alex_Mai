@@ -69,16 +69,17 @@ namespace Alex_Mai.ViewModels
             LoadConversationHistory(_currentConversationId);
         }
 
-        // *** DƏYİŞİKLİK: Yalnız tarixi yükləyir ***
+        // --- LoadConversationHistory METODUNU BELƏ YENİLƏYİN ---
         private void LoadConversationHistory(string conversationId)
         {
             Messages.Clear();
             List<ChatMessage> historyMessages = _chatService.GetConversationHistory(conversationId);
             foreach (var message in historyMessages)
             {
+                message.Text = FormatMessageText(message.Text); // Mətni formatlayırıq
                 Messages.Add(message);
             }
-            _currentConversationId = conversationId; // Update current conversation context
+            _currentConversationId = conversationId;
         }
 
         // *** YENİ: Statlar dəyişdikdə UI-ı yeniləmək üçün Event Handler ***
@@ -94,27 +95,28 @@ namespace Alex_Mai.ViewModels
             }
         }
 
-        // *** YENİ: Mesajları yükləmək üçün metod ***
-        private void LoadConversation(string conversationId)
-        {
-            Messages.Clear(); // Clear existing messages if any
-            List<ChatMessage> loadedMessages = _chatService.GetConversationHistory(conversationId);
-            foreach (var message in loadedMessages)
-            {
-                Messages.Add(message);
-            }
-            // Optional: Trigger scroll to bottom after loading messages
-            // Dispatcher.InvokeAsync(() => ScrollToBottom(), System.Windows.Threading.DispatcherPriority.Background);
-            // Note: Scrolling logic is currently in ChatView.xaml.cs, this might need adjustment if loading happens after view is shown.
-        }
+        //// *** YENİ: Mesajları yükləmək üçün metod ***
+        //private void LoadConversation(string conversationId)
+        //{
+        //    Messages.Clear(); // Clear existing messages if any
+        //    List<ChatMessage> loadedMessages = _chatService.GetConversationHistory(conversationId);
+        //    foreach (var message in loadedMessages)
+        //    {
+        //        Messages.Add(message);
+        //    }
+        //    // Optional: Trigger scroll to bottom after loading messages
+        //    // Dispatcher.InvokeAsync(() => ScrollToBottom(), System.Windows.Threading.DispatcherPriority.Background);
+        //    // Note: Scrolling logic is currently in ChatView.xaml.cs, this might need adjustment if loading happens after view is shown.
+        //}
 
+        // --- SendMessage METODUNU BELƏ YENİLƏYİN ---
         [RelayCommand]
-        private async Task SendMessage() // Change to async Task
+        private async Task SendMessage()
         {
-            if (string.IsNullOrWhiteSpace(NewMessageText) || IsMaiTyping) return; // Prevent sending while Mai is "typing"
+            if (string.IsNullOrWhiteSpace(NewMessageText) || IsMaiTyping) return;
 
-            string alexMessageText = NewMessageText; // Store before clearing
-            NewMessageText = string.Empty; // Clear input immediately
+            string alexMessageText = NewMessageText;
+            NewMessageText = string.Empty;
 
             var alexMessage = new ChatMessage
             {
@@ -124,27 +126,28 @@ namespace Alex_Mai.ViewModels
                 IsSentByUser = true
             };
             Messages.Add(alexMessage);
-            
+
             IsMaiTyping = true;
 
-            try // Use try-finally to ensure indicator is turned off
+            try
             {
-                await Task.Delay(1500); // Simulate typing delay (1.5 seconds)
+                await Task.Delay(1500);
 
-                List<ChatMessage> maiResponses = _chatService.FindResponse(_currentConversationId, alexMessageText);
+                List<ChatMessage> maiResponses = _chatService.FindResponse(_currentConversationId, alexMessageText, _maiStats);
 
                 foreach (var response in maiResponses)
                 {
+                    response.Text = FormatMessageText(response.Text); // Cavab gələndə mətni formatlayırıq
                     Messages.Add(response);
-                    if (maiResponses.Count > 1) await Task.Delay(700); // Shorter delay between multiple messages
+                    if (maiResponses.Count > 1) await Task.Delay(700);
                 }
             }
             finally
             {
-                // *** YENİ: Göstəricini deaktivləşdir ***
                 IsMaiTyping = false;
             }
         }
+
         [RelayCommand]
         private void ViewMaiStatus()
         {
@@ -167,6 +170,13 @@ namespace Alex_Mai.ViewModels
                 _maiStats.PropertyChanged -= MaiStats_PropertyChanged;
                 Console.WriteLine("ChatViewModel cleaned up."); // Debug üçün mesaj (opsional)
             }
+        }
+
+        private string FormatMessageText(string text)
+        {
+            if (string.IsNullOrEmpty(text)) return text;
+            // Burada "Alex" əvəzinə gələcəkdə Settings-dən gələn adı istifadə edə bilərsiniz
+            return text.Replace("{playerName}", "Alex");
         }
 
         // Optional: Ensure unsubscription if the ViewModel is somehow destroyed unexpectedly

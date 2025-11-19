@@ -1,18 +1,17 @@
 {
     "meta": {
-        "version": "1.0.0",
-        "locale": "az-AZ",
+        "version": "2.0.0",
+        "locale": "en-US",
         "character": {
             "id": "mai",
             "displayName": "Mai",
             "typingDelaysMs": {
-                "min": 350,
-                "max": 1100
+                "min": 600,
+                "max": 1800
             },
-            "availableHours": [ 10, 23 ]
+            "availableHours": [ 9, 24 ]
         }
     },
-
     "nlp": {
         "similarity": {
             "threshold": 0.72,
@@ -21,345 +20,511 @@
         "intents": [
             {
                 "id": "greeting",
-                "keywords": [ "salam", "hi", "hey", "hello", "selam" ],
-                "regex": "(?i)^(salam|hi|hey|hello|selam)\\b"
+                "keywords": [ "hi", "hey", "hello", "yo", "heya", "good morning", "sup" ],
+                "regex": "(?i)^(hi|hey|hello|yo|greetings|sup)\\b"
             },
             {
-                "id": "status_chill",
-                "keywords": [ "yaxşıyam", "relaks", "istirahət", "chill", "rahat" ],
-                "regex": "(?i)(rahat|relaks|istirah)"
+                "id": "status_positive",
+                "keywords": [ "fine", "good", "great", "amazing", "happy", "cool", "vibing", "chilling" ],
+                "regex": "(?i)(fine|good|great|happy|cool|vibing|chill)"
             },
             {
-                "id": "woke_up",
-                "keywords": [ "indi oyandım", "yenicə oyandım", "yeni oyandim", "just woke up" ],
-                "regex": "(?i)(yeni(c|cə)? oyand|just woke)"
+                "id": "status_negative",
+                "keywords": [ "bad", "sad", "tired", "bored", "exhausted", "terrible", "stressed", "lonely" ],
+                "regex": "(?i)(bad|sad|tired|bored|exhausted|terrible|stressed|lonely)"
+            },
+            {
+                "id": "flirt",
+                "keywords": [ "cute", "beautiful", "pretty", "love you", "miss you", "date", "hot", "sexy", "angel", "sweetheart" ],
+                "regex": "(?i)(cute|beautiful|love you|miss you|date|hot|sexy|angel)"
             },
             {
                 "id": "plan_suggest",
-                "keywords": [ "nəsə edək", "birlikdə", "görüş", "gəzinti", "film", "plan" ],
-                "regex": "(?i)(n[eə]s[eə] ed[əe]k|birl[iı]kd[əe]|g[eə]zint|film|plan)"
+                "keywords": [ "lets go out", "hang out", "cinema", "coffee", "drink", "walk", "park", "eat", "dinner", "movie" ],
+                "regex": "(?i)(go out|hang out|plan|cinema|coffee|park|dinner|movie)"
             },
             {
-                "id": "relax_home",
-                "keywords": [ "evdə dincəlirəm", "evdə", "istirahət evdə", "relaks ev" ],
-                "regex": "(?i)(evd[əe].*din[cç][eə]l|evd[əe] (ol|qal))"
+                "id": "busy_ask",
+                "keywords": [ "what are you doing", "busy?", "wyd", "studying?", "working?", "up to" ],
+                "regex": "(?i)(what.*doing|wyd|busy|up to)"
             },
             {
-                "id": "teacher_secret",
-                "keywords": [ "Terane müəllimə", "Təranə müəllimə", "mesajlarımızı görür" ],
-                "regex": "(?i)(teran[eə].*m[uü][əa]llim[eə]|mesajlar[iı]m[iı]z[ıi] g[oö]r[uü]r)"
+                "id": "ask_about_mai",
+                "keywords": [ "how are you", "how's it going", "you okay", "you alright" ],
+                "regex": "(?i)(how are you|how.s it going|you ok|you alright)"
+            },
+            {
+                "id": "ask_about_player_day",
+                "keywords": [ "my day", "today was", "wanna hear", "long day", "rough day" ],
+                "regex": "(?i)(my day|today was|rough day|long day)"
+            },
+            {
+                "id": "joke",
+                "keywords": [ "lol", "lmao", "rofl", "haha", "funny", "youre funny" ],
+                "regex": "(?i)(lol|lmao|rofl|haha|funny)"
+            },
+            {
+                "id": "thanks",
+                "keywords": [ "thanks", "thank you", "ty", "appreciate it" ],
+                "regex": "(?i)(thanks|thank you|appreciate it|ty)"
+            },
+            {
+                "id": "goodnight",
+                "keywords": [ "good night", "gn", "going to sleep", "sleep now" ],
+                "regex": "(?i)(good night|gn|going to sleep|sleep now)"
+            },
+            {
+                "id": "goodmorning",
+                "keywords": [ "good morning", "morning", "gm" ],
+                "regex": "(?i)^(good morning|gm|morning)\\b"
+            },
+            {
+                "id": "study_talk",
+                "keywords": [ "exam", "homework", "assignment", "study", "studying", "test" ],
+                "regex": "(?i)(exam|homework|assignment|study|studying|test)"
+            },
+            {
+                "id": "game_talk",
+                "keywords": [ "game", "gaming", "anime", "manga", "visual novel", "vn" ],
+                "regex": "(?i)(game|gaming|anime|manga|visual novel|vn)"
             }
         ]
     },
-
     "state": {
         "variables": {
             "day": 1,
             "timeOfDay": "morning",
-            "affinityMai": 0,
+            "affinityMai": 10,
+            "stress": 0,
             "flags": {
-                "maiSeenStudyMsg": false,
-                "playerSuggestedPlan": false,
-                "teacherJokeUnlocked": false
-            },
-            "playerName": "Alex"
+                "isDating": false,
+                "seenFirstPhoto": false,
+                "unlockedParkEvent": false
+            }
         }
     },
-
-    "templates": {
-        "greet_back": "Salam, {playerName}! ☀️ Necəsən?",
-        "ask_plans": "Bugün ({timeOfDay}) nə planın var?",
-        "affinity_up": "+1 yaxınlıq 😊",
-        "done_study": "Bugünlük oxuma bitdi! ✨ Nə edək indi?"
-    },
-
-    "attachments": {
-        "mai_study_photo": {
-            "type": "image",
-            "path": "res/images/mai_study_desk.png",
-            "caption": "Dərs bitdi! 📚✨"
-        }
-    },
-
-    "events": {
-        "unlock_cafe_date": {
-            "type": "quest",
-            "id": "q_cafe_day2",
-            "progress": "available"
-        },
-        "give_small_gift": {
-            "type": "flag",
-            "name": "giftStickerUnlocked",
-            "value": true
-        }
-    },
-
     "dialogs": [
         {
             "id": "mai_initial",
             "when": {
-                "day": [ 1 ],
-                "timeOfDay": [ "morning", "noon", "evening" ]
+                "day": [ 1 ]
             },
             "history": [
                 {
                     "sender": "Mai",
-                    "text": "Hey {playerName}, how are you doing?"
+                    "textOptions": [
+                        "Hey {playerName}! 👋 Finally caught you online.",
+                        "Hii {playerName}! ✨ How's your day going?",
+                        "Yo {playerName}~ I need a distraction from studying 📚",
+                        "{playerName}! I was literally just thinking about you 👀"
+                    ]
                 }
             ],
             "choices": [
                 {
-                    "playerText": "Hi Mai! I'm good, just relaxing.",
-                    "intent": "status_chill",
-                    "goTo": "mai_resp_initial_1",
+                    "playerText": "Hey Mai! I'm doing great.",
+                    "intent": "status_positive",
+                    "goTo": "mai_resp_status_pos",
+                    "effects": { "affinityMai": { "add": 2 } }
+                },
+                {
+                    "playerText": "Honestly? I'm exhausted.",
+                    "intent": "status_negative",
+                    "goTo": "mai_resp_status_neg",
                     "effects": { "affinityMai": { "add": 1 } }
                 },
                 {
-                    "playerText": "Not much, just woke up.",
-                    "intent": "woke_up",
-                    "goTo": "mai_resp_initial_2"
+                    "playerText": "You look cute today 😉",
+                    "intent": "flirt",
+                    "goTo": "mai_resp_flirt_generic",
+                    "effects": { "affinityMai": { "add": 5 } }
                 },
                 {
-                    "playerText": "Mesajlarimizi Terane muellime gorur...",
-                    "intent": "teacher_secret",
-                    "goTo": "mai_resp_terane",
-                    "effects": { "flags.teacherJokeUnlocked": true }
+                    "playerText": "What are you up to?",
+                    "intent": "busy_ask",
+                    "goTo": "mai_resp_activity"
                 },
                 {
-                    "playerText": "__free_text__",
-                    "fallback": true,
-                    "goTo": "mai_resp_generic_hmm"
-                }
-            ]
-        },
-
-        {
-            "id": "mai_resp_initial_1",
-            "history": [
-                {
-                    "sender": "Mai",
-                    "text": "That's good to hear. 😊 What are you up to?"
-                }
-            ],
-            "system": {
-                "suggestIntents": [ "plan_suggest", "relax_home" ],
-                "cooldownSec": 20
-            }
-        },
-
-        {
-            "id": "mai_resp_initial_2",
-            "history": [
-                {
-                    "sender": "Mai",
-                    "text": "Good morning then! 😴☕ Yuxunu ala bildin?"
-                }
-            ],
-            "system": { "suggestIntents": [ "plan_suggest", "relax_home" ] }
-        },
-
-        {
-            "id": "mai_resp_terane",
-            "history": [
-                {
-                    "sender": "Mai",
-                    "text": "Salam Terane muellime <3"
-                }
-            ],
-            "system": {
-                "onEnter": [ { "event": "give_small_gift" } ]
-            }
-        },
-
-        {
-            "id": "mai_day2_afternoon",
-            "when": {
-                "day": [ 2 ],
-                "timeOfDay": [ "afternoon" ],
-                "flags": { "maiSeenStudyMsg": false }
-            },
-            "history": [
-                {
-                    "sender": "Mai",
-                    "text": "{templates.done_study}"
+                    "playerText": "How are you?",
+                    "intent": "ask_about_mai",
+                    "goTo": "mai_resp_ask_mai"
                 },
-                { "attachment": "mai_study_photo" }
-            ],
-            "choices": [
                 {
-                    "playerText": "Maybe we could do something?",
+                    "playerText": "Let’s go somewhere.",
                     "intent": "plan_suggest",
-                    "goTo": "mai_resp_day2_suggest",
-                    "effects": {
-                        "flags.playerSuggestedPlan": true,
-                        "affinityMai": { "add": 1 }
-                    }
+                    "goTo": "mai_resp_plan_suggest"
                 },
                 {
-                    "playerText": "Just planning to relax at home.",
-                    "intent": "relax_home",
-                    "goTo": "mai_resp_day2_relax",
-                    "effects": { "affinityMai": { "add": 0 } }
+                    "playerText": "I had a long day…",
+                    "intent": "ask_about_player_day",
+                    "goTo": "mai_resp_player_day"
+                },
+                {
+                    "playerText": "That was funny lol",
+                    "intent": "joke",
+                    "goTo": "mai_resp_joke"
+                },
+                {
+                    "playerText": "Thanks Mai",
+                    "intent": "thanks",
+                    "goTo": "mai_resp_thanks"
+                },
+                {
+                    "playerText": "Good night Mai",
+                    "intent": "goodnight",
+                    "goTo": "mai_resp_goodnight"
+                },
+                {
+                    "playerText": "Good morning Mai",
+                    "intent": "goodmorning",
+                    "goTo": "mai_resp_goodmorning"
+                },
+                {
+                    "playerText": "Something about exams/homework",
+                    "intent": "study_talk",
+                    "goTo": "mai_resp_study"
+                },
+                {
+                    "playerText": "Talking about games/anime",
+                    "intent": "game_talk",
+                    "goTo": "mai_resp_game_talk"
                 },
                 {
                     "playerText": "__free_text__",
                     "fallback": true,
-                    "goTo": "mai_resp_generic_ok"
-                }
-            ],
-            "system": {
-                "onExit": [ { "set": { "flags.maiSeenStudyMsg": true } } ]
-            }
-        },
-
-        {
-            "id": "mai_resp_day2_suggest",
-            "history": [
-                {
-                    "sender": "Mai",
-                    "text": "Like what? I'm open to ideas!"
-                }
-            ],
-            "reactiveRoutes": [
-                {
-                    "match": { "keywords": [ "kafe", "çay", "coffee" ] },
-                    "onMatch": {
-                        "reply": {
-                            "sender": "Mai",
-                            "text": "Kafe ideyası gözəldir ☕️ yaxınlarda yeni bir kafe açılıb!"
-                        },
-                        "effects": {
-                            "event": "unlock_cafe_date",
-                            "affinityMai": { "add": 1 }
-                        },
-                        "end": true
-                    }
-                },
-                {
-                    "match": { "keywords": [ "park", "gəzinti", "walk" ] },
-                    "onMatch": {
-                        "reply": {
-                            "sender": "Mai",
-                            "text": "Parkda gəzinti superdir 🌿 gəlin gün batımına yetişək."
-                        },
-                        "effects": { "affinityMai": { "add": 1 } },
-                        "end": true
-                    }
-                }
-            ],
-            "fallback": { "goTo": "mai_resp_generic_ok" }
-        },
-
-        {
-            "id": "mai_resp_day2_relax",
-            "history": [
-                {
-                    "sender": "Mai",
-                    "text": "Okay, enjoy your rest! Yenə də darıxsan, yaz 😉"
-                }
-            ]
-        },
-
-        {
-            "id": "mai_smalltalk_bank",
-            "type": "smalltalk",
-            "rules": [
-                {
-                    "match": { "intent": "greeting" },
-                    "responses": [
-                        {
-                            "sender": "Mai",
-                            "text": "{templates.greet_back}"
-                        },
-                        {
-                            "sender": "Mai",
-                            "text": "Bugün {timeOfDay} sənin ruh halın necədir?"
-                        }
-                    ],
-                    "cooldownSec": 60
-                },
-                {
-                    "match": { "keywords": [ "ne edirsən", "nə var nə yox" ] },
-                    "responses": [
-                        {
-                            "sender": "Mai",
-                            "text": "Bir az notlarımı düzənləyirəm 📒"
-                        },
-                        {
-                            "sender": "Mai",
-                            "text": "Səndə nə var?"
-                        }
-                    ]
-                }
-            ]
-        },
-
-        {
-            "id": "fallbacks",
-            "genericHmm": [
-                {
-                    "sender": "Mai",
-                    "text": "Hmm? 🤔"
-                },
-                {
-                    "sender": "Mai",
-                    "text": "Tam başa düşmədim, bir az açıqlayarsan?"
-                }
-            ],
-            "genericOk": [
-                {
-                    "sender": "Mai",
-                    "text": "Okay."
-                },
-                {
-                    "sender": "Mai",
-                    "text": "Qeyd etdim."
+                    "goTo": "mai_resp_fallback_dynamic"
                 }
             ]
         }
     ],
-
     "responseMessages": {
-        "mai_resp_initial_1": [
+        "mai_resp_status_pos": [
             {
+                "condition": "Affection > 30",
                 "sender": "Mai",
-                "text": "That's good to hear. 😊 What are you up to?"
+                "textOptions": [
+                    "Yay!! Hearing that from you makes my day 100x better 🥰",
+                    "Good mood {playerName}? I love that for us ✨",
+                    "If you're happy, I'm happy. Simple math 💕"
+                ]
+            },
+            {
+                "condition": "Stress > 50",
+                "sender": "Mai",
+                "textOptions": [
+                    "Lucky you… I'm drowning in assignments over here 😭",
+                    "Send me some of that good mood, I'm in homework hell rn 😩"
+                ]
+            },
+            {
+                "condition": "default",
+                "sender": "Mai",
+                "textOptions": [
+                    "That's awesome! Keep that vibe going ✨",
+                    "Good to hear! Better than being bored like me lol.",
+                    "Nicee, that's the energy I wanted to hear today 😎"
+                ]
             }
         ],
-        "mai_resp_initial_2": [
+        "mai_resp_status_neg": [
             {
+                "condition": "Affection > 20",
                 "sender": "Mai",
-                "text": "Good morning then! Sleep well?"
+                "textOptions": [
+                    "Oh no… 🥺 Do you want to talk about it? I'm here.",
+                    "Come here, virtual hug time 🫂 You don't have to deal with it alone.",
+                    "That sounds rough… Tell me what happened, I’ll listen."
+                ]
+            },
+            {
+                "condition": "Stress > 60",
+                "sender": "Mai",
+                "textOptions": [
+                    "Same tbh. Life is just side quests of stress lately 😵‍💫",
+                    "We should start a \"tired club\". Entry fee: one complaint each 😪"
+                ]
+            },
+            {
+                "condition": "default",
+                "sender": "Mai",
+                "textOptions": [
+                    "Sorry to hear that. Maybe some rest will help? 😴",
+                    "That sucks… but hey, you're still here, and I’m proud of you for that 💛",
+                    "Today might be trash, but tomorrow can still be better. I’m rooting for you ✊"
+                ]
             }
         ],
-        "mai_resp_terane": [
+        "mai_resp_flirt_generic": [
             {
+                "condition": "Affection > 35",
                 "sender": "Mai",
-                "text": "Salam Terane muellime <3"
+                "textOptions": [
+                    "Omg stoppp, you're making me blush over here 😳💓",
+                    "You're gonna give me heart damage talking like that 😵‍💘",
+                    "You know exactly what you're doing, don’t you? 😉"
+                ]
+            },
+            {
+                "condition": "Affection < 10",
+                "sender": "Mai",
+                "textOptions": [
+                    "Uhh… thanks? We barely know each other though 😅",
+                    "Woah there, speedrunner 😳 Maybe slow down just a little?"
+                ]
+            },
+            {
+                "condition": "default",
+                "sender": "Mai",
+                "textOptions": [
+                    "Haha, you're kind of a charmer, huh? 😏",
+                    "Thanks~ I'll remember you said that ✨",
+                    "Careful, if you keep talking like that I might start liking you more 😌"
+                ]
             }
         ],
-        "mai_resp_day2_suggest": [
+        "mai_resp_activity": [
             {
+                "condition": "Stress > 60",
                 "sender": "Mai",
-                "text": "Like what? I'm open to ideas!"
+                "textOptions": [
+                    "Just suffering. Math is literally deleting my brain cells rn 🤯",
+                    "Studying… or at least pretending to while staring at the same page 😵‍💫"
+                ]
+            },
+            {
+                "condition": "Affection > 25",
+                "sender": "Mai",
+                "textOptions": [
+                    "Thinking about you… and also watching Netflix, being productive as always 🤭",
+                    "Mostly scrolling my phone and waiting for your messages if I'm honest 🥹"
+                ]
+            },
+            {
+                "condition": "default",
+                "sender": "Mai",
+                "textOptions": [
+                    "Nothing much, just chilling and scrolling through random stuff. You?",
+                    "Just finished eating and now I'm in full lazy mode 🍱😴"
+                ]
             }
         ],
-        "mai_resp_day2_relax": [
+        "mai_resp_ask_mai": [
             {
+                "condition": "Affection > 20",
                 "sender": "Mai",
-                "text": "Okay, enjoy your rest!"
+                "textOptions": [
+                    "I'm okay~ Better now that you're here actually 💕",
+                    "Kinda tired, but seeing your name pop up helped a lot 😌",
+                    "Mentally: in pajamas. Physically: also in pajamas. Emotionally: attached to this chat 😂"
+                ]
+            },
+            {
+                "condition": "Stress > 50",
+                "sender": "Mai",
+                "textOptions": [
+                    "Honestly? A bit overwhelmed… but talking to you is my break 🥲",
+                    "My brain is a browser with 27 tabs open. And 3 of them are frozen 😵‍💫"
+                ]
+            },
+            {
+                "condition": "default",
+                "sender": "Mai",
+                "textOptions": [
+                    "I'm good! Just floating through the day like a little cloud ☁️",
+                    "Pretty normal day so far. Nothing exciting… unless you’re about to change that? 😉"
+                ]
             }
         ],
-        "mai_resp_generic_hmm": [
+        "mai_resp_player_day": [
             {
+                "condition": "Affection > 25",
                 "sender": "Mai",
-                "text": "Hmm?"
+                "textOptions": [
+                    "Tell me everything. I want the detailed director's cut version 🎬",
+                    "Sit down, this is now a therapy chat. I’m listening ☕🛋️",
+                    "You know I care, right? Go on, I’m all ears 👂"
+                ]
+            },
+            {
+                "condition": "default",
+                "sender": "Mai",
+                "textOptions": [
+                    "Sounds like a long day… Want to rant about it a bit?",
+                    "If today was a movie, what genre would it be? Comedy, drama, horror? 😅"
+                ]
             }
         ],
-        "mai_resp_generic_ok": [
+        "mai_resp_plan_suggest": [
             {
+                "condition": "isDating == true",
                 "sender": "Mai",
-                "text": "Okay."
+                "textOptions": [
+                    "Date idea time?? Say less, I'm already getting ready in my head 🥰",
+                    "You wanna go out with *me*? That’s an auto-yes, obviously 😌"
+                ]
+            },
+            {
+                "condition": "Stress > 60",
+                "sender": "Mai",
+                "textOptions": [
+                    "Can we do something low-energy? Like sitting somewhere and existing together 😂",
+                    "Honestly I just want to grab a drink and complain about life with you ☕"
+                ]
+            },
+            {
+                "condition": "default",
+                "sender": "Mai",
+                "textOptions": [
+                    "Ooh, like what? Cafe, park, or something nerdy like arcade? 👀",
+                    "Yes please, get me out of the house. Where are we going, planner-san? 😏"
+                ]
+            }
+        ],
+        "mai_resp_joke": [
+            {
+                "condition": "Affection > 30",
+                "sender": "Mai",
+                "textOptions": [
+                    "LMAO you always know how to make me laugh 😂",
+                    "Stop, my cheeks hurt from smiling too much 😆",
+                    "You're dangerously close to being my favorite notification 📲"
+                ]
+            },
+            {
+                "condition": "default",
+                "sender": "Mai",
+                "textOptions": [
+                    "LOL that actually got me 😂",
+                    "Pfftt— okay that was good, I'll give you that 😏",
+                    "You're fun to talk to, you know that?"
+                ]
+            }
+        ],
+        "mai_resp_study": [
+            {
+                "condition": "Stress > 50",
+                "sender": "Mai",
+                "textOptions": [
+                    "I hate studying but I hate failing more, so here we are 😭",
+                    "If I disappear, tell people the textbooks got me 📚⚰️"
+                ]
+            },
+            {
+                "condition": "default",
+                "sender": "Mai",
+                "textOptions": [
+                    "Exams are evil but we'll survive somehow… probably 🧠",
+                    "We should make a study pact. You suffer there, I suffer here, and we motivate each other 😤"
+                ]
+            }
+        ],
+        "mai_resp_game_talk": [
+            {
+                "condition": "Affection > 20",
+                "sender": "Mai",
+                "textOptions": [
+                    "Wait you like that stuff too?? Ok, new topic unlocked 😳",
+                    "We should totally watch an anime or play something together one day 🎮",
+                    "Careful, if we start talking about games/anime I might never shut up 😅"
+                ]
+            },
+            {
+                "condition": "default",
+                "sender": "Mai",
+                "textOptions": [
+                    "Nice taste 👀 Tell me more about what you’re into.",
+                    "Okay but now I’m curious… what’s your comfort game/anime?"
+                ]
+            }
+        ],
+        "mai_resp_thanks": [
+            {
+                "condition": "Affection > 20",
+                "sender": "Mai",
+                "textOptions": [
+                    "Anytime. You know I’ve got your back 💛",
+                    "You don't have to thank me, but I’ll still take it 😌",
+                    "Thanks for trusting me enough to talk to me, too."
+                ]
+            },
+            {
+                "condition": "default",
+                "sender": "Mai",
+                "textOptions": [
+                    "You're welcome~ ✨",
+                    "No problem at all!",
+                    "Of course. That’s what I’m here for."
+                ]
+            }
+        ],
+        "mai_resp_goodnight": [
+            {
+                "condition": "Affection > 30",
+                "sender": "Mai",
+                "textOptions": [
+                    "Good night, dummy 💕 Dream about me, okay? 😴",
+                    "Sleep well and don't stay up overthinking… unless it’s about me 😏",
+                    "Rest well, you did your best today. I’m proud of you 🫂"
+                ]
+            },
+            {
+                "condition": "default",
+                "sender": "Mai",
+                "textOptions": [
+                    "Good night! Sleep tight 🌙",
+                    "Rest up, tomorrow needs a strong version of you ✨",
+                    "Gnnn, don’t scroll too long after this 😴"
+                ]
+            }
+        ],
+        "mai_resp_goodmorning": [
+            {
+                "condition": "Affection > 25",
+                "sender": "Mai",
+                "textOptions": [
+                    "Good morning sunshine ☀️ You checked your phone and saw **me** first, right? 😏",
+                    "Morningg~ I hope today treats you gently 💛",
+                    "You being here already makes my morning better ✨"
+                ]
+            },
+            {
+                "condition": "default",
+                "sender": "Mai",
+                "textOptions": [
+                    "Good morning! Did you sleep well? 😴",
+                    "Morning! Let’s survive another day together 💪",
+                    "Rise and shine… or at least rise 😅"
+                ]
+            }
+        ],
+        "mai_resp_fallback_dynamic": [
+            {
+                "condition": "Affection > 40",
+                "sender": "Mai",
+                "textOptions": [
+                    "You always say the most chaotic but interesting things 😂",
+                    "I could listen to you ramble all day ngl.",
+                    "Even when I don't fully get it, I like hearing you talk 💕"
+                ]
+            },
+            {
+                "condition": "Stress > 70",
+                "sender": "Mai",
+                "textOptions": [
+                    "My brain is fried, can you say that again but in baby mode? 😵‍💫",
+                    "I swear I read that three times and still went \"huh\" 😂 Simpler please?"
+                ]
+            },
+            {
+                "condition": "default",
+                "sender": "Mai",
+                "textOptions": [
+                    "Wait, run that by me again? 🤔",
+                    "Hmm, interesting... tell me more?",
+                    "Idk what that means but I agree! 😂",
+                    "That sounded kinda deep, not gonna lie.",
+                    "You have such a unique way of saying things, I like it."
+                ]
             }
         ]
     }
