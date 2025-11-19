@@ -43,9 +43,11 @@ namespace Alex_Mai.ViewModels
 
         public void NavigateToChat()
         {
-            _chatViewModel ??= new ChatViewModel(this, _parentViewModel.MainCharacterStats);
-            // Pass the MainCharacterStats from GameViewModel to ChatViewModel
-            CurrentScreenViewModel = new ChatViewModel(this, _parentViewModel.MainCharacterStats);
+            // DƏYİŞİKLİK: _gameState parametrini əlavə etdik
+            _chatViewModel ??= new ChatViewModel(this, _parentViewModel.MainCharacterStats, _gameState);
+
+            // Burada da yenidən yaradanda ötürməyi unutmayın
+            CurrentScreenViewModel = new ChatViewModel(this, _parentViewModel.MainCharacterStats, _gameState);
         }
 
         public void NavigateToHome()

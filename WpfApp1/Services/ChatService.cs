@@ -329,5 +329,27 @@ namespace Alex_Mai.Services
             return null;
         }
 
+
+        // ChatService.cs daxilində
+        public void MarkLastMessageAsDeleted(string dialogId)
+        {
+            if (_chatData?.Dialogs == null) return;
+
+            var dialog = _chatData.Dialogs.FirstOrDefault(d => d.Id == dialogId);
+            if (dialog != null && dialog.History != null && dialog.History.Count > 0)
+            {
+                // Sonuncu mesajı tapırıq
+                var lastMsg = dialog.History.Last();
+
+                // Bizim JsonChatMessage modelimizdə "IsDeleted" yoxdur, 
+                // ona görə də bunu runtime-da (işləmə vaxtı) idarə etmək üçün 
+                // mətni xüsusi bir markerlə əvəz edə bilərik və ya 
+                // ViewModel səviyyəsində idarə edə bilərik.
+
+                // Amma ən təmiz yol: Gələn mesajın mətninə xüsusi marker qoymaqdır.
+                // VƏ YA: Bu metodu ViewModel-də çağırmaq daha düzgündür (Addım 4-ə baxın).
+            }
+        }
+
     }
 }

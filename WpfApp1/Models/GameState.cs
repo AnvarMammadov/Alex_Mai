@@ -115,5 +115,8 @@ namespace Alex_Mai.Models
                 }
             }
         }
+
+        public ObservableCollection<ChatMessage> ChatHistory { get; set; } = new ObservableCollection<ChatMessage>();
+
     }
 }

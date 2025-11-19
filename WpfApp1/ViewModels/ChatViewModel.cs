@@ -6,6 +6,8 @@ using Alex_Mai.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Threading.Tasks;
+using System.Collections.Generic; // List üçün lazımdır
+using System.Linq; // LastOrDefault üçün lazımdır
 
 namespace Alex_Mai.ViewModels
 {
@@ -14,6 +16,7 @@ namespace Alex_Mai.ViewModels
         private readonly PhoneViewModel _parentViewModel;
         private readonly CharacterStats _maiStats; // Store the reference
         private readonly ChatService _chatService;
+        private readonly GameState _gameState; // GameState lazımdır
 
         [ObservableProperty]
         private ObservableCollection<ChatMessage> _messages = new ObservableCollection<ChatMessage>();
@@ -57,29 +60,53 @@ namespace Alex_Mai.ViewModels
         private bool _isMaiTyping = false;
 
         // *** YENİ: Konstruktoru CharacterStats qəbul etmək üçün yeniləyin ***
-        public ChatViewModel(PhoneViewModel parent, CharacterStats characterStats)
+        public ChatViewModel(PhoneViewModel parent, CharacterStats characterStats, GameState gameState)
         {
             _parentViewModel = parent;
             _maiStats = characterStats;
-            _chatService = new ChatService(); // *** YENİ: ChatService yaradılır ***
+            _gameState = gameState; // Yadda saxlayırıq
+            _chatService = new ChatService();
 
-            // Subscribe to PropertyChanged event of CharacterStats
             _maiStats.PropertyChanged += MaiStats_PropertyChanged;
 
             LoadConversationHistory(_currentConversationId);
+
+            // *** DÜZƏLİŞ: Mesajları emal etdikdən SONRA sayı sıfırlayırıq ***
+            if (_gameState != null)
+            {
+                _gameState.UnreadMessageCount = 0;
+            }
         }
 
-        // --- LoadConversationHistory METODUNU BELƏ YENİLƏYİN ---
-        private void LoadConversationHistory(string conversationId)
+        private void LoadConversationHistory(string conversationId = null)
         {
             Messages.Clear();
-            List<ChatMessage> historyMessages = _chatService.GetConversationHistory(conversationId);
-            foreach (var message in historyMessages)
+
+            // MƏNBƏ: Artıq birbaşa GameState-dən götürürük
+            var sourceMessages = _gameState.ChatHistory;
+
+            // Trip rejimi aktivdirmi?
+            bool isTripMode = _gameState != null && _gameState.UnreadMessageCount > 1;
+
+            // Sonuncu mesaj (buna toxunmuruq)
+            var lastMessage = sourceMessages.LastOrDefault();
+
+            foreach (var msg in sourceMessages)
             {
-                message.Text = FormatMessageText(message.Text); // Mətni formatlayırıq
-                Messages.Add(message);
+                // Formatlama (əgər lazımdırsa)
+                msg.Text = FormatMessageText(msg.Text);
+
+                // SİLİNMƏ MƏNTİQİ:
+                // Trip rejimidirsə VƏ Mai yazıbsa VƏ sonuncu mesaj deyilsə -> SİLİNSİN
+                if (isTripMode && !msg.IsSentByUser && msg != lastMessage)
+                {
+                    msg.IsDeleted = true;
+                }
+                // Əks halda, əgər əvvəl silinibmişsə, amma indi oxuyuruqsa (tarixçədə qalması üçün)
+                // Buranı olduğu kimi saxlayırıq. WhatsApp-da silinən mesaj silinmiş qalır.
+
+                Messages.Add(msg);
             }
-            _currentConversationId = conversationId;
         }
 
         // *** YENİ: Statlar dəyişdikdə UI-ı yeniləmək üçün Event Handler ***

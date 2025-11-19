@@ -118,6 +118,16 @@ namespace Alex_Mai.ViewModels
             // YENİ: ChatService yaradılır
             _chatService = new ChatService();
 
+            // YENİ: Əgər tarixçə boşdursa, ilk salamlaşmanı yüklə
+            if (CurrentGameState.ChatHistory.Count == 0)
+            {
+                var initialMsgs = _chatService.GetConversationHistory("mai_initial");
+                foreach (var msg in initialMsgs)
+                {
+                    CurrentGameState.ChatHistory.Add(msg);
+                }
+            }
+
             CurrentCharacterSprite = "/Assets/Sprites/alex_normal.png";
 
             CurrentGameState.PropertyChanged += (_, e) =>
@@ -146,24 +156,38 @@ namespace Alex_Mai.ViewModels
             _currentNodeId = "start_game";
         }
 
-        // YENİ METOD: Avtomatik mesajları yoxlayır
+        // CheckForProactiveMessages metodunu TAMAMİLƏ YENİLƏYİN:
         private async void CheckForProactiveMessages()
         {
-            // Hazırkı yeri müəyyən et (əgər null-dırsa "alex_room" götür)
             string placeToCheck = _currentPlaceId ?? "alex_room";
-
-            // Servisdən yoxla: Bu məkanda və bu vaxtda mesaj varmı?
             string triggeredDialogId = _chatService.CheckForTrigger(placeToCheck, CurrentGameState.TimeOfDay);
 
             if (!string.IsNullOrEmpty(triggeredDialogId))
             {
-                // 1. Səs effekti (Mesaj səsi yoxdursa click səsi istifadə edirik)
+                // 1. Səs və Bildiriş
                 _audioService.PlaySFX("click.wav");
 
-                // 2. Ekranda bildiriş göstər
-                await ShowNotification("New Message from Mai 💬");
+                // Trip atma yoxlanışı (Bildiriş mətni üçün)
+                if (CurrentGameState.UnreadMessageCount > 0)
+                {
+                    MainCharacterStats.Stress += 5;
+                    await ShowNotification("Mai deleted a message...", 3000);
+                }
+                else
+                {
+                    await ShowNotification("New Message from Mai 💬");
+                }
 
-                // 3. Oxunmamış mesaj sayını artır (Telefonda qırmızı işarə üçün)
+                // 2. YENİ: Mesajı fiziki olaraq tarixçəyə əlavə edirik
+                var newMessages = _chatService.GetConversationHistory(triggeredDialogId);
+                foreach (var msg in newMessages)
+                {
+                    // Mesajın vaxtını indiki vaxt edirik
+                    msg.Timestamp = DateTime.Now;
+                    CurrentGameState.ChatHistory.Add(msg);
+                }
+
+                // 3. Sayı artır
                 CurrentGameState.UnreadMessageCount++;
             }
         }
