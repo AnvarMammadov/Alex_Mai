@@ -103,7 +103,7 @@ namespace Alex_Mai.ViewModels
             {
                 msg.Text = FormatMessageText(msg.Text);
 
-                // ƏSAS: Silinmiş mesajları ümumiyyətlə göstərmirik
+                // Silinmiş mesajları ümumiyyətlə göstərmə
                 if (msg.IsDeleted)
                     continue;
 

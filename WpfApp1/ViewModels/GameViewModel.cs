@@ -160,34 +160,31 @@ namespace Alex_Mai.ViewModels
         // CheckForProactiveMessages metodunu TAMAMİLƏ YENİLƏYİN:
         private async void CheckForProactiveMessages()
         {
-            // 1. Hazırkı vəziyyəti yoxlayırıq
             string placeToCheck = _currentPlaceId ?? "alex_room";
             string dialogIdToTrigger = null;
 
-            // --- SSENARİ 1: SƏHƏR PARK ---
+            // Ssenari 1: səhər park
             if (placeToCheck == "park" && CurrentGameState.TimeOfDay == TimeOfDay.Morning)
             {
-                // Əgər hələ bu mesajı almayıbsa
                 dialogIdToTrigger = "mai_park_morning";
             }
-
-            // --- SSENARİ 2: AXŞAM İŞDƏN SONRA (TRİP) ---
+            // Ssenari 2: axşam işdən sonra trip
             else if (placeToCheck == "part_time" && CurrentGameState.TimeOfDay == TimeOfDay.Evening)
             {
-                // ŞƏRT: Əgər oxunmamış mesaj varsa (deməli səhərki mesaja baxmayıb)
+                // Səhər gələn mesaja baxmayıbsa
                 if (CurrentGameState.UnreadMessageCount > 0)
                 {
                     dialogIdToTrigger = "mai_job_evening_trip";
 
-                    // *** TRİP MƏNTİQİ: Əvvəlki mesajları silirik! ***
-                    // Yalnız Mai-nin göndərdiyi və hələ oxunmamış mesajları silirik
+                    // 1) Yeni trip mesaj(lar)ını əlavə et
                     var newMessages = _chatService.GetConversationHistory(dialogIdToTrigger);
                     foreach (var msg in newMessages)
                     {
                         msg.Timestamp = DateTime.Now;
                         CurrentGameState.ChatHistory.Add(msg);
                     }
-                    // ---- ƏSAS HİSSƏ: yalnız SON Mai mesajı qalsın ----
+
+                    // 2) Yalnız SON Mai mesajı qalsın, qalan hamısı silinsin
                     var lastMai = CurrentGameState.ChatHistory
                         .LastOrDefault(m => !m.IsSentByUser);
 
@@ -195,45 +192,44 @@ namespace Alex_Mai.ViewModels
                     {
                         foreach (var msg in CurrentGameState.ChatHistory)
                         {
-                            // Mai-nin göndərdiyi və sonuncu olmayan bütün mesajları sil
                             if (!msg.IsSentByUser && !ReferenceEquals(msg, lastMai))
                             {
-                                msg.IsDeleted = true;
+                                msg.IsDeleted = true;   // silindi kimi işarələ
                             }
                         }
                     }
 
-                    // Bir az da Stress əlavə edək, çünki Mai əsəbiləşib
+                    // 3) Stress artırsın
                     MainCharacterStats.Stress += 5;
                     await ShowNotification("Mai mesaj sildi... 🚫");
-                }
-                CurrentGameState.UnreadMessageCount = 1;
 
-                // Burada artıq aşağıdakı ümumi blokda yenidən mesaj əlavə etməyə ehtiyac yoxdur,
-                // çünki trip mesajını yuxarıda artıq əlavə etdik.
-                return;
+                    // 4) UnreadMessageCount – indi sadəcə trip mesaj(lar)ı oxunmayıb
+                    CurrentGameState.UnreadMessageCount += newMessages.Count;
+
+                    // Artıq aşağıdakı ümumi blok işləməsin
+                    _audioService.PlaySFX("notification.mp3");
+                    return;
+                }
             }
 
-            // --- MESAJIN GÖNDƏRİLMƏSİ ---
+            // --- NORMAL PROAKTİV MESAJ BLOKU ---
             if (!string.IsNullOrEmpty(dialogIdToTrigger))
             {
                 _audioService.PlaySFX("notification.mp3");
+                await ShowNotification("Mai-dən yeni mesaj 💬");
 
-                if (dialogIdToTrigger != "mai_job_evening_trip")
+                var newMessages = _chatService.GetConversationHistory(dialogIdToTrigger);
+                foreach (var msg in newMessages)
                 {
-                    await ShowNotification("Mai-dən yeni mesaj 💬");
-
-                    var newMessages = _chatService.GetConversationHistory(dialogIdToTrigger);
-                    foreach (var msg in newMessages)
-                    {
-                        msg.Timestamp = DateTime.Now;
-                        CurrentGameState.ChatHistory.Add(msg);
-                    }
-
-                    CurrentGameState.UnreadMessageCount += newMessages.Count;
+                    msg.Timestamp = DateTime.Now;
+                    CurrentGameState.ChatHistory.Add(msg);
                 }
+
+                // BURADA sadəcə ++ yox, gələn mesaj sayını əlavə et
+                CurrentGameState.UnreadMessageCount += newMessages.Count;
             }
         }
+
 
         private async Task ShowNotification(string message, int durationMs = 2000)
         {
