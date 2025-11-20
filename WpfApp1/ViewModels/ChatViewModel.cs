@@ -78,36 +78,7 @@ namespace Alex_Mai.ViewModels
             }
         }
 
-        private void LoadConversationHistory(string conversationId = null)
-        {
-            Messages.Clear();
-
-            // MƏNBƏ: Artıq birbaşa GameState-dən götürürük
-            var sourceMessages = _gameState.ChatHistory;
-
-            // Trip rejimi aktivdirmi?
-            bool isTripMode = _gameState != null && _gameState.UnreadMessageCount > 1;
-
-            // Sonuncu mesaj (buna toxunmuruq)
-            var lastMessage = sourceMessages.LastOrDefault();
-
-            foreach (var msg in sourceMessages)
-            {
-                // Formatlama (əgər lazımdırsa)
-                msg.Text = FormatMessageText(msg.Text);
-
-                // SİLİNMƏ MƏNTİQİ:
-                // Trip rejimidirsə VƏ Mai yazıbsa VƏ sonuncu mesaj deyilsə -> SİLİNSİN
-                if (isTripMode && !msg.IsSentByUser && msg != lastMessage)
-                {
-                    msg.IsDeleted = true;
-                }
-                // Əks halda, əgər əvvəl silinibmişsə, amma indi oxuyuruqsa (tarixçədə qalması üçün)
-                // Buranı olduğu kimi saxlayırıq. WhatsApp-da silinən mesaj silinmiş qalır.
-
-                Messages.Add(msg);
-            }
-        }
+       
 
         // *** YENİ: Statlar dəyişdikdə UI-ı yeniləmək üçün Event Handler ***
         private void MaiStats_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -122,19 +93,23 @@ namespace Alex_Mai.ViewModels
             }
         }
 
-        //// *** YENİ: Mesajları yükləmək üçün metod ***
-        //private void LoadConversation(string conversationId)
-        //{
-        //    Messages.Clear(); // Clear existing messages if any
-        //    List<ChatMessage> loadedMessages = _chatService.GetConversationHistory(conversationId);
-        //    foreach (var message in loadedMessages)
-        //    {
-        //        Messages.Add(message);
-        //    }
-        //    // Optional: Trigger scroll to bottom after loading messages
-        //    // Dispatcher.InvokeAsync(() => ScrollToBottom(), System.Windows.Threading.DispatcherPriority.Background);
-        //    // Note: Scrolling logic is currently in ChatView.xaml.cs, this might need adjustment if loading happens after view is shown.
-        //}
+        private void LoadConversationHistory(string conversationId = null)
+        {
+            Messages.Clear();
+
+            var sourceMessages = _gameState.ChatHistory;
+
+            foreach (var msg in sourceMessages)
+            {
+                msg.Text = FormatMessageText(msg.Text);
+
+                // ƏSAS: Silinmiş mesajları ümumiyyətlə göstərmirik
+                if (msg.IsDeleted)
+                    continue;
+
+                Messages.Add(msg);
+            }
+        }
 
         // --- SendMessage METODUNU BELƏ YENİLƏYİN ---
         [RelayCommand]
