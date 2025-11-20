@@ -255,6 +255,27 @@
                     "goTo": "mai_resp_thanks"
                 }
             ]
+        },
+        {
+            "id": "mai_evening_neutral",
+            "history": [
+                {
+                    "sender": "Mai",
+                    "text": "Let me know when you're done with work. 🌙"
+                }
+            ],
+            "choices": [
+                {
+                    "playerText": "Just got off, heading home now.",
+                    "intent": "status_positive",
+                    "goTo": "mai_resp_status_pos"
+                },
+                {
+                    "playerText": "I'm so tired...",
+                    "intent": "status_negative",
+                    "goTo": "mai_resp_status_neg"
+                }
+            ]
         }
     ],
 
